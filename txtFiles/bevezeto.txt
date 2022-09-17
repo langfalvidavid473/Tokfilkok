@@ -1,0 +1,11 @@
+Egyszer volt, hol nem volt, volt egyszer egy kisgyerek, aki ki nem állhatta a zöldségeket és a gyümölcsöket.
+Történt egyik este, hogy édesanyukája nagyon egészséges salátát csinált vacsorára, amit mondani sem kell, nem nyerte el főhősünk tetszését.
+Nem is nagyon evett belőle, ezért éhesen tért nyugovóra.
+Pedig itt még nem is sejthette, hogy a rémálom csak most kezdődik...
+
+A kaland során a karakter egy folyosón halad, amelynek mindkét oldalán ajtók vannak.
+A játékos döntheti el, hogy melyiken megy be a nyilak segítségével.
+Ezek az ajtók rejthetnek szörnyeket, csapdákat vagy esetleg erősítéseket is.
+A játéknak akkor lesz vége, ha minden szörny le lett győzve!
+
+A játékélmény maximalizálásához kérem nagyítsa ki a parancssor ablakot!
