@@ -19,6 +19,7 @@ void readFile(string fileName, int color) {
 		string myText;	// Fájl egy sora
 		ifstream MyReadFile(fileName);	// Fájl megnyitása
 		SetConsoleTextAttribute(h, color);	// Parancssor betűszín változtatás 
+		cout << "\n\n";	
 		while (getline(MyReadFile, myText)) {	// Fájl soronkénti kiírása
 			cout << myText << endl;
 		}
@@ -58,6 +59,12 @@ int sqr(int a){
 	return a*a;
 }
 
+// Új sor függvény
+
+void newLine(){
+	cout << endl;
+}
+
 
 // ---- Ellenfelek generálása (random értékek) ----
 
@@ -74,12 +81,13 @@ vector<Bosses> generateBoss(){
 
 			int randomHealth = 1000+generateNum((sqr(i+1)*60)-i*100,(sqr(i+1)*70)-i*100);	// Random értékek generálása (1)
 			int randomDamage = 150+generateNum(sqr(i+1)*10,sqr(i+1)*20);	// (2)
-			string name = v[i].substr(0,v[i].length()-4);	// Beolvasott .txt fájlok formázása (kiterjesztés elhagyása)
-			name[0] = toupper(name[0]);		// Nagy kezdőbetű a neveknek (cctype)
+			// string name = v[i].substr(0,v[i].length()-4);	// Beolvasott .txt fájlok formázása (kiterjesztés elhagyása)
+			// name[0] = toupper(name[0]);		// Nagy kezdőbetű a neveknek (cctype)
 			
-			Bosses *newBoss = new Bosses(randomHealth,i+1,randomDamage,name);	// Új objektum létrehozása, értékek hozzárendelése konstruktorral
+			Bosses *newBoss = new Bosses(randomHealth,i+1,randomDamage,v[i]);	// Új objektum létrehozása, értékek hozzárendelése konstruktorral
 			allBosses.push_back(*newBoss);	// vektor feltöltése a generált objektummal
 		}
 
 	return allBosses;
 }
+

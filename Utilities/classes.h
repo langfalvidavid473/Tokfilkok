@@ -11,6 +11,7 @@
 #include <algorithm>	// shuffle() metódus használatához
 #include <cctype>	// toupper() metódus használatához
 #include <cstdio>	// getchar()
+#include <conio.h> //getch()
 
 using namespace std;
 #pragma execution_character_set( "utf-8" ) // UTF-8 karakterek engedélyezése
@@ -19,11 +20,10 @@ using namespace std;
 
 class Player {
 public:
-	int health, level, damage;
+	int health, damage;
 	string name;
-	Player(int hp, int lvl, int dmg, string name) {
+	Player(int hp, int dmg, string name) {
 		health = hp;
-		level = lvl;
 		damage = dmg;
 		name = name;
 	}
@@ -45,10 +45,10 @@ public:
 		void getBoss(string fileName, int color) {
 		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása 
 		string myText;
-		ifstream MyReadFile("./Enemies/" + fileName + ".txt");
+		ifstream MyReadFile("./Enemies/" + fileName);
 		SetConsoleTextAttribute(h, color); // Parancssor betűszín változtatás 
 		while (getline(MyReadFile, myText)) {
-			cout << myText << endl;
+			cout << "\t\t" << myText << endl;
 		}
 		MyReadFile.close();
 		SetConsoleTextAttribute(h, 7);
