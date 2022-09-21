@@ -82,7 +82,6 @@ vector<Bosses> generateBoss(){
 			int randomHealth = 1000+generateNum((sqr(i+1)*60)-i*100,(sqr(i+1)*70)-i*100);	// Random értékek generálása (1)
 			int randomDamage = 150+generateNum(sqr(i+1)*10,sqr(i+1)*20);	// (2)
 			// string name = v[i].substr(0,v[i].length()-4);	// Beolvasott .txt fájlok formázása (kiterjesztés elhagyása)
-			// name[0] = toupper(name[0]);		// Nagy kezdőbetű a neveknek (cctype)
 			
 			Bosses *newBoss = new Bosses(randomHealth,i+1,randomDamage,v[i]);	// Új objektum létrehozása, értékek hozzárendelése konstruktorral
 			allBosses.push_back(*newBoss);	// vektor feltöltése a generált objektummal
@@ -90,4 +89,3 @@ vector<Bosses> generateBoss(){
 
 	return allBosses;
 }
-

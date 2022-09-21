@@ -12,6 +12,7 @@
 #include <cctype>	// toupper() metódus használatához
 #include <cstdio>	// getchar()
 #include <conio.h> //getch()
+#include <locale> // UTF-8 karakterek kiírása
 
 using namespace std;
 #pragma execution_character_set( "utf-8" ) // UTF-8 karakterek engedélyezése
@@ -20,12 +21,11 @@ using namespace std;
 
 class Player {
 public:
-	int health, damage;
-	string name;
-	Player(int hp, int dmg, string name) {
+	int health, damage, armor;
+	Player(int hp, int dmg, int armor) {
 		health = hp;
 		damage = dmg;
-		name = name;
+		armor = armor;
 	}
 };
 
