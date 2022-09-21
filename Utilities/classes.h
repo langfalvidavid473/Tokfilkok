@@ -13,6 +13,7 @@
 #include <cstdio>	// getchar()
 #include <conio.h> //getch()
 #include <locale> // UTF-8 karakterek kiírása
+#include <future> // delay
 
 using namespace std;
 #pragma execution_character_set( "utf-8" ) // UTF-8 karakterek engedélyezése
@@ -47,8 +48,9 @@ public:
 		string myText;
 		ifstream MyReadFile("./Enemies/" + fileName);
 		SetConsoleTextAttribute(h, color); // Parancssor betűszín változtatás 
+		system("cls");
 		while (getline(MyReadFile, myText)) {
-			cout << "\t\t" << myText << endl;
+			cout << "\t\t\t\t\t\t\t" << myText << endl;
 		}
 		MyReadFile.close();
 		SetConsoleTextAttribute(h, 7);

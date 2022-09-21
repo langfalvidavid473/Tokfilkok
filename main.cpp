@@ -33,11 +33,11 @@ int main() {
 	cout << "Játékos neve: "; getline(cin,name);
 	name[0] = toupper(name[0]);		// Nagy kezdőbetű a neveknek (cctype)
 	Player player(1500,300,50);
-	readFile("./txtFiles/bevezeto.txt",2);
+	readFile("./txtFiles/bevezeto.txt", 2, "");
 	system("pause");
 	do
 	{
-		readFile("./txtFiles/doors.txt",7);
+		readFile("./txtFiles/doors.txt", 7, "\t\t\t\t\t\t");
 		newLine();
 		SetConsoleOutputCP(1250);	// UTF-8 változóból kiíratáshoz
 		cout << name;
@@ -45,10 +45,14 @@ int main() {
 		cout << ", " << "kérem válasszon egy ajtót jobb vagy bal nyíl használatával!" << endl;
 		pressedChar = _getch();
 		if (pressedChar == 0 || pressedChar == 0xE0) pressedChar=getch();
-		if(pressedChar == LEFT){
+		if(pressedChar == LEFT && i < 16){
+			readFile("./txtFiles/doorsLeft.txt", 7, "\t\t\t\t\t\t");
+			Sleep(1000);
 			cout << "Balra";
 		}
-		else if(pressedChar == RIGHT){
+		else if(pressedChar == RIGHT && i < 16){
+			readFile("./txtFiles/doorsRight.txt", 7, "\t\t\t\t\t\t");
+			Sleep(1000);
 			allBosses[i].getBoss(allBosses[i].name,6);
 			cout <<"\tHealth: " << allBosses[i].health <<
 		 	"\tDamage: " << allBosses[i].damage << endl;

@@ -13,7 +13,7 @@ int countEnemies(string filename) {
 
 // ---- Függvény általános fájlból olvasáshoz ----
 
-void readFile(string fileName, int color) {
+void readFile(string fileName, int color, string tab) {
 		system("cls");	// Terminál sorainak törlése
 		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);	// Parancssor hívása 
 		string myText;	// Fájl egy sora
@@ -21,7 +21,7 @@ void readFile(string fileName, int color) {
 		SetConsoleTextAttribute(h, color);	// Parancssor betűszín változtatás 
 		cout << "\n\n";	
 		while (getline(MyReadFile, myText)) {	// Fájl soronkénti kiírása
-			cout << myText << endl;
+			cout << tab << myText << endl;
 		}
 		MyReadFile.close();	// Fájl bezárása
 		SetConsoleTextAttribute(h, 7);
@@ -89,3 +89,15 @@ vector<Bosses> generateBoss(){
 
 	return allBosses;
 }
+
+template <typename... ParamTypes>
+
+    void setTimeOut(int milliseconds,std::function<void(ParamTypes...)> func,ParamTypes... parames)
+    {   
+        std::async(std::launch::async,[=]()
+        {       
+            Sleep(milliseconds);
+            func(parames...); 
+        });
+		system("cls");
+     };
