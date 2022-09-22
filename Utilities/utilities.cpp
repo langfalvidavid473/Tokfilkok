@@ -90,6 +90,8 @@ vector<Bosses> generateBoss(){
 	return allBosses;
 }
 
+// ---- Delay függvény ----
+
 template <typename... ParamTypes>
 
     void setTimeOut(int milliseconds,std::function<void(ParamTypes...)> func,ParamTypes... parames)
@@ -101,3 +103,12 @@ template <typename... ParamTypes>
         });
 		system("cls");
      };
+
+void displayStats(vector<Bosses> boss, Player player, int i){
+	cout << "\tTámadás [->]\t" << "Kitérés [<-]\t" << "Kilépés [ESC]\n" << endl;
+	cout << "\tYour health: " << player.health <<
+			"\tYour damage: " << player.damage <<
+			"\tYour armor: "  << player.armor  << "\n\n" <<
+			"\tBoss health: " << boss[i].health <<
+		 	"\tBoss damage: " << boss[i].damage << endl;
+}

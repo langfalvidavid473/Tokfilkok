@@ -20,19 +20,20 @@
 8		Gray	F	Bright White
 */
 
+
+
 int main() {
 	system("cls");
 	SetConsoleOutputCP(CP_UTF8); // UTF-8 karakterek megjelenítése
 	SetConsoleCP(1250);
 	string name;
-	int hp, dmg, armor;
 	int i = 0;
-	char pressedChar;
+	char pressedChar, combatOption;
 	bool gameOver=false;
 	vector<Bosses> allBosses = generateBoss();
 	cout << "Játékos neve: "; getline(cin,name);
 	name[0] = toupper(name[0]);		// Nagy kezdőbetű a neveknek (cctype)
-	Player player(1500,300,50);
+	Player player(1000,300,100);
 	readFile("./txtFiles/bevezeto.txt", 2, "");
 	system("pause");
 	do
@@ -42,26 +43,63 @@ int main() {
 		SetConsoleOutputCP(1250);	// UTF-8 változóból kiíratáshoz
 		cout << name;
 		SetConsoleOutputCP(65001);	// UTF-8 általános kiíratáshoz
-		cout << ", " << "kérem válasszon egy ajtót jobb vagy bal nyíl használatával!" << endl;
+		cout << ", " << "válassz egy ajtót jobb vagy bal nyíl használatával!" << endl;
 		pressedChar = _getch();
-		if (pressedChar == 0 || pressedChar == 0xE0) pressedChar=getch();
+		if (pressedChar == 0 || pressedChar == 0xE0) pressedChar=_getch();
 		if(pressedChar == LEFT && i < 16){
 			readFile("./txtFiles/doorsLeft.txt", 7, "\t\t\t\t\t\t");
-			Sleep(1000);
+			Sleep(2000);
 			cout << "Balra";
 		}
 		else if(pressedChar == RIGHT && i < 16){
 			readFile("./txtFiles/doorsRight.txt", 7, "\t\t\t\t\t\t");
-			Sleep(1000);
+			Sleep(2000);
 			allBosses[i].getBoss(allBosses[i].name,6);
-			cout <<"\tHealth: " << allBosses[i].health <<
-		 	"\tDamage: " << allBosses[i].damage << endl;
+			displayStats(allBosses, player, i);
+				do
+				{	
+					combatOption = _getch();
+					if (combatOption == 0 || combatOption == 0xE0) combatOption = _getch();
+					if (combatOption == RIGHT && i < 16){
+						newLine();
+						cout << "\tTámadás!!!" << endl;
+						Sleep(3000);
+						allBosses[i].health -= player.damage;
+						allBosses[i].getBoss(allBosses[i].name,6);
+						displayStats(allBosses, player, i);
+						newLine();
+						cout << "\t" << player.damage << " sebzést okoztál!" << endl;
+						Sleep(3000);
+					if(allBosses[i].health >= 1){
+						allBosses[i].getBoss(allBosses[i].name,6);
+						displayStats(allBosses, player, i);
+						newLine();
+						cout << "\tSzörny támad!" << endl;
+						Sleep(3000);
+						player.health -= allBosses[i].damage;
+						allBosses[i].getBoss(allBosses[i].name,6);
+						displayStats(allBosses, player, i);
+						newLine();
+						cout << "\t" << allBosses[i].damage << " sebzést szenvedtél!" << endl;
+						Sleep(2000);
+						allBosses[i].getBoss(allBosses[i].name,6);
+						displayStats(allBosses, player, i);
+					}
+					else {newLine(); cout << "\tGratulálok! Győztél!" << endl;}
+					if(player.health <= 0) {newLine(); cout << "Game over!" << endl; gameOver = true;}
+					}
+					else if(combatOption == ESC) {system("cls"); return 0;}
+				} while ((player.health >= 0) && (allBosses[i].health >= 0));
 			i++;
 		}
-		else if(pressedChar == ESC) {return 0;}
-		else {cout << "Kérem válasszon ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";}
+		else if(pressedChar == ESC) {system("cls"); return 0;}
+		else {
+			SetConsoleOutputCP(1250);
+			cout << name;
+			SetConsoleOutputCP(65001);
+			cout << "válassz ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";
+			}
 		newLine();
-		system("pause");
 	} while (!gameOver);
 	
 	return 0;
