@@ -33,11 +33,12 @@ int main() {
 	vector<Bosses> allBosses = generateBoss();
 	cout << "Játékos neve: "; getline(cin,name);
 	name[0] = toupper(name[0]);		// Nagy kezdőbetű a neveknek (cctype)
-	Player player(1000,300,100);
+	Player player(1000,300,50);
 	readFile("./txtFiles/bevezeto.txt", 2, "");
 	system("pause");
 	do
 	{
+		BlockInput(false); 
 		readFile("./txtFiles/doors.txt", 7, "\t\t\t\t\t\t");
 		newLine();
 		SetConsoleOutputCP(1250);	// UTF-8 változóból kiíratáshoz
@@ -58,7 +59,9 @@ int main() {
 			displayStats(allBosses, player, i);
 				do
 				{	
+					BlockInput(false);
 					combatOption = _getch();
+					BlockInput(true);
 					if (combatOption == 0 || combatOption == 0xE0) combatOption = _getch();
 					if (combatOption == RIGHT && i < 16){
 						newLine();
@@ -76,17 +79,26 @@ int main() {
 						newLine();
 						cout << "\tSzörny támad!" << endl;
 						Sleep(3000);
-						player.health -= allBosses[i].damage;
+						player.health -= (allBosses[i].damage - player.armor);
 						allBosses[i].getBoss(allBosses[i].name,6);
 						displayStats(allBosses, player, i);
 						newLine();
-						cout << "\t" << allBosses[i].damage << " sebzést szenvedtél!" << endl;
+						cout << "\t" << allBosses[i].damage - player.armor << " sebzést szenvedtél!" << endl;
 						Sleep(2000);
 						allBosses[i].getBoss(allBosses[i].name,6);
 						displayStats(allBosses, player, i);
+						
 					}
-					else {newLine(); cout << "\tGratulálok! Győztél!" << endl;}
-					if(player.health <= 0) {newLine(); cout << "Game over!" << endl; gameOver = true;}
+					else {
+						newLine();
+						cout << "\tGratulálok! Győztél!" << endl;
+						Sleep(2000);
+						}
+					if(player.health <= 0) {
+						newLine();
+						cout << "Game over!" << endl;
+						Sleep(2000);
+						gameOver = true;}
 					}
 					else if(combatOption == ESC) {system("cls"); return 0;}
 				} while ((player.health >= 0) && (allBosses[i].health >= 0));

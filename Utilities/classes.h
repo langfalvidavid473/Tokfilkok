@@ -14,6 +14,7 @@
 #include <conio.h> //getch()
 #include <locale> // UTF-8 karakterek kiírása
 #include <future> // delay
+#include <WinUser.h>
 
 using namespace std;
 #pragma execution_character_set( "utf-8" ) // UTF-8 karakterek engedélyezése
@@ -23,10 +24,10 @@ using namespace std;
 class Player {
 public:
 	int health, damage, armor;
-	Player(int hp, int dmg, int armor) {
+	Player(int hp, int dmg, int arm) {
 		health = hp;
 		damage = dmg;
-		armor = armor;
+		armor = arm;
 	}
 };
 

@@ -108,7 +108,8 @@ void displayStats(vector<Bosses> boss, Player player, int i){
 	cout << "\tTámadás [->]\t" << "Kitérés [<-]\t" << "Kilépés [ESC]\n" << endl;
 	cout << "\tYour health: " << player.health <<
 			"\tYour damage: " << player.damage <<
-			"\tYour armor: "  << player.armor  << "\n\n" <<
-			"\tBoss health: " << boss[i].health <<
+			"\tYour armor: "  << player.armor << endl;
+		cout <<	"\tBoss health: " << boss[i].health <<
 		 	"\tBoss damage: " << boss[i].damage << endl;
 }
+
