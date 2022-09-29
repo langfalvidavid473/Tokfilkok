@@ -1,0 +1,2 @@
+name:abrakadabra price:50000330 value:15121210 buff:true
+name:sajt price:123 value:1000 buff:false

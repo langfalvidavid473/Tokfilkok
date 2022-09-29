@@ -3,6 +3,8 @@
 
 #define LEFT 75
 #define RIGHT 77
+#define UP 72
+#define DOWN 80
 #define ESC 27
 
 /*
@@ -22,43 +24,206 @@
 
 int main() {
 	system("cls");
+	vector<ShopItems> v = shopSystem();
 	SetConsoleOutputCP(CP_UTF8); // UTF-8 karakterek megjelenítése
 	SetConsoleCP(1250);
 	string name;
 	int hp, dmg, armor;
 	int i = 0;
-	char pressedChar;
-	bool gameOver=false;
+	int pressedChar, combatOption, pickDoor, pickDebuff, pickShopItems;
+	bool gameOver=false, itemPicked;
 	vector<Bosses> allBosses = generateBoss();
 	cout << "Játékos neve: "; getline(cin,name);
 	name[0] = toupper(name[0]);		// Nagy kezdőbetű a neveknek (cctype)
 	Player player(1500,300,50);
 	readFile("./txtFiles/bevezeto.txt",2);
 	system("pause");
+	// Fő ciklus
 	do
 	{
-		readFile("./txtFiles/doors.txt",7);
+		BlockInput(false);	/* User input engedélyezése (BlockInput függvény használata 
+							   rendszergazdaként való futtatást igényel, anélkül nem működik) */
+		setCursorPosition(0,0);
+		int doorHeight=0;
+		readFile("./txtFiles/doors.txt", 7, "\t\t\t\t",doorHeight);	// Ajtók beolvasása fájlból
 		newLine();
 		SetConsoleOutputCP(1250);	// UTF-8 változóból kiíratáshoz
 		cout << name;
 		SetConsoleOutputCP(65001);	// UTF-8 általános kiíratáshoz
-		cout << ", " << "kérem válasszon egy ajtót jobb vagy bal nyíl használatával!" << endl;
-		pressedChar = _getch();
-		if (pressedChar == 0 || pressedChar == 0xE0) pressedChar=getch();
-		if(pressedChar == LEFT){
-			cout << "Balra";
+		cout << "\t\t\t\t, " << "válassz egy ajtót jobb vagy bal nyíl használatával!" << endl;
+		pressedChar = _getch();		// User inputra várakozás, majd a kapott karakter eltárolása
+		if (pressedChar == 0 || pressedChar == 0xE0) pressedChar = _getch();	// Virtuális karakterek (nyilak) nem 1 értéket adnak vissza, ezért plusz ellenőrzés szükséges
+		if(pressedChar == LEFT && i < 16){			// ----Bal ajtó választása----
+			system("cls");
+			readFile("./txtFiles/doorsLeft.txt", 7, "\t\t\t\t");
+			Sleep(2000);
+			do
+			{
+			itemPicked = false;
+			readFile("./txtFiles/doors.txt", 7, "\t\t\t\t");
+			newLine();
+			newLine();
+			newLine();
+			cout << "\t\t\t\t\t\t\t\t\tBolt" << "\t\t\t\t\t\t\t\t\t" << "Kijárat" << endl;
+			pickDoor = _getch();
+			if (pickDoor == 0 || pickDoor == 0xE0) pickDoor = _getch();
+			// ---- Bolt ----
+			if(pickDoor == LEFT){
+				readFile("./txtFiles/doorsLeft.txt", 7, "\t\t\t\t");
+				Sleep(2000);
+				readFile("./txtFiles/shop.txt", 7, "\t\t\t\t");	// Bolt menü beolvasása
+				newLine();
+				newLine();
+				cout << "\telső [<]" << "\tmásodik [^]" << "\tharmadik [>]" << "\trefresh [v]" << "\tkilépés [ESC]\n";
+				Sleep(2000);
+				itemPicked=false;
+				do
+				{
+				pickShopItems = _getch();
+				if (pickShopItems == 0 || pickShopItems == 0xE0) pickShopItems = _getch();
+				// Sleep(100);
+				switch(pickShopItems){
+					case LEFT: cout << "első item"; itemPicked=true; break;
+					case UP: cout << "második item"; itemPicked=true; break;
+					case RIGHT: cout << "harmadik item"; itemPicked=true; break;
+					case DOWN: cout << "refresh item"; itemPicked=true; break;
+					case ESC: return 0; break;
+					default: {
+						cout << "nem jó input";
+						Sleep(2000);
+						readFile("./txtFiles/shop.txt", 7, "\t\t\t\t");	// Bolt menü beolvasása
+						newLine();
+						newLine();
+						cout << "\telső [<]" << "\tmásodik [^]" << "\tharmadik [>]" << "\trefresh [v]" << "\tkilépés [ESC]\n";
+						} break;
+				}
+				} while (!itemPicked);
+				
+				Sleep(3000);
+			}
+			// ---- Kijárat ----
+			else if(pickDoor == RIGHT){
+				readFile("./txtFiles/doorsRight.txt", 7, "\t\t\t\t");
+				Sleep(2000);
+				readFile("./txtFiles/debuffs.txt", 7, "\t\t\t\t");	// Gyengítés "rendszer" beolvasása
+				newLine();
+				newLine();
+				cout << "\telső [<]" << "\tmásodik [^]" << "\tharmadik [>]" << "\tkilépés [ESC]\n";
+				do
+				{
+					pickShopItems = _getch();
+					if (pickShopItems == 0 || pickShopItems == 0xE0) pickShopItems = _getch();
+					switch(pickShopItems){
+						case LEFT: cout << "első item"; itemPicked=true; break;
+						case UP: cout << "második item"; itemPicked=true; break;
+						case RIGHT: cout << "harmadik item"; itemPicked=true; break;
+						case ESC: return 0; break;
+						default: {
+							cout << "nem jó input";
+							Sleep(2000);
+							readFile("./txtFiles/debuffs.txt", 7, "\t\t\t\t");
+							newLine();
+							newLine();
+							cout << "\telső [<]" << "\tmásodik [^]" << "\tharmadik [>]" << "\tkilépés [ESC]\n";
+						} break;
+				}
+				} while (!itemPicked);
+				Sleep(3000);
+			}
+			else {										// Ha nem sikerült helyes gombot lenyomni
+			SetConsoleOutputCP(1250);
+			cout << name;
+			SetConsoleOutputCP(65001);
+			cout << "válassz ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";
+			Sleep(2000);
+			}
+			} while (!itemPicked);
 		}
-		else if(pressedChar == RIGHT){
-			allBosses[i].getBoss(allBosses[i].name,6);
-			cout <<"\tHealth: " << allBosses[i].health <<
-		 	"\tDamage: " << allBosses[i].damage << endl;
-			i++;
+			
+		// ----Jobb ajtó választása (harc)----
+		else if(pressedChar == RIGHT && i < 16){		
+			readFile("./txtFiles/doorsRight.txt", 7, "\t\t\t\t");
+			Sleep(2000);
+			system("cls");
+			setCursorPosition(0,0);
+			allBosses[i].getBoss(allBosses[i].name,6);	// Megfelelő szörny megjelenítése
+			displayStats(allBosses, player, i);			// Játékos és szörny tulajdonságok megjelenítése
+				do
+				{	
+					BlockInput(false);					// User input engedélyezése, hogy ismét lehessen választani
+					combatOption = _getch();			// Változó a harc közben lenyomható billentyűkre
+					BlockInput(true);					/* User input megszűntetése (azért, hogy tudjon automatikusan működni a harc,
+														   ne lépjen fel semmi furcsa jelenség, ha a felhasználó nyomkodja a gombokat) */
+					if (combatOption == 0 || combatOption == 0xE0) combatOption = _getch();
+					if (combatOption == RIGHT && i < 16){ // Jobb nyíl lenyomása (támadás)
+						newLine();
+						cout << "\tTámadás!!!" << endl;
+						Sleep(3000);
+						allBosses[i].health -= player.damage;
+						// allBosses[i].getBoss(allBosses[i].name,6);
+						setCursorPosition(45,0);
+						displayStats(allBosses, player, i);
+						newLine();
+						cout << "\t" << player.damage << " sebzést okoztál!" << endl;
+						Sleep(3000);
+					if (allBosses[i].health >= 1) {		// Ha a szörnynek maradt élete, támadjon vissza, ha nincs, akkor a játékos győzőtt
+						// allBosses[i].getBoss(allBosses[i].name,6);
+						setCursorPosition(45,0);
+						displayStats(allBosses, player, i);
+						newLine();
+						cout << "\tSzörny támad!" << endl;
+						Sleep(3000);
+						player.health -= (allBosses[i].damage - player.armor);
+						// allBosses[i].getBoss(allBosses[i].name,6);
+						setCursorPosition(45,0);
+						displayStats(allBosses, player, i);
+						newLine();
+						cout << "\t" << allBosses[i].damage - player.armor << " sebzést szenvedtél!" << endl;
+						Sleep(2000);
+						// allBosses[i].getBoss(allBosses[i].name,6);
+						setCursorPosition(45,0);
+						displayStats(allBosses, player, i);
+					}
+					else {
+						newLine();
+						cout << "\tGratulálok! Győztél!" << endl;
+						Sleep(2000);
+						}
+					if(player.health <= 0) {									// Ha a játékosnak elfogyott az élete, vége a játéknak
+						newLine();
+						cout << "Game over!" << endl;
+						Sleep(2000);
+						gameOver = true;
+						}
+					}
+					else if(combatOption == ESC) {system("cls"); return 0;}		// ESC-re kilép a program (harc közben is)
+					else {
+						setCursorPosition(50,0);
+						SetConsoleOutputCP(1250);
+						cout << name;
+						SetConsoleOutputCP(65001);
+						cout << ", a folytatáshoz nyomd le a fent látható gombok egyikét!" << endl;
+						Sleep(2000);
+						// allBosses[i].getBoss(allBosses[i].name,6);
+						// displayStats(allBosses, player, i);
+					}
+			
+					newLine();
+					
+				} while ((player.health >= 0) && (allBosses[i].health >= 0));	// Ha mind két félnek maradt élete, folytatódhat a harc
+			i++;																// A harcnak vége, ciklusváltozó nő 1-gyel (azért, hogy a következő harcban más szörny legyen)
 		}
-		else if(pressedChar == ESC) {return 0;}
-		else {cout << "Kérem válasszon ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";}
+		else if(pressedChar == ESC) {system("cls"); return 0;}					// ESC-re kilép a program
+		else {																	// Ha nem sikerült helyes gombot lenyomni
+			SetConsoleOutputCP(1250);
+			cout << name;
+			SetConsoleOutputCP(65001);
+			cout << "válassz ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";
+			Sleep(2000);
+			}
 		newLine();
-		system("pause");
-	} while (!gameOver);
+	
+	} while (!gameOver);														// Ha a változó hamis, folytatódhat a játék
 	
 	return 0;
 }
