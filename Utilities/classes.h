@@ -1,5 +1,10 @@
 #ifndef CLASSES_H
 #define CLASSES_H
+#define LEFT 75
+#define RIGHT 77
+#define UP 72
+#define DOWN 80
+#define ESC 27
 
 #include <iostream>		// Alapvető input, output műveletekhez
 #include <fstream>		// Fájlból olvasáshoz
@@ -15,6 +20,7 @@
 #include <locale>		// UTF-8 karakterek kiírása
 #include <future>		// delay
 #include <WinUser.h>	// BlockInput()
+#include <typeinfo>
 
 using namespace std;
 
@@ -25,10 +31,10 @@ using namespace std;
 class Player {
 public:
 	int health, damage, armor;
-	Player(int hp, int dmg, int armor) {
+	Player(int hp, int dmg, int arm) {
 		health = hp;
 		damage = dmg;
-		armor = armor;
+		armor = arm;
 	}
 };
 
@@ -45,16 +51,18 @@ public:
 		name = n1;
 	}
 	// ---- Adott ellenfél beolvasása fájlból, ASCII art stílusban ----
-		void getBoss(string fileName, int color) {
+		int getBoss(string fileName, int color,int rows) {
 		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása 
 		string myText;
-		ifstream MyReadFile("./Enemies/" + fileName);
+		ifstream MyReadFile("../Enemies/" + fileName);
 		SetConsoleTextAttribute(h, color); // Parancssor betűszín változtatás 
 		while (getline(MyReadFile, myText)) {
 			cout << "\t\t" << myText << endl;
+			rows++;
 		}
 		MyReadFile.close();
 		SetConsoleTextAttribute(h, 7);
+		return rows;
 	}
 };
 
@@ -64,9 +72,9 @@ int price, value;
 string name;
 bool buff;
 ShopItems(string n, int p, int v, bool b){
+	name = n;
 	price = p;
 	value = v;
-	name = n;
 	buff = b;
 }
 };

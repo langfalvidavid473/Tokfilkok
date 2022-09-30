@@ -1,5 +1,7 @@
 #include "classes.h"
 
+
+
 // x is the column, y is the row. The origin (0,0) is top-left.
 void setCursorPosition(int x, int y)
 {
@@ -59,7 +61,7 @@ int countEnemies(string filename) {
 
 // ---- Függvény általános fájlból olvasáshoz + kiíráshoz ----
 
-void readFile(string fileName, int color, string tab,int rows) {
+auto readFile(string fileName, int color, string tab="",int rows=0) {
 		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);	// Parancssor hívása 
 		string myText;	// Fájl egy sora
 		ifstream MyReadFile(fileName);	// Fájl megnyitása
@@ -72,6 +74,7 @@ void readFile(string fileName, int color, string tab,int rows) {
 		}
 		MyReadFile.close();	// Fájl bezárása
 		SetConsoleTextAttribute(h, 7);
+		return rows;
 	}
 
 void getFileContent(string fileName) {
@@ -120,15 +123,20 @@ void newLine(){
 	cout << endl;
 }
 
+template <typename T>
+
+void shuffleArray(vector<T> &v){
+	random_device rd;	//Random biteket generál, melyeket a default_random_engine felhasznál
+    default_random_engine rng(rd());	// Random számokat generál a kapott bitek alapján
+    shuffle(v.begin(), v.end(), rng);	// Szörnyek sorrendjének keverése
+}
 
 // ---- Ellenfelek generálása (random értékek) ----
 
 vector<Bosses> generateBoss(){
-	vector<string> v = getFileNames("./Enemies");	// A mappában lévő összes txt fájl nevének eltárolása
+	vector<string> v = getFileNames("../Enemies");	// A mappában lévő összes txt fájl nevének eltárolása
 
-	random_device rd;	//Random biteket generál, melyeket a default_random_engine felhasznál
-    default_random_engine rng(rd());	// Random számokat generál a kapott bitek alapján
-    shuffle(v.begin(), v.end(), rng);	// Szörnyek sorrendjének keverése
+	shuffleArray(v);
 
 	vector<Bosses> allBosses;	// Ez a vektor lesz feltöltve a generált objektumokkal
 
@@ -166,32 +174,10 @@ void displayStats(vector<Bosses> boss, Player player, int i){
 		 	"\tBoss damage: " << boss[i].damage << endl;
 }
 
-// hp poti: 25-50-100 --- 300 arany (egyszeri)
 
-// hp buff poti: 2-4-10 --- 500 arany
-
-// damage buff poti: 2-4-10 --- 500 arany
-
-// armor buff poti: 2-5-10 --- 300 arany
-
-// kitérés buff poti: +5% --- 400 arany
-
-// növény hp debuff: 5-10-15 --- 500 arany
-
-// növény damage debuff: 2-5-10 --- 300 arany
-
-// hp debuff poti: 1-3-9 --- +1 kulcs
-
-// damage debuff poti: 1-3-9 --- +1 kulcs
-
-// armor debuff poti: 1-4-9 --- +1 kulcs
-
-			// string name = v[i].substr(0,v[i].length()-4);	// Beolvasott .txt fájlok formázása (kiterjesztés elhagyása)
 vector<ShopItems> shopSystem (){
-	vector <string> v;
-	vector <ShopItems> shopVector;
+	vector<ShopItems> shopVector;
 	string myText;	// Fájl egy sora
-	// string comma = "oti";
 	ifstream MyReadFile("../txtFiles/shop.txt");	// Fájl megnyitása
 	while (getline(MyReadFile, myText)) {	// Fájl soronkénti olvasása
 		string name = myText.substr(myText.find("name:")+5,myText.find("price:",myText.find("name:")+5)-5);
@@ -208,4 +194,239 @@ vector<ShopItems> shopSystem (){
 	}
 	MyReadFile.close();	// Fájl bezárása
 	return shopVector;
+}
+
+/*
+		  ===============
+		  |C++ színkódok|
+		  ===============
+ 
+1		Blue	9	Light Blue
+2		Green	0	Black
+3		Aqua	A	Light Green
+4		Red		B	Light Aqua
+5		Purple	C	Light Red
+6		Yellow	D	Light Purple
+7		White	E	Light Yellow
+8		Gray	F	Bright White
+*/
+
+int main(){
+
+// vector<ShopItems> shopGoods = shopSystem();
+// shuffleArray(shopGoods);
+// cout << shopGoods[0].name << "\t" << shopGoods[0].value << "\t" << shopGoods[0].price << "\t" << shopGoods[0].buff;
+
+	system("cls");
+	SetConsoleOutputCP(CP_UTF8); // UTF-8 karakterek megjelenítése
+	SetConsoleCP(1250);
+	string playerName;
+	int hp, dmg, armor;
+	int i = 0;
+	int pressedChar, combatOption, pickDoor, pickDebuff, pickShopItems;
+	bool gameOver=false, itemPicked;
+	vector<Bosses> allBosses = generateBoss();
+	vector<ShopItems> shopGoods = shopSystem();
+	cout << "Játékos neve: "; getline(cin,playerName);
+	playerName[0] = toupper(playerName[0]);		// Nagy kezdőbetű a neveknek (cctype)
+	Player player(1500,300,50);
+	readFile("../txtFiles/bevezeto.txt",2);
+	system("pause");
+	// Fő ciklus
+	do
+	{
+		BlockInput(false);	/* User input engedélyezése (BlockInput függvény használata 
+							   rendszergazdaként való futtatást igényel, anélkül nem működik) */
+		system("cls");
+		setCursorPosition(0,0);
+		int doorHeight = readFile("../txtFiles/doors.txt", 7, "\t\t\t\t",doorHeight);	// Ajtók beolvasása fájlból
+		setCursorPosition(0,doorHeight+4);
+		SetConsoleOutputCP(1250);	// UTF-8 változóból kiíratáshoz
+		cout << playerName;
+		SetConsoleOutputCP(65001);	// UTF-8 általános kiíratáshoz
+		cout << ", " << "válassz egy ajtót jobb vagy bal nyíl használatával!" << endl;
+		pressedChar = _getch();		// User inputra várakozás, majd a kapott karakter eltárolása
+		if (pressedChar == 0 || pressedChar == 0xE0) pressedChar = _getch();	// Virtuális karakterek (nyilak) nem 1 értéket adnak vissza, ezért plusz ellenőrzés szükséges
+		if(pressedChar == LEFT && i < 16){			// ----Bal ajtó választása----
+			setCursorPosition(0,0);
+			int doorLeftHeight = readFile("../txtFiles/doorsLeft.txt", 7, "\t\t\t\t",doorLeftHeight);
+			Sleep(1500);
+			do
+			{
+			itemPicked = false;
+			setCursorPosition(0,0);
+			readFile("../txtFiles/doors.txt", 7, "\t\t\t\t");
+			setCursorPosition(0,doorHeight+4);
+			cout << "\t\t\t\t\t\t\t\t\tBolt" << "\t\t\t\t\t\t\t\t\t" << "Kijárat" << endl;
+			pickDoor = _getch();
+			if (pickDoor == 0 || pickDoor == 0xE0) pickDoor = _getch();
+			// ---- Bolt ----
+			if(pickDoor == LEFT){
+				setCursorPosition(0,0);
+				readFile("../txtFiles/doorsLeft.txt", 7, "\t\t\t\t");
+				Sleep(2000);
+				system("cls");
+				int shopASCII = readFile("../txtFiles/shopASCII.txt", 7, "\t\t\t\t", shopASCII);	// Bolt menü beolvasása
+				setCursorPosition(0, shopASCII+5);
+				cout << "\t\t\t\t" << shopGoods[0].name << "\t" << shopGoods[1].name << "\t" << shopGoods[2].name << endl;
+				cout << "\t\t\t\t" << shopGoods[0].price << "\t" << shopGoods[1].price << "\t" << shopGoods[2].price << endl;
+				newLine();
+				newLine();
+				cout << "\telső [<]" << "\tmásodik [^]" << "\tharmadik [>]" << "\trefresh [v]" << "\tkilépés [ESC]\n";
+				Sleep(2000);
+				itemPicked=false;
+				do
+				{
+				pickShopItems = _getch();
+				if (pickShopItems == 0 || pickShopItems == 0xE0) pickShopItems = _getch();
+				switch(pickShopItems){
+					case LEFT: cout << "első item"; itemPicked=true; break;
+					case UP: cout << "második item"; itemPicked=true; break;
+					case RIGHT: cout << "harmadik item"; itemPicked=true; break;
+					case DOWN: {
+						shuffleArray(shopGoods);
+						setCursorPosition(0, shopASCII+5);
+						cout << "\x1b[2K";
+						setCursorPosition(0, shopASCII+5);
+						cout << "\t\t\t\t" << shopGoods[0].name << "\t" << shopGoods[1].name << "\t" << shopGoods[2].name << endl;
+						cout << "\t\t\t\t" << shopGoods[0].price << "\t" << shopGoods[1].price << "\t" << shopGoods[2].price << endl;
+					} break;	
+					case ESC: return 0; break;
+					default: {
+						cout << "nem jó input";
+						Sleep(2000);
+						readFile("../txtFiles/shop.txt", 7, "\t\t\t\t");	// Bolt menü beolvasása
+						newLine();
+						newLine();
+						cout << "\telső [<]" << "\tmásodik [^]" << "\tharmadik [>]" << "\trefresh [v]" << "\tkilépés [ESC]\n";
+						} break;
+				}
+				} while (!itemPicked);
+				
+				Sleep(1500);
+			}
+			// ---- Kijárat ----
+			else if(pickDoor == RIGHT){
+				readFile("../txtFiles/doorsRight.txt", 7, "\t\t\t\t");
+				Sleep(2000);
+				readFile("../txtFiles/debuffs.txt", 7, "\t\t\t\t");	// Gyengítés "rendszer" beolvasása
+				newLine();
+				newLine();
+				cout << "\telső [<]" << "\tmásodik [^]" << "\tharmadik [>]" << "\tkilépés [ESC]\n";
+				do
+				{
+					pickShopItems = _getch();
+					if (pickShopItems == 0 || pickShopItems == 0xE0) pickShopItems = _getch();
+					switch(pickShopItems){
+						case LEFT: cout << "első item"; itemPicked=true; break;
+						case UP: cout << "második item"; itemPicked=true; break;
+						case RIGHT: cout << "harmadik item"; itemPicked=true; break;
+						case ESC: return 0; break;
+						default: {
+							cout << "nem jó input";
+							Sleep(2000);
+							readFile("../txtFiles/debuffs.txt", 7, "\t\t\t\t");
+							newLine();
+							newLine();
+							cout << "\telső [<]" << "\tmásodik [^]" << "\tharmadik [>]" << "\tkilépés [ESC]\n";
+						} break;
+				}
+				} while (!itemPicked);
+				Sleep(3000);
+			}
+			else {										// Ha nem sikerült helyes gombot lenyomni
+			SetConsoleOutputCP(1250);
+			cout << playerName;
+			SetConsoleOutputCP(65001);
+			cout << "válassz ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";
+			Sleep(2000);
+			}
+			} while (!itemPicked);
+		}
+			
+		// ----Jobb ajtó választása (harc)----
+		else if(pressedChar == RIGHT && i < 16){		
+			readFile("../txtFiles/doorsRight.txt", 7, "\t\t\t\t");
+			Sleep(2000);
+			system("cls");
+			setCursorPosition(0,0);
+			int bossHeight = allBosses[i].getBoss(allBosses[i].name,6,bossHeight);	// Megfelelő szörny megjelenítése
+			setCursorPosition(0,bossHeight+3);
+			displayStats(allBosses, player, i);			// Játékos és szörny tulajdonságok megjelenítése
+				do
+				{	
+					BlockInput(false);					// User input engedélyezése, hogy ismét lehessen választani
+					combatOption = _getch();			// Változó a harc közben lenyomható billentyűkre
+					BlockInput(true);					/* User input megszűntetése (azért, hogy tudjon automatikusan működni a harc,
+														   ne lépjen fel semmi furcsa jelenség, ha a felhasználó nyomkodja a gombokat) */
+					if (combatOption == 0 || combatOption == 0xE0) combatOption = _getch();
+					if (combatOption == RIGHT && i < 16){ // Jobb nyíl lenyomása (támadás)
+						setCursorPosition(0,bossHeight+7);
+						cout << "\tTámadás!!!" << endl;
+						Sleep(2000);
+						allBosses[i].health -= player.damage;
+						setCursorPosition(0,bossHeight+3);
+						displayStats(allBosses, player, i);
+						setCursorPosition(0,bossHeight+9);
+						cout << "\t" << player.damage << " sebzést okoztál!" << endl;
+						Sleep(2000);
+					if (allBosses[i].health >= 1) {		// Ha a szörnynek maradt élete, támadjon vissza, ha nincs, akkor a játékos győzőtt
+						setCursorPosition(0,bossHeight+7);
+						cout << "\tSzörny támad!" << endl;
+						Sleep(2000);
+						player.health -= (allBosses[i].damage - player.armor);
+						setCursorPosition(0,bossHeight+3);
+						displayStats(allBosses, player, i);
+						setCursorPosition(0,bossHeight+9);
+						cout << "\t" << allBosses[i].damage - player.armor << " sebzést szenvedtél!" << endl;
+						Sleep(2000);
+						setCursorPosition(0,bossHeight+7);
+						cout << "\x1b[2K";
+						setCursorPosition(0,bossHeight+9);
+						cout << "\x1b[2K";
+					}
+					else {
+						newLine();
+						cout << "\tGratulálok! Győztél!" << endl;
+						Sleep(2000);
+						}
+					if(player.health <= 0) {									// Ha a játékosnak elfogyott az élete, vége a játéknak
+						newLine();
+						cout << "Game over!" << endl;
+						Sleep(2000);
+						gameOver = true;
+						}
+					}
+					else if(combatOption == ESC) {system("cls"); return 0;}		// ESC-re kilép a program (harc közben is)
+					else {
+						setCursorPosition(0,bossHeight+9);
+						SetConsoleOutputCP(1250);
+						cout << playerName;
+						SetConsoleOutputCP(65001);
+						cout << ", a folytatáshoz nyomd le a fent látható gombok egyikét!" << endl;
+						Sleep(2000);
+						// allBosses[i].getBoss(allBosses[i].name,6);
+						// displayStats(allBosses, player, i);
+					}
+			
+				
+					
+				} while ((player.health >= 0) && (allBosses[i].health >= 0));	// Ha mind két félnek maradt élete, folytatódhat a harc
+			i++;																// A harcnak vége, ciklusváltozó nő 1-gyel (azért, hogy a következő harcban más szörny legyen)
+		}
+		else if(pressedChar == ESC) {system("cls"); return 0;}					// ESC-re kilép a program
+		else {																	// Ha nem sikerült helyes gombot lenyomni
+			SetConsoleOutputCP(1250);
+			cout << playerName;
+			SetConsoleOutputCP(65001);
+			cout << "válassz ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";
+			Sleep(2000);
+			}
+		newLine();
+	
+	} while (!gameOver);														// Ha a változó hamis, folytatódhat a játék
+	
+
+
+	return 0;
 }
