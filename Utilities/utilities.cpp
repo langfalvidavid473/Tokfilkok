@@ -222,6 +222,7 @@ int main(){
 	SetConsoleCP(1250);
 	string playerName;
 	int hp, dmg, armor;
+	int bossHeight;
 	int i = 0;
 	int pressedChar, combatOption, pickDoor, pickDebuff, pickShopItems;
 	bool gameOver=false, itemPicked;
@@ -287,6 +288,8 @@ int main(){
 						shuffleArray(shopGoods);
 						setCursorPosition(0, shopASCII+5);
 						cout << "\x1b[2K";
+						setCursorPosition(0, shopASCII+6);
+						cout << "\x1b[2K";
 						setCursorPosition(0, shopASCII+5);
 						cout << "\t\t\t\t" << shopGoods[0].name << "\t" << shopGoods[1].name << "\t" << shopGoods[2].name << endl;
 						cout << "\t\t\t\t" << shopGoods[0].price << "\t" << shopGoods[1].price << "\t" << shopGoods[2].price << endl;
@@ -346,12 +349,12 @@ int main(){
 			
 		// ----Jobb ajtó választása (harc)----
 		else if(pressedChar == RIGHT && i < 16){	
+			bossHeight = 0;
 			setCursorPosition(0,0);	
 			readFile("../txtFiles/doorsRight.txt", 7, "\t\t\t\t");
 			Sleep(2000);
 			system("cls");
-			setCursorPosition(0,0);
-			int bossHeight = allBosses[i].getBoss(allBosses[i].name,6,bossHeight);	// Megfelelő szörny megjelenítése
+			bossHeight = allBosses[i].getBoss(allBosses[i].name,6,bossHeight);	// Megfelelő szörny megjelenítése
 			setCursorPosition(0,bossHeight+3);
 			displayStats(allBosses, player, i);			// Játékos és szörny tulajdonságok megjelenítése
 				do
@@ -380,6 +383,10 @@ int main(){
 						cout << "\tSzörny támad!" << endl;
 						Sleep(2000);
 						player.health -= (allBosses[i].damage - player.armor);
+						setCursorPosition(0,bossHeight+5);
+						cout << "\x1b[2K";
+						setCursorPosition(0,bossHeight+6);
+						cout << "\x1b[2K";
 						setCursorPosition(0,bossHeight+3);
 						displayStats(allBosses, player, i);
 						setCursorPosition(0,bossHeight+10);
