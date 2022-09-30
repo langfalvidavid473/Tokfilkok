@@ -238,9 +238,9 @@ int main(){
 		BlockInput(false);	/* User input engedélyezése (BlockInput függvény használata 
 							   rendszergazdaként való futtatást igényel, anélkül nem működik) */
 		system("cls");
-		setCursorPosition(0,0);
 		int doorHeight = readFile("../txtFiles/doors.txt", 7, "\t\t\t\t",doorHeight);	// Ajtók beolvasása fájlból
-		setCursorPosition(0,doorHeight+4);
+		newLine();
+		newLine();
 		SetConsoleOutputCP(1250);	// UTF-8 változóból kiíratáshoz
 		cout << playerName;
 		SetConsoleOutputCP(65001);	// UTF-8 általános kiíratáshoz
@@ -345,7 +345,8 @@ int main(){
 		}
 			
 		// ----Jobb ajtó választása (harc)----
-		else if(pressedChar == RIGHT && i < 16){		
+		else if(pressedChar == RIGHT && i < 16){	
+			setCursorPosition(0,0);	
 			readFile("../txtFiles/doorsRight.txt", 7, "\t\t\t\t");
 			Sleep(2000);
 			system("cls");
@@ -361,28 +362,32 @@ int main(){
 														   ne lépjen fel semmi furcsa jelenség, ha a felhasználó nyomkodja a gombokat) */
 					if (combatOption == 0 || combatOption == 0xE0) combatOption = _getch();
 					if (combatOption == RIGHT && i < 16){ // Jobb nyíl lenyomása (támadás)
-						setCursorPosition(0,bossHeight+7);
+						setCursorPosition(0,bossHeight+8);
 						cout << "\tTámadás!!!" << endl;
 						Sleep(2000);
 						allBosses[i].health -= player.damage;
+						setCursorPosition(0,bossHeight+5);
+						cout << "\x1b[2K";
+						setCursorPosition(0,bossHeight+6);
+						cout << "\x1b[2K";
 						setCursorPosition(0,bossHeight+3);
 						displayStats(allBosses, player, i);
-						setCursorPosition(0,bossHeight+9);
+						setCursorPosition(0,bossHeight+10);
 						cout << "\t" << player.damage << " sebzést okoztál!" << endl;
 						Sleep(2000);
 					if (allBosses[i].health >= 1) {		// Ha a szörnynek maradt élete, támadjon vissza, ha nincs, akkor a játékos győzőtt
-						setCursorPosition(0,bossHeight+7);
+						setCursorPosition(0,bossHeight+8);
 						cout << "\tSzörny támad!" << endl;
 						Sleep(2000);
 						player.health -= (allBosses[i].damage - player.armor);
 						setCursorPosition(0,bossHeight+3);
 						displayStats(allBosses, player, i);
-						setCursorPosition(0,bossHeight+9);
+						setCursorPosition(0,bossHeight+10);
 						cout << "\t" << allBosses[i].damage - player.armor << " sebzést szenvedtél!" << endl;
 						Sleep(2000);
-						setCursorPosition(0,bossHeight+7);
+						setCursorPosition(0,bossHeight+8);
 						cout << "\x1b[2K";
-						setCursorPosition(0,bossHeight+9);
+						setCursorPosition(0,bossHeight+10);
 						cout << "\x1b[2K";
 					}
 					else {
@@ -399,7 +404,7 @@ int main(){
 					}
 					else if(combatOption == ESC) {system("cls"); return 0;}		// ESC-re kilép a program (harc közben is)
 					else {
-						setCursorPosition(0,bossHeight+9);
+						setCursorPosition(0,bossHeight+10);
 						SetConsoleOutputCP(1250);
 						cout << playerName;
 						SetConsoleOutputCP(65001);
@@ -422,7 +427,6 @@ int main(){
 			cout << "válassz ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";
 			Sleep(2000);
 			}
-		newLine();
 	
 	} while (!gameOver);														// Ha a változó hamis, folytatódhat a játék
 	

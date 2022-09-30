@@ -51,7 +51,7 @@ public:
 		name = n1;
 	}
 	// ---- Adott ellenfél beolvasása fájlból, ASCII art stílusban ----
-		int getBoss(string fileName, int color,int rows) {
+		int getBoss(string fileName, int color,int rows=0) {
 		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása 
 		string myText;
 		ifstream MyReadFile("../Enemies/" + fileName);
