@@ -83,7 +83,7 @@ class Debuffs{
 	public:
 	int value;
 	string name, type;
-	Debuffs(int v, string n, string t){
+	Debuffs(string n, int v, string t){
 		value = v;
 		name = n;
 		type = t;

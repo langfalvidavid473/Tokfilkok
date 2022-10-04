@@ -1,1 +1,5 @@
-        debuff1      debuff2      debuff3
+name:asd value:123 type:hp
+name:asd1 value:134 type:dmg
+name:asd2 value:145 type:armor
+name:asd3 value:156 type:luck
+        
