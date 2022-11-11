@@ -82,48 +82,48 @@ int main(){
 			if (pickDoor == 0 || pickDoor == 0xE0) pickDoor = _getch();
 			// ---- Bolt ----
 			if(pickDoor == LEFT){
-				if(player.keys>0){
-				player.keys--;
+				if(player.keys>0){	// Csak akkor enged be, ha a játékos rendelkezik kulccsal
+				player.keys--;		// Belépés után 1 kulcs elveszik
 				setCursorPosition(0,0);
-				readFile("../txtFiles/doorsLeft.txt", 7, "\t\t\t\t");
+				readFile("../txtFiles/doorsLeft.txt", 7, "\t\t\t\t");	
 				Sleep(2000);
 				system("cls");
 				shopASCII = readFile("../txtFiles/shopASCII.txt", 7, "\t\t\t\t", shopASCII);	// Bolt menü beolvasása
 				newLine();
 				newLine();
 				newLine();
-				cout << "\t\t\t\t" << shopGoods[0].name << "\t" << shopGoods[1].name << "\t" << shopGoods[2].name << endl;
-				cout << "\t\t\t\t" << shopGoods[0].price << "\t" << shopGoods[1].price << "\t" << shopGoods[2].price << endl;
+				cout << "\t\t\t\t" << shopGoods[0].name << "\t" << shopGoods[1].name << "\t" << shopGoods[2].name << endl;		// Áruk neve
+				cout << "\t\t\t\t" << shopGoods[0].price << "\t" << shopGoods[1].price << "\t" << shopGoods[2].price << endl;	// Áruk ára
 				newLine();
 				newLine();
-				cout << "\t" << shopGoods[0].name <<"[<]" << "\t" << shopGoods[1].name << "[^]" << "\t" << shopGoods[2].name << "[>]" << "\tFrissítés (300 arany) [v]" << "\tKilépés [ESC]\n";
+				cout << "\t" << shopGoods[0].name <<"[<]" << "\t" << shopGoods[1].name << "[^]" << "\t" << shopGoods[2].name << "[>]" << "\tFrissítés (300 arany) [v]" << "\tKilépés [ESC]\n"; // Instrukciók
 				Sleep(2000);
-				itemPicked = false;
+				itemPicked = false;	// Amíg a változó hamis, nem történt interakció
 				do
 				{
 				pickShopItems = _getch();
 				if (pickShopItems == 0 || pickShopItems == 0xE0) pickShopItems = _getch();
 				switch(pickShopItems){
-					case LEFT: {
-						if (player.gold >= shopGoods[0].price){
+					case LEFT: {	// Első áru megvásárlása
+						if (player.gold >= shopGoods[0].price){	// Ha a játékos pénze elegendő, az áru megvásárolható
 							setCursorPosition(0,shopASCII+11);
 							cout << "\t\t\t\t" << shopGoods[0].name << " megvásárolva " << shopGoods[0].price << " aranyért!" << endl;
-							player.gold-= shopGoods[0].price;
-							itemPicked=true;
-							switch (shopGoods[0].type){
-								case 1: shopGoods[0].buff ? player.health += shopGoods[0].value : player.health -= shopGoods[0].value; break;
-								case 2: shopGoods[0].buff ? player.damage += shopGoods[0].value : player.damage -= shopGoods[0].value; break;
-								case 3: shopGoods[0].buff ? dodgeChance += shopGoods[0].value : dodgeChance -= shopGoods[0].value; break;
-								case 4: shopGoods[0].buff ? player.armor += shopGoods[0].value : player.armor -= shopGoods[0].value; break;
+							player.gold-= shopGoods[0].price;	// Arany levonása az árnak megfelelően
+							itemPicked=true;					// Változó igazra vált, kilépés a boltból
+							switch (shopGoods[0].type){			// A vásárolt áru típusának ellenőrzése
+								case 1: shopGoods[0].buff ? player.health += shopGoods[0].value : player.health -= shopGoods[0].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (ÉLET)
+								case 2: shopGoods[0].buff ? player.damage += shopGoods[0].value : player.damage -= shopGoods[0].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (SEBZÉS)
+								case 3: shopGoods[0].buff ? dodgeChance += shopGoods[0].value : dodgeChance -= shopGoods[0].value; break;		// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (KITÉRÉS)
+								case 4: shopGoods[0].buff ? player.armor += shopGoods[0].value : player.armor -= shopGoods[0].value; break;		// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (PÁNCÉL)
 							}
-							shopGoods.erase(shopGoods.begin());
+							shopGoods.erase(shopGoods.begin()); // Vásárlás után a megvásárolt áru törlése a vektorból. hogy később ne legyen ismétlődés
 						}
-						else {
+						else {	// Ha a játékosnak nincs elég pénze, hibaüzenetet kap
 							setCursorPosition(0,shopASCII+11);
 							cout << "\t\t\t\t" << "További " << shopGoods[0].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
 						}
 					} break;
-					case UP: {
+					case UP: {	// Második áru megvásárlása
 						if (player.gold >= shopGoods[1].price){
 							setCursorPosition(0,shopASCII+11);
 							cout << "\t\t\t\t" << shopGoods[1].name << " megvásárolva " << shopGoods[1].price << " aranyért!" << endl;
@@ -142,7 +142,7 @@ int main(){
 							cout << "\t\t\t\t" << "További " << shopGoods[1].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
 						}
 					} break;
-					case RIGHT: {
+					case RIGHT: {	// Harmadik áru megvásárlása
 						if (player.gold >= shopGoods[2].price){
 							setCursorPosition(0,shopASCII+11);
 							cout << "\t\t\t\t" << shopGoods[2].name << " megvásárolva " << shopGoods[2].price << " aranyért!" << endl;
@@ -161,32 +161,32 @@ int main(){
 							cout << "\t\t\t\t" << "További " << shopGoods[2].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
 						}
 					} break;
-					case DOWN: {
-						if(player.gold >= shopRefresh) {
-							player.gold -= shopRefresh;
-							shuffleArray(shopGoods);
+					case DOWN: {	// Bolt frissítése
+						if(player.gold >= shopRefresh) { // Ha a játékosnak van elég pénze, frissítheti az árukat
+							player.gold -= shopRefresh;	 // Az arany levonódik frissítés után
+							shuffleArray(shopGoods);	 // Az árukat tároló vektor összekeverése
 							setCursorPosition(0, shopASCII+5);
 							cout << "\x1b[2K";
 							setCursorPosition(0, shopASCII+6);
 							cout << "\x1b[2K";
 							setCursorPosition(0, shopASCII+5);
-							cout << "\t\t\t\t" << shopGoods[0].name << "\t" << shopGoods[1].name << "\t" << shopGoods[2].name << endl;
-							cout << "\t\t\t\t" << shopGoods[0].price << "\t" << shopGoods[1].price << "\t" << shopGoods[2].price << endl;
+							cout << "\t\t\t\t" << shopGoods[0].name << "\t" << shopGoods[1].name << "\t" << shopGoods[2].name << endl;		// Új áruk megjelenítése
+							cout << "\t\t\t\t" << shopGoods[0].price << "\t" << shopGoods[1].price << "\t" << shopGoods[2].price << endl;	// Új áruk árának megjelenítése
 							setCursorPosition(0,shopASCII+9);
 							cout << "\x1b[2K";
 							setCursorPosition(0,shopASCII+9);
-							cout << "\t" << shopGoods[0].name <<"[<]" << "\t" << shopGoods[1].name << "[^]" << "\t" << shopGoods[2].name << "[>]" << "\tFrissítés (300 arany) [v]" << "\tKilépés [ESC]\n";
+							cout << "\t" << shopGoods[0].name <<"[<]" << "\t" << shopGoods[1].name << "[^]" << "\t" << shopGoods[2].name << "[>]" << "\tFrissítés (300 arany) [v]" << "\tKilépés [ESC]\n";	// Instrukciók
 							newLine();
 						}
-						else {
+						else {	// Ha nincs elegendő arany a frissítéshez, a játékos hibaüzenetet kap
 							cout << "\t\t\t\t" << "További " << shopRefresh - player.gold << " arany szükséges az áruk frissítéséhez!" << endl;
 						}
 					} break;	
-					case ESC: {
+					case ESC: {	// Kilépés a boltból, ha semmire sem elegendő a játékos aranya  
 							cout << "\t\t\t\t" << "Kilépés!" << endl;
 							itemPicked=true;
 					} break;
-					default: {
+					default: {	// Ha a felsorolt gombok közül egyiket sem nyomta meg a játékos, hibaüzenetet kap, ami 1.5s múlva el is tűnik
 						setCursorPosition(0,shopASCII+8);
 						cout << "Helytelen input!" << endl;
 						Sleep(1500);
@@ -194,16 +194,16 @@ int main(){
 						cout << "\x1b[2K";
 						} break;
 				}
-				} while (!itemPicked);
+				} while (!itemPicked);	// do-while ciklus vége (BOLT)
 				}
-				else {
+				else {	// Ha a játékosnak nincs 1 kulcsa sem, nem léphet be a boltba
 					setCursorPosition(0,doorHeight+6);
 					cout << "\t\t\t\tNincs elegendő kulcs a belépéshez!" << endl;
 					Sleep(1500);
 					setCursorPosition(0,doorHeight+6);
 					cout << "\x1b[2K";
 					}
-					shuffleArray(shopGoods);
+					shuffleArray(shopGoods);	// Árukat tároló vektor elemeinek összekeverése, hogy a következő megnyitásnál más áruk legyenek
 				}
 			// ---- Kijárat ----
 			else if(pickDoor == RIGHT){
@@ -211,10 +211,10 @@ int main(){
 				readFile("../txtFiles/doorsRight.txt", 7, "\t\t\t\t");
 				Sleep(2000);
 				system("cls");
-				debuffsASCII = readFile("../txtFiles/debuffsASCII.txt", 4, "\t\t\t\t", debuffsASCII);	// Gyengítés "rendszer" beolvasása
+				debuffsASCII = readFile("../txtFiles/debuffsASCII.txt", 4, "\t\t\t\t", debuffsASCII);					// Gyengítésekhez tartozó ASCII-k beolvasása
 				setCursorPosition(0, debuffsASCII+4);
-				cout << "\t\t\t\t" << debuffs[0].name << "\t" << debuffs[1].name << "\t" << debuffs[2].name << endl;
-				cout << "\t\t\t\t" << debuffs[0].value << "\t" << debuffs[1].value << "\t" << debuffs[2].value << endl;
+				cout << "\t\t\t\t" << debuffs[0].name << "\t" << debuffs[1].name << "\t" << debuffs[2].name << endl;	// Gyengítések neve
+				cout << "\t\t\t\t" << debuffs[0].value << "\t" << debuffs[1].value << "\t" << debuffs[2].value << endl;	// Gyengítések értéke
 				newLine();
 				newLine();
 				cout << "\t" << debuffs[0].name << "[<]" << "\t" << debuffs[1].name << "[^]" << "\t" << debuffs[2].name << "[>]" << "\tKilépés [ESC]\n";
@@ -223,22 +223,22 @@ int main(){
 				{
 					pickShopItems = _getch();
 					if (pickShopItems == 0 || pickShopItems == 0xE0) pickShopItems = _getch();
-					switch(pickShopItems){
-						case LEFT: {
-							player.keys++;
-							switch(debuffs[0].type){
-								case 1: player.health -= debuffs[0].value;
-								case 2: player.damage -= debuffs[0].value;
-								case 3: dodgeChance   -= debuffs[0].value;
-								case 4: player.armor  -= debuffs[0].value;
-								case 5: allBosses[i].health += debuffs[0].value;
-								case 6: allBosses[i].damage += debuffs[0].value;
+					switch(pickShopItems){	// Felsorolt gyengítések választásához szükséges input
+						case LEFT: {		// Első gyengítés választása
+							player.keys++;	// Játékos kap 1 kulcsot miután választott
+							switch(debuffs[0].type){	// Gyengítés típusának ellenőrzése (debuffs.txt)
+								case 1: player.health -= debuffs[0].value;			// JÁTÉKOS ÉLET CSÖKKENTÉS
+								case 2: player.damage -= debuffs[0].value;			// JÁTÉKOS SEBZÉS CSÖKKENTÉS
+								case 3: dodgeChance   -= debuffs[0].value;			// JÁTÉKOS KITÉRÉS CSÖKKENTÉS
+								case 4: player.armor  -= debuffs[0].value;			// JÁTÉKOS PÁNCÉL CSÖKKENTÉS
+								case 5: allBosses[i].health += debuffs[0].value;	// SZÖRNY ÉLET NÖVELÉS
+								case 6: allBosses[i].damage += debuffs[0].value;	// SZÖRNY SEBZÉS NÖVELÉS
 							}
 							cout << "\t\t\t\t" << debuffs[0].name << "kiválasztva!" << endl;
-							debuffs.erase(debuffs.begin());
+							debuffs.erase(debuffs.begin());							// Választás után a gyengítés törlése a vektorból, hogy ne ismétlődjön később
 							itemPicked=true;
 						} break;
-						case UP:{
+						case UP:{			// Második gyengítés választása
 							player.keys++;
 							switch(debuffs[1].type){
 								case 1: player.health -= debuffs[1].value;
@@ -252,7 +252,7 @@ int main(){
 							debuffs.erase(debuffs.begin()+1);
 							itemPicked=true;
 						} break;
-						case RIGHT: {
+						case RIGHT: {		// Harmadik gyengítés választása
 							player.keys++;
 							switch(debuffs[2].type){
 								case 1: player.health -= debuffs[2].value;
@@ -266,8 +266,8 @@ int main(){
 							debuffs.erase(debuffs.begin()+2);
 							itemPicked=true;
 						} break;
-						case ESC: return 0; break;
-						default: {
+						case ESC: return 0; break;	// ESC-re leáll a program
+						default: {					// Ha a felsorolt gombok közül egyiket sem nyomja meg a felhasználó, hibaüzenetet kap
 							setCursorPosition(0,debuffsASCII+11);
 							cout << "Helytelen input!" << endl;
 							Sleep(1500);
@@ -277,19 +277,19 @@ int main(){
 						
 				}
 				} while (!itemPicked);
-				shuffleArray(debuffs);
+				shuffleArray(debuffs);	// Gyengítéseket tároló vektor összekeverése, hogy a következő megnyitáskor ne ismétlődjenek
 				Sleep(2000);
 				setCursorPosition(0,0);
 			}
-			else if (pickDoor == ESC) {system("cls"); return 0;}
-			else {										// Ha nem sikerült helyes gombot lenyomni
+			else if (pickDoor == ESC) {system("cls"); return 0;}	// ESC-re leáll a program
+			else {						// Ha nem sikerült helyes gombot lenyomni
 			SetConsoleOutputCP(1250);
 			cout << "\t" << playerName;
 			SetConsoleOutputCP(65001);
 			cout << ", válassz ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";
 			Sleep(2000);
 			}
-			} while (!itemPicked);
+			} while (!itemPicked);	// do-while ciklus vége (kijárat)
 		}
 			
 		// ----Jobb ajtó választása (harc)----
@@ -298,21 +298,21 @@ int main(){
 			readFile("../txtFiles/doorsRight.txt", 7, "\t\t\t\t");
 			Sleep(2000);
 			system("cls");
-			bossHeight = allBosses[i].getBoss(allBosses[i].name,6,bossHeight);	// Megfelelő szörny megjelenítése
+			bossHeight = allBosses[i].getBoss(allBosses[i].name,6,bossHeight);	// Megfelelő szörny megjelenítése, ASCII art sorainak számának eltárolása
 			setCursorPosition(0,bossHeight+3);
-			displayStats(allBosses, player, i);			// Játékos és szörny tulajdonságok megjelenítése
+			displayStats(allBosses, player, i);					// Játékos és szörny tulajdonságok megjelenítése
 				do
 				{	
-					BlockInput(false);					// User input engedélyezése, hogy ismét lehessen választani
-					combatOption = _getch();			// Változó a harc közben lenyomható billentyűkre
-					BlockInput(true);					/* User input megszűntetése (azért, hogy tudjon automatikusan működni a harc,
-														   ne lépjen fel semmi furcsa jelenség, ha a felhasználó nyomkodja a gombokat) */
+					BlockInput(false);							// User input engedélyezése, hogy ismét lehessen választani
+					combatOption = _getch();					// Változó a harc közben lenyomható billentyűkre
+					BlockInput(true);							/* User input megszűntetése (azért, hogy tudjon automatikusan működni a harc,
+														   		ne lépjen fel semmi furcsa jelenség, ha a felhasználó nyomkodja a gombokat) */
 					if (combatOption == 0 || combatOption == 0xE0) combatOption = _getch();
-					if (combatOption == RIGHT && i < 16){ // Jobb nyíl lenyomása (támadás)
+					if (combatOption == RIGHT && i < 16){ 		// Jobb nyíl lenyomása (támadás)
 						setCursorPosition(0,bossHeight+8);
 						cout << "\tTámadás!!!" << endl;
 						Sleep(2000);
-						allBosses[i].health -= player.damage;
+						allBosses[i].health -= player.damage;	// Támadás után a szörny életet veszít
 						setCursorPosition(0,bossHeight+5);
 						cout << "\x1b[2K";
 						setCursorPosition(0,bossHeight+6);
@@ -322,11 +322,11 @@ int main(){
 						setCursorPosition(0,bossHeight+10);
 						cout << "\t" << player.damage << " sebzést okoztál!" << endl;
 						Sleep(2000);
-					if (allBosses[i].health >= 1) {		// Ha a szörnynek maradt élete, támadjon vissza, ha nincs, akkor a játékos győzőtt
+					if (allBosses[i].health >= 1) {				// Ha a szörnynek maradt élete, támadjon vissza, ha nincs, akkor a játékos győzőtt
 						setCursorPosition(0,bossHeight+8);
 						cout << "\tSzörny támad!" << endl;
 						Sleep(2000);
-						player.health -= (allBosses[i].damage - player.armor);
+						player.health -= (allBosses[i].damage - player.armor);	// Játékos életet veszít (szörny sebzése - játékos páncélja)
 						setCursorPosition(0,bossHeight+5);
 						cout << "\x1b[2K";
 						setCursorPosition(0,bossHeight+6);
@@ -334,41 +334,41 @@ int main(){
 						setCursorPosition(0,bossHeight+3);
 						displayStats(allBosses, player, i);
 						setCursorPosition(0,bossHeight+10);
-						cout << "\t" << allBosses[i].damage - player.armor << " sebzést szenvedtél!" << endl;
+						cout << "\t" << allBosses[i].damage - player.armor << " sebzést szenvedtél!" << endl;	// Elveszített élet pontok kiírása
 						Sleep(2000);
 						setCursorPosition(0,bossHeight+8);
 						cout << "\x1b[2K";
 						setCursorPosition(0,bossHeight+10);
 						cout << "\x1b[2K";
 					}
-					else {
+					else {														// Ha a szörny élete <= 0, a játékos győzött
 						newLine();
 						cout << "\tGratulálok! Győztél!" << endl;
 						Sleep(2000);
-						player.gold += 500;
-						int keyChance = generateNum(1,100);
+						player.gold += 500;										// Játékos kap 500 aranyat a győzelemért
+						int keyChance = generateNum(1,100);						// Szám generálás 1 és 100 között
 						bool giveKey;
-						keyChance % 2 == 0 ? giveKey = true : giveKey = false;
-						giveKey ? player.keys += 1 : player.keys += 0;
+						keyChance % 2 == 0 ? giveKey = true : giveKey = false;	// A generált szám ellenőrzése
+						giveKey ? player.keys += 1 : player.keys += 0;			// Ha a generált szám páros, a játékos kap kulcsot (50% esély)
 						}
 					if(player.health <= 0) {									// Ha a játékosnak elfogyott az élete, vége a játéknak
 						newLine();
 						cout << "Game over!" << endl;
 						Sleep(2000);
-						gameOver = true;
+						gameOver = true;										// Főciklus változója hamisra vált, a program leáll
 						}
 					}
-					else if(combatOption == LEFT && i < 16){
-						int chance = generateNum(0, dodgeChance);
+					else if(combatOption == LEFT && i < 16){					// Bal nyíl lenyomása, kitérés a szörny elől
+						int chance = generateNum(0, dodgeChance);				// Szám generálása 0 és 100 között, később változhat
 						bool runAway;
-						chance % 5 == 0 ? runAway = true : runAway = false;
-						if(runAway){
+						chance % 5 == 0 ? runAway = true : runAway = false;		// Ha a generált szám osztható 5-tel, a játékos kitéra szörny elől (kezdetben 20% esély, később változhat)
+						if(runAway){											// Ha sikeres a kitérés, kilépés a harcból, főciklus elejére ugrás
 							setCursorPosition(0,bossHeight+8);
 							cout << "\tSikeres kitérés!" << endl;
 							Sleep(2000);
 							break;	
 						}
-						else{
+						else{													// Ha nem sikerült a kitérés, a szörny támad
 							setCursorPosition(0,bossHeight+8);
 							cout << "\tSikertelen kitérés!" << endl;
 							Sleep(2000);
@@ -400,7 +400,7 @@ int main(){
 						}
 					}
 					else if(combatOption == ESC) {system("cls"); return 0;}		// ESC-re kilép a program (harc közben is)
-					else {
+					else {														// Ha a felsorolt gombok közül egyiket se nyomta le a felhasználó, hibaüzenetet kap
 						setCursorPosition(0,bossHeight+10);
 						SetConsoleOutputCP(1250);
 						cout << playerName;
@@ -420,5 +420,5 @@ int main(){
 			Sleep(2000);
 			}
 	} while (!gameOver);														// Ha a változó hamis, folytatódhat a játék
-	return 0;
+	return 0;																	// Ha a változó igaz, kilépés a ciklusból, a program leáll
 }
