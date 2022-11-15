@@ -93,8 +93,8 @@ void shuffleArray(vector<T> &v){
 
 // ---- Ellenfelek generálása (random értékek) ----
 
-vector<Bosses> generateBoss(){
-	vector<string> v = getFileNames("../Enemies");	// A mappában lévő összes txt fájl nevének eltárolása
+vector<Bosses> generateBoss(string filename){
+	vector<string> v = getFileNames(filename);	// A mappában lévő összes txt fájl nevének eltárolása
 
 	shuffleArray(v);
 
@@ -123,38 +123,41 @@ void displayStats(vector<Bosses> boss, Player player, int i){
 }
 
 
-vector<ShopItems> shopSystem (){
+vector<ShopItems> shopSystem (string path){
 	vector<ShopItems> shopVector;
 	string myText;	// Fájl egy sora
-	ifstream MyReadFile("../txtFiles/shop.txt");	// Fájl megnyitása
+	ifstream MyReadFile(path);	// Fájl megnyitása
 	while (getline(MyReadFile, myText)) {	// Fájl soronkénti olvasása
-		string name = myText.substr(myText.find("name:")+5,myText.find("price:",myText.find("name:")+5)-5);
+		string name = myText.substr(myText.find("name:")+5,myText.find("type:",myText.find("name:")+5)-5);
+		stringstream type(myText.substr(myText.find("type:")+5,myText.find("price:")-(myText.find("type:")+5)));
 		stringstream price(myText.substr(myText.find("price:")+6,myText.find("value:")-(myText.find("price:")+6))); 
-		stringstream value(myText.substr(myText.find("value:")+6,myText.find("buff:")-(myText.find("value:")+6)))  ;
-		stringstream buff(myText.substr(myText.find("buff:")+5,myText.length())) ;
-		int p,v;
+		stringstream value(myText.substr(myText.find("value:")+6,myText.find("buff:")-(myText.find("value:")+6)));
+		stringstream buff(myText.substr(myText.find("buff:")+5,myText.length()));
+		int p,v,t;
 		bool b;
+		type >> t;
 		price >> p;
 		value >> v;
 		buff >> b;
-		ShopItems *s = new ShopItems(name,p,v,b);
+		ShopItems *s = new ShopItems(name,t,p,v,b);
 		shopVector.push_back(*s);
 	}
 	MyReadFile.close();	// Fájl bezárása
 	return shopVector;
 }
 
-vector<Debuffs> debuffSystem (){
+vector<Debuffs> debuffSystem (string path){
 	vector<Debuffs> debuffs;
 	string myText;	// Fájl egy sora
-	ifstream MyReadFile("../txtFiles/debuffs.txt");	// Fájl megnyitása
+	ifstream MyReadFile(path);	// Fájl megnyitása
 	while (getline(MyReadFile, myText)) {	// Fájl soronkénti olvasása
 		string name = myText.substr(myText.find("name:")+5,myText.find("value:",myText.find("name:")+5)-5);
 		stringstream value(myText.substr(myText.find("value:")+6,myText.find("type:")-(myText.find("value:")+6))); 
-		string type = myText.substr(myText.find("type:")+5,myText.length());
-		int v;
+		stringstream type(myText.substr(myText.find("type:")+5,myText.length()));
+		int v, t;
 		value >> v;
-		Debuffs *d = new Debuffs(name,v,type);
+		type >> t;
+		Debuffs *d = new Debuffs(name,v,t);
 		debuffs.push_back(*d);
 	}
 	MyReadFile.close();	// Fájl bezárása

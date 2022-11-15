@@ -21,6 +21,7 @@
 #include <future>		// delay
 #include <WinUser.h>	// BlockInput()
 #include <typeinfo>
+#include <sstream>
 
 using namespace std;
 
@@ -30,11 +31,13 @@ using namespace std;
 
 class Player {
 public:
-	int health, damage, armor;
-	Player(int hp, int dmg, int arm) {
+	int health, damage, armor, gold, keys;
+	Player(int hp, int dmg, int arm, int g, int k) {
 		health = hp;
 		damage = dmg;
 		armor = arm;
+		gold = g;
+		keys = k;
 	}
 };
 
@@ -68,11 +71,12 @@ public:
 
 class ShopItems{
 public:
-int price, value;
+int price, value, type;
 string name;
 bool buff;
-ShopItems(string n, int p, int v, bool b){
+ShopItems(string n, int t, int p, int v, bool b){
 	name = n;
+	type = t;
 	price = p;
 	value = v;
 	buff = b;
@@ -81,9 +85,9 @@ ShopItems(string n, int p, int v, bool b){
 
 class Debuffs{
 	public:
-	int value;
-	string name, type;
-	Debuffs(string n, int v, string t){
+	int value, type;
+	string name;
+	Debuffs(string n, int v, int t){
 		value = v;
 		name = n;
 		type = t;
