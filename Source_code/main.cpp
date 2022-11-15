@@ -1,5 +1,4 @@
 #include "utilities.h"
-
 /*
 		  ===============
 		  |C++ színkódok|
@@ -15,29 +14,32 @@
 8		Gray	F	Bright White
 */
 
+
+
 int main(){
 	system("cls");
 	SetConsoleOutputCP(CP_UTF8); 						// UTF-8 karakterek megjelenítése
 	SetConsoleCP(1250);
 	string playerName;									// Játékos neve
 	int dodgeChance = 100;								// Kitérés esélye (alapértelmezett 20%)
-	int bossHeight=0;										// Fájlból beolvasott szörny magassága (sorok száma)
+	int bossHeight=0;									// Fájlból beolvasott szörny magassága (sorok száma)
 	int i = 0;											// Ciklusváltozó (akkor nő, ha egy szörny meghal)
 	int pressedChar, combatOption, pickDoor,			// Különböző változók felhasználói bemenet ellenőrzésére
 	pickDebuff, pickShopItems;
 	int doorHeight=0, doorLeftHeight=0,
-	shopASCII=0, debuffsASCII=0;							// Különböző ASCII artok magasságának megszámolására
+	shopASCII=0, debuffsASCII=0;						// Különböző ASCII artok magasságának megszámolására
 	bool gameOver = false, itemPicked;					// gameOver akkor igaz, ha a játékos meghal, itemPicked változót boltnál és kijáratnál használjuk
-	vector<Bosses> allBosses = generateBoss();			// Szörnyek
-	vector<ShopItems> shopGoods = shopSystem();			// Áruk (bolt)
+	vector<Bosses> allBosses = generateBoss("../Enamies");			// Szörnyek
+	vector<ShopItems> shopGoods = shopSystem("../txtFiles/shop.txt");			// Áruk (bolt)
 	int shopRefresh = 300;								// Áruk frissítésének költsége	
-	vector<Debuffs> debuffs = debuffSystem();			// Kijárat (gyengítések)
+	vector<Debuffs> debuffs = debuffSystem("../txtFiles/debuffs.txt");			// Kijárat (gyengítések)
 	shuffleArray(shopGoods);
 	shuffleArray(debuffs);
 	cout << "Játékos neve: "; getline(cin,playerName);
 	playerName[0] = toupper(playerName[0]);				// Nagy kezdőbetű a neveknek (cctype)
 	Player player(1500,300,50,0,0);						// Játékos(élet,sebzés,páncél,arany,kulcsok)
-	readFile("../txtFiles/bevezeto.txt",2);				// Bevezető fájl beolvasása
+	readFile("../txtFiles/bevezeto.txt",2);	
+	cout << shopGoods.size() << " ," << debuffs.size();// Bevezető fájl beolvasása
 	system("pause");
 	system("cls");
 	// Fő ciklus
@@ -313,6 +315,7 @@ int main(){
 						cout << "\tTámadás!!!" << endl;
 						Sleep(2000);
 						allBosses[i].health -= player.damage;	// Támadás után a szörny életet veszít
+						allBosses[i].health < 0 ? allBosses[i].health = 0 : allBosses[i].health;	
 						setCursorPosition(0,bossHeight+5);
 						cout << "\x1b[2K";
 						setCursorPosition(0,bossHeight+6);

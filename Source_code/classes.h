@@ -21,6 +21,7 @@
 #include <future>		// delay
 #include <WinUser.h>	// BlockInput()
 #include <typeinfo>
+#include <sstream>
 
 using namespace std;
 
