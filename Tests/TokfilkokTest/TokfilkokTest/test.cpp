@@ -11,6 +11,8 @@ TEST(PlayerTest, PlayerStatsPositive) {
 	EXPECT_GE(player1.keys, 0);
 }
 
+// Teszt: Szörnyeket tároló vektor tartalmaz elemeket
+
 TEST(BossTest, BossVectorNotEmpty) {
 	const string path = "../../../Enemies";
 	vector<Bosses> allBosses = generateBoss(path);
@@ -18,6 +20,8 @@ TEST(BossTest, BossVectorNotEmpty) {
 	const int bossCount = allBosses.size();
 	EXPECT_EQ(bossCount, countBosses);
 }
+
+// Teszt: Szörnyeket tároló vektor objektumai megfelelõ értékekkel vannak-e ellátva
 
 TEST(BossTest, BossStatsPositive) {
 	const string path = "../../../Enemies";
@@ -29,11 +33,15 @@ TEST(BossTest, BossStatsPositive) {
 	}
 }
 
+// Teszt: Árukat tároló vektor tartalmaz-e elemeket
+
 TEST(ShopTest, ShopVectorNotEmpty) {
 	const string path = "../../../txtFiles/shop.txt";
 	vector<ShopItems> shopGoods = shopSystem(path);
 	EXPECT_GT(shopGoods.size(), 0);
 }
+
+// Teszt: Árukat tároló vektor objektumai megfelelõ értékkel vannak-e ellátva
 
 TEST(ShopTest, ShopObjectsHaveValues) {
 	const string path = "../../../txtFiles/shop.txt";
@@ -47,11 +55,15 @@ TEST(ShopTest, ShopObjectsHaveValues) {
 	}
 }
 
+// Teszt: Debuffokat tároló vektor tartalmaz-e elemeket
+
 TEST(DebuffsTest, DebuffsVectorNotEmpty) {
 	const string path = "../../../txtFiles/debuffs.txt";
 	vector<Debuffs> debuffs = debuffSystem(path);
 	EXPECT_GT(debuffs.size(), 0);
 }
+
+// Teszt: Debuffokat tároló vektor objektumai megfelelõ értékkel vannak-e ellátva
 
 TEST(ShopTest, DebuffsObjectsHaveValues) {
 	const string path = "../../../txtFiles/debuffs.txt";
