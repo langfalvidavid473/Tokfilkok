@@ -1,7 +1,7 @@
-name:asd value:123 type:1
-name:asd1 value:134 type:2
-name:asd2 value:145 type:3
-name:asd3 value:156 type:4
-name:asd4 value:156 type:5
-name:asd5 value:156 type:6
+name:Mérgezés value:90 type:1
+name:Pillanatnyi gyengeség value:90 type:2
+name:Ólom lábak value:90 type:3
+name:Bababőr value:90 type:4
+name:Fás szár value:110 type:5
+name:Trágya value:110 type:6
         
