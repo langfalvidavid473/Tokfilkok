@@ -29,7 +29,7 @@ int main(){
 	int doorHeight=0, doorLeftHeight=0,
 	shopASCII=0, debuffsASCII=0;						// Különböző ASCII artok magasságának megszámolására
 	bool gameOver = false, itemPicked;					// gameOver akkor igaz, ha a játékos meghal, itemPicked változót boltnál és kijáratnál használjuk
-	vector<Bosses> allBosses = generateBoss("../Enamies");			// Szörnyek
+	vector<Bosses> allBosses = generateBoss("../Enemies");			// Szörnyek
 	vector<ShopItems> shopGoods = shopSystem("../txtFiles/shop.txt");			// Áruk (bolt)
 	int shopRefresh = 300;								// Áruk frissítésének költsége	
 	vector<Debuffs> debuffs = debuffSystem("../txtFiles/debuffs.txt");			// Kijárat (gyengítések)
