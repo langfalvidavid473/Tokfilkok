@@ -48,7 +48,7 @@
 
 6 - BOSS DAMAGE
 
-**Példa:** name:trágya value:500 type:2 => Trágya, amely 500 ponttal növeli a szörny sebzését
+**Példa:** name:trágya value:500 type:2 => Trágya, amely 500 ponttal csökkenti a játékos sebzését
 
 **A sorrend fontos!**
 
