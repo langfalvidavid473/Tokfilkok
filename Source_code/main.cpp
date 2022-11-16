@@ -263,8 +263,8 @@ int main(){
 							case 2: player.damage -= (player.damage *= debuffs[1].value / 100);			// JÁTÉKOS SEBZÉS CSÖKKENTÉS
 							case 3: dodgeChance -= (dodgeChance *= debuffs[1].value / 100);			// JÁTÉKOS KITÉRÉS CSÖKKENTÉS
 							case 4: player.armor -= (player.armor *= debuffs[1].value / 100);			// JÁTÉKOS PÁNCÉL CSÖKKENTÉS
-							case 5: allBosses[i].health += (allBosses[i].health *= debuffs[0].value / 100);	// SZÖRNY ÉLET NÖVELÉS
-							case 6: allBosses[i].damage += (allBosses[i].damage *= debuffs[0].value / 100);	// SZÖRNY SEBZÉS NÖVELÉS
+							case 5: allBosses[i].health += (allBosses[i].health *= debuffs[1].value / 100);	// SZÖRNY ÉLET NÖVELÉS
+							case 6: allBosses[i].damage += (allBosses[i].damage *= debuffs[1].value / 100);	// SZÖRNY SEBZÉS NÖVELÉS
 							}
 							cout << "\t\t\t\t" << debuffs[1].name << "kiválasztva!" << endl;
 							debuffs.erase(debuffs.begin()+1);
@@ -277,8 +277,8 @@ int main(){
 							case 2: player.damage -= (player.damage *= debuffs[2].value / 100);			// JÁTÉKOS SEBZÉS CSÖKKENTÉS
 							case 3: dodgeChance -= (dodgeChance *= debuffs[2].value / 100);			// JÁTÉKOS KITÉRÉS CSÖKKENTÉS
 							case 4: player.armor -= (player.armor *= debuffs[2].value / 100);			// JÁTÉKOS PÁNCÉL CSÖKKENTÉS
-							case 5: allBosses[i].health += (allBosses[i].health *= debuffs[0].value / 100);	// SZÖRNY ÉLET NÖVELÉS
-							case 6: allBosses[i].damage += (allBosses[i].damage *= debuffs[0].value / 100);	// SZÖRNY SEBZÉS NÖVELÉS
+							case 5: allBosses[i].health += (allBosses[i].health *= debuffs[2].value / 100);	// SZÖRNY ÉLET NÖVELÉS
+							case 6: allBosses[i].damage += (allBosses[i].damage *= debuffs[2].value / 100);	// SZÖRNY SEBZÉS NÖVELÉS
 							}
 							cout << "\t\t\t\t" << debuffs[2].name << "kiválasztva!" << endl;
 							debuffs.erase(debuffs.begin()+2);
