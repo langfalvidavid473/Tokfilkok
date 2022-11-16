@@ -22,9 +22,9 @@ name:A cselkirály itala III type:7 price:400 value:120 buff:true
 name:Gyomirtó type:8 price:500 value:95 buff:false
 name:Gyomirtó II type:8 price:500 value:90 buff:false
 name:Gyomirtó III type:8 price:500 value:85 buff:false
-name:Metszőolló type:9 price: 300 value:98 buff:false
-name:Metszőolló II type:9 price: 300 value:95 buff:false
-name:Metszőolló III type:9 price: 300 value:90 buff:false
+name:Metszőolló type:9 price:300 value:98 buff:false
+name:Metszőolló II type:9 price:300 value:95 buff:false
+name:Metszőolló III type:9 price:300 value:90 buff:false
 
 
 
