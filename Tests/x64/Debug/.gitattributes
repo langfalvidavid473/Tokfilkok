@@ -1,0 +1,2 @@
+Tests.pch filter=lfs diff=lfs merge=lfs -text
+*.pch filter=lfs diff=lfs merge=lfs -text
