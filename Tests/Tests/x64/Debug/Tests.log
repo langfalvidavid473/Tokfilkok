@@ -1,0 +1,5 @@
+﻿  pch.cpp
+  test.cpp
+C:\Users\langf\OneDrive\Dokumentumok\GitHub\Tokfilkok\Tests\Tests\test.cpp(19,40): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\langf\OneDrive\Dokumentumok\GitHub\Tokfilkok\Tests\Tests\test.cpp(19,40): warning C4267: 'initializing': conversion from 'size_t' to 'const int', possible loss of data
+  Tests.vcxproj -> C:\Users\langf\OneDrive\Dokumentumok\GitHub\Tokfilkok\Tests\x64\Debug\Tests.exe
