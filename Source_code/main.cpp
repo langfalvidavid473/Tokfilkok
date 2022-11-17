@@ -38,8 +38,7 @@ int main(){
 	cout << "Játékos neve: "; getline(cin,playerName);
 	playerName[0] = toupper(playerName[0]);				// Nagy kezdőbetű a neveknek (cctype)
 	Player player(1500,300,50,0,0);						// Játékos(élet,sebzés,páncél,arany,kulcsok)
-	readFile("../txtFiles/bevezeto.txt",2);	
-	cout << shopGoods.size() << " ," << debuffs.size();// Bevezető fájl beolvasása
+	readFile("../txtFiles/bevezeto.txt",2);				// Bevezető fájl beolvasása
 	system("pause");
 	system("cls");
 	// Fő ciklus
@@ -113,10 +112,15 @@ int main(){
 							player.gold-= shopGoods[0].price;	// Arany levonása az árnak megfelelően
 							itemPicked=true;					// Változó igazra vált, kilépés a boltból
 							switch (shopGoods[0].type){			// A vásárolt áru típusának ellenőrzése
-								case 1: shopGoods[0].buff ? player.health += shopGoods[0].value : player.health -= shopGoods[0].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (ÉLET)
-								case 2: shopGoods[0].buff ? player.damage += shopGoods[0].value : player.damage -= shopGoods[0].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (SEBZÉS)
-								case 3: shopGoods[0].buff ? dodgeChance += shopGoods[0].value : dodgeChance -= shopGoods[0].value; break;		// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (KITÉRÉS)
-								case 4: shopGoods[0].buff ? player.armor += shopGoods[0].value : player.armor -= shopGoods[0].value; break;		// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (PÁNCÉL)
+								case 1: shopGoods[0].buff == true ? player.health += shopGoods[0].value : player.health -= shopGoods[0].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (ÉLET)
+								case 2: shopGoods[0].buff == true ? player.damage += shopGoods[0].value : player.damage -= shopGoods[0].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (SEBZÉS)
+								case 3: shopGoods[0].buff == true ? player.armor += shopGoods[0].value : player.armor -= shopGoods[0].value; break;		// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (PÁNCÉL)
+								case 4: player.health = (player.health * shopGoods[0].value / 100); break;		// (ÉLET BUFF %)
+								case 5: player.damage = (player.damage * shopGoods[0].value / 100); break;		// (SEBZÉS BUFF %)
+								case 6: player.armor = (player.armor * shopGoods[0].value / 100); break; 		// (PÁNCÉL BUFF %)
+								case 7: dodgeChance = (dodgeChance * shopGoods[0].value / 100); break;			// (KITÉRÉS BUFF %) 
+								case 8: allBosses[i].health = (allBosses[i].health * shopGoods[0].value / 100) ; break; // (SZÖRNY ÉLET DEBUFF %)
+								case 9: allBosses[i].damage = (allBosses[i].damage * shopGoods[0].value / 100) ; break;	// (SZÖRNY SEBZÉS DEBUFF %)
 							}
 							shopGoods.erase(shopGoods.begin()); // Vásárlás után a megvásárolt áru törlése a vektorból. hogy később ne legyen ismétlődés
 						}
@@ -132,10 +136,15 @@ int main(){
 							player.gold-= shopGoods[1].price;
 							itemPicked=true;
 							switch(shopGoods[1].type){
-								case 1: shopGoods[1].buff ? player.health += shopGoods[1].value : player.health -= shopGoods[1].value; break;
-								case 2: shopGoods[1].buff ? player.damage += shopGoods[1].value : player.damage -= shopGoods[1].value; break;
-								case 3: shopGoods[1].buff ? dodgeChance += shopGoods[1].value : dodgeChance -= shopGoods[1].value; break;
-								case 4: shopGoods[1].buff ? player.armor += shopGoods[1].value : player.armor -= shopGoods[1].value; break;
+								case 1: shopGoods[1].buff == true ? player.health += shopGoods[1].value : player.health -= shopGoods[1].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (ÉLET)
+								case 2: shopGoods[1].buff == true ? player.damage += shopGoods[1].value : player.damage -= shopGoods[1].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (SEBZÉS)
+								case 3: shopGoods[1].buff == true ? player.armor += shopGoods[1].value : player.armor -= shopGoods[1].value; break;		// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (PÁNCÉL)
+								case 4: player.health = (player.health * shopGoods[1].value / 100); break;		// (ÉLET BUFF %)
+								case 5: player.damage = (player.damage * shopGoods[1].value / 100); break;		// (SEBZÉS BUFF %)
+								case 6: player.armor = (player.armor * shopGoods[1].value / 100); break; 		// (PÁNCÉL BUFF %)
+								case 7: dodgeChance = (dodgeChance * shopGoods[1].value / 100); break;			// (KITÉRÉS BUFF %) 
+								case 8: allBosses[i].health = (allBosses[i].health * shopGoods[1].value / 100) ; break; // (SZÖRNY ÉLET DEBUFF %)
+								case 9: allBosses[i].damage = (allBosses[i].damage * shopGoods[1].value / 100) ; break;	// (SZÖRNY SEBZÉS DEBUFF %)
 							}
 							shopGoods.erase(shopGoods.begin()+1);
 						}
@@ -151,10 +160,15 @@ int main(){
 							player.gold-= shopGoods[2].price;
 							itemPicked=true;
 							switch(shopGoods[2].type){
-								case 1: shopGoods[2].buff ? player.health += shopGoods[2].value : player.health -= shopGoods[2].value; break;
-								case 2: shopGoods[2].buff ? player.damage += shopGoods[2].value : player.damage -= shopGoods[2].value; break;
-								case 3: shopGoods[2].buff ? dodgeChance += shopGoods[2].value : dodgeChance -= shopGoods[2].value; break;
-								case 4: shopGoods[2].buff ? player.armor += shopGoods[2].value : player.armor -= shopGoods[2].value; break;
+								case 1: shopGoods[2].buff == true ? player.health += shopGoods[2].value : player.health -= shopGoods[2].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (ÉLET)
+								case 2: shopGoods[2].buff == true ? player.damage += shopGoods[2].value : player.damage -= shopGoods[2].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (SEBZÉS)
+								case 3: shopGoods[2].buff == true ? player.armor += shopGoods[2].value : player.armor -= shopGoods[2].value; break;		// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (PÁNCÉL)
+								case 4: player.health = (player.health * shopGoods[2].value / 100); break;		// (ÉLET BUFF %)
+								case 5: player.damage = (player.damage * shopGoods[2].value / 100); break;		// (SEBZÉS BUFF %)
+								case 6: player.armor = (player.armor * shopGoods[2].value / 100); break; 		// (PÁNCÉL BUFF %)
+								case 7: dodgeChance = (dodgeChance * shopGoods[2].value / 100); break;			// (KITÉRÉS BUFF %) 
+								case 8: allBosses[i].health = (allBosses[i].health * shopGoods[2].value / 100) ; break; // (SZÖRNY ÉLET DEBUFF %)
+								case 9: allBosses[i].damage = (allBosses[i].damage * shopGoods[2].value / 100) ; break;	// (SZÖRNY SEBZÉS DEBUFF %)
 							}
 							shopGoods.erase(shopGoods.begin()+2);
 						}
@@ -229,12 +243,12 @@ int main(){
 						case LEFT: {		// Első gyengítés választása
 							player.keys++;	// Játékos kap 1 kulcsot miután választott
 							switch(debuffs[0].type){	// Gyengítés típusának ellenőrzése (debuffs.txt)
-								case 1: player.health -= debuffs[0].value;			// JÁTÉKOS ÉLET CSÖKKENTÉS
-								case 2: player.damage -= debuffs[0].value;			// JÁTÉKOS SEBZÉS CSÖKKENTÉS
-								case 3: dodgeChance   -= debuffs[0].value;			// JÁTÉKOS KITÉRÉS CSÖKKENTÉS
-								case 4: player.armor  -= debuffs[0].value;			// JÁTÉKOS PÁNCÉL CSÖKKENTÉS
-								case 5: allBosses[i].health += debuffs[0].value;	// SZÖRNY ÉLET NÖVELÉS
-								case 6: allBosses[i].damage += debuffs[0].value;	// SZÖRNY SEBZÉS NÖVELÉS
+								case 1: player.health = (player.health * debuffs[0].value / 100);				// JÁTÉKOS ÉLET CSÖKKENTÉS
+								case 2: player.damage = (player.damage * debuffs[0].value / 100);				// JÁTÉKOS SEBZÉS CSÖKKENTÉS
+								case 3: dodgeChance = (dodgeChance * debuffs[0].value / 100);					// JÁTÉKOS KITÉRÉS CSÖKKENTÉS
+								case 4: player.armor = (player.armor * debuffs[0].value / 100);					// JÁTÉKOS PÁNCÉL CSÖKKENTÉS
+								case 5: allBosses[i].health = (allBosses[i].health * debuffs[0].value / 100);	// SZÖRNY ÉLET NÖVELÉS
+								case 6: allBosses[i].damage = (allBosses[i].damage * debuffs[0].value / 100);	// SZÖRNY SEBZÉS NÖVELÉS
 							}
 							cout << "\t\t\t\t" << debuffs[0].name << "kiválasztva!" << endl;
 							debuffs.erase(debuffs.begin());							// Választás után a gyengítés törlése a vektorból, hogy ne ismétlődjön később
@@ -243,12 +257,12 @@ int main(){
 						case UP:{			// Második gyengítés választása
 							player.keys++;
 							switch(debuffs[1].type){
-								case 1: player.health -= debuffs[1].value;
-								case 2: player.damage -= debuffs[1].value;
-								case 3: dodgeChance   -= debuffs[1].value;
-								case 4: player.armor  -= debuffs[1].value;
-								case 5: allBosses[i].health += debuffs[1].value;
-								case 6: allBosses[i].damage += debuffs[1].value;
+								case 1: player.health = (player.health * debuffs[1].value / 100);				// JÁTÉKOS ÉLET CSÖKKENTÉS
+								case 2: player.damage = (player.damage * debuffs[1].value / 100);				// JÁTÉKOS SEBZÉS CSÖKKENTÉS
+								case 3: dodgeChance = (dodgeChance * debuffs[1].value / 100);					// JÁTÉKOS KITÉRÉS CSÖKKENTÉS
+								case 4: player.armor = (player.armor * debuffs[1].value / 100);					// JÁTÉKOS PÁNCÉL CSÖKKENTÉS
+								case 5: allBosses[i].health = (allBosses[i].health * debuffs[1].value / 100);	// SZÖRNY ÉLET NÖVELÉS
+								case 6: allBosses[i].damage = (allBosses[i].damage * debuffs[1].value / 100);	// SZÖRNY SEBZÉS NÖVELÉS
 							}
 							cout << "\t\t\t\t" << debuffs[1].name << "kiválasztva!" << endl;
 							debuffs.erase(debuffs.begin()+1);
@@ -257,12 +271,12 @@ int main(){
 						case RIGHT: {		// Harmadik gyengítés választása
 							player.keys++;
 							switch(debuffs[2].type){
-								case 1: player.health -= debuffs[2].value;
-								case 2: player.damage -= debuffs[2].value;
-								case 3: dodgeChance   -= debuffs[2].value;
-								case 4: player.armor  -= debuffs[2].value;
-								case 5: allBosses[i].health += debuffs[2].value;
-								case 6: allBosses[i].damage += debuffs[2].value;
+								case 1: player.health = (player.health * debuffs[2].value / 100);				// JÁTÉKOS ÉLET CSÖKKENTÉS
+								case 2: player.damage = (player.damage * debuffs[2].value / 100);				// JÁTÉKOS SEBZÉS CSÖKKENTÉS
+								case 3: dodgeChance = (dodgeChance * debuffs[2].value / 100);					// JÁTÉKOS KITÉRÉS CSÖKKENTÉS
+								case 4: player.armor = (player.armor * debuffs[2].value / 100);					// JÁTÉKOS PÁNCÉL CSÖKKENTÉS
+								case 5: allBosses[i].health = (allBosses[i].health * debuffs[2].value / 100);	// SZÖRNY ÉLET NÖVELÉS
+								case 6: allBosses[i].damage = (allBosses[i].damage * debuffs[2].value / 100);	// SZÖRNY SEBZÉS NÖVELÉS
 							}
 							cout << "\t\t\t\t" << debuffs[2].name << "kiválasztva!" << endl;
 							debuffs.erase(debuffs.begin()+2);
@@ -313,9 +327,9 @@ int main(){
 					if (combatOption == RIGHT && i < 16){ 		// Jobb nyíl lenyomása (támadás)
 						setCursorPosition(0,bossHeight+8);
 						cout << "\tTámadás!!!" << endl;
-						Sleep(2000);
+						Sleep(1000);
 						allBosses[i].health -= player.damage;	// Támadás után a szörny életet veszít
-						allBosses[i].health < 0 ? allBosses[i].health = 0 : allBosses[i].health;	
+						// allBosses[i].health < 0 ? allBosses[i].health = 0 : allBosses[i].health;	
 						setCursorPosition(0,bossHeight+5);
 						cout << "\x1b[2K";
 						setCursorPosition(0,bossHeight+6);
@@ -324,11 +338,11 @@ int main(){
 						displayStats(allBosses, player, i);
 						setCursorPosition(0,bossHeight+10);
 						cout << "\t" << player.damage << " sebzést okoztál!" << endl;
-						Sleep(2000);
+						Sleep(1000);
 					if (allBosses[i].health >= 1) {				// Ha a szörnynek maradt élete, támadjon vissza, ha nincs, akkor a játékos győzőtt
 						setCursorPosition(0,bossHeight+8);
 						cout << "\tSzörny támad!" << endl;
-						Sleep(2000);
+						Sleep(1000);
 						player.health -= (allBosses[i].damage - player.armor);	// Játékos életet veszít (szörny sebzése - játékos páncélja)
 						setCursorPosition(0,bossHeight+5);
 						cout << "\x1b[2K";
@@ -338,7 +352,7 @@ int main(){
 						displayStats(allBosses, player, i);
 						setCursorPosition(0,bossHeight+10);
 						cout << "\t" << allBosses[i].damage - player.armor << " sebzést szenvedtél!" << endl;	// Elveszített élet pontok kiírása
-						Sleep(2000);
+						Sleep(1000);
 						setCursorPosition(0,bossHeight+8);
 						cout << "\x1b[2K";
 						setCursorPosition(0,bossHeight+10);
@@ -374,12 +388,12 @@ int main(){
 						else{													// Ha nem sikerült a kitérés, a szörny támad
 							setCursorPosition(0,bossHeight+8);
 							cout << "\tSikertelen kitérés!" << endl;
-							Sleep(2000);
+							Sleep(1000);
 							setCursorPosition(0,bossHeight+8);
 							cout << "\x1b[2K";
 							setCursorPosition(0,bossHeight+8);
 							cout << "\tSzörny támad!" << endl;
-							Sleep(2000);
+							Sleep(1000);
 							player.health -= (allBosses[i].damage - player.armor);
 							setCursorPosition(0,bossHeight+5);
 							cout << "\x1b[2K";
@@ -389,7 +403,7 @@ int main(){
 							displayStats(allBosses, player, i);
 							setCursorPosition(0,bossHeight+10);
 							cout << "\t" << allBosses[i].damage - player.armor << " sebzést szenvedtél!" << endl;
-							Sleep(2000);
+							Sleep(1000);
 							setCursorPosition(0,bossHeight+8);
 							cout << "\x1b[2K";
 							setCursorPosition(0,bossHeight+10);
