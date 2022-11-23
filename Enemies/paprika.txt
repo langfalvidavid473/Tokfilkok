@@ -41,4 +41,7 @@
                                       +%####*#=                                                     
                                        :*%###*#                                                     
                                          :*%%%%:                                                    
-                                            :==.                                                    
+                                            :==.              
+$
+name:Arnold az ananasz
+color:blue                                       

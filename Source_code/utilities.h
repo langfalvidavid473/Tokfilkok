@@ -104,8 +104,32 @@ vector<Bosses> generateBoss(string filename){
 
 			int randomHealth = 1000+generateNum((sqr(i+1)*60)-i*100,(sqr(i+1)*70)-i*100);	// Random értékek generálása (1)
 			int randomDamage = 150+generateNum(sqr(i+1)*10,sqr(i+1)*20);	// (2)
-			
-			Bosses *newBoss = new Bosses(randomHealth,i+1,randomDamage,v[i]);	// Új objektum létrehozása, értékek hozzárendelése konstruktorral
+			HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása 
+			string myText;
+			string name;
+			string color;
+			int correctColor;
+			ifstream MyReadFile("../Enemies/" + v[i]);
+			while(getline(MyReadFile, myText)){
+				if (myText.find("name") != std::string::npos){
+				name = (myText.substr(myText.find("name:")+5,myText.length()));
+				}
+
+				if (myText.find("color") != std::string::npos){
+				color = (myText.substr(myText.find("color:")+6,myText.length()));
+				if(color == "red") correctColor = 4;
+					else if(color.find("green") != std::string::npos) correctColor = 2;
+					else if(color.find("blue") != std::string::npos) correctColor = 1;
+					else if(color.find("yellow") != std::string::npos) correctColor = 6;
+					else if(color.find("aqua") != std::string::npos) correctColor = 3;
+					else if(color.find("purple") != std::string::npos) correctColor = 5;
+					else if(color.find("white") != std::string::npos) correctColor = 7;
+					else if(color.find("blue") != std::string::npos) correctColor = 8;
+				else correctColor = 7;
+				}
+			}
+			MyReadFile.close();
+			Bosses *newBoss = new Bosses(randomHealth, i+1, randomDamage, v[i], name, correctColor);	// Új objektum létrehozása, értékek hozzárendelése konstruktorral
 			allBosses.push_back(*newBoss);	// vektor feltöltése a generált objektummal
 		}
 
@@ -113,8 +137,8 @@ vector<Bosses> generateBoss(string filename){
 }
 
 
-void displayStats(vector<Bosses> boss, Player player, int i){
-	cout << "\tTámadás [->]\t" << "Kitérés [<-]\t" << "Kilépés [ESC]\n" << endl;
+void displayStats(vector<Bosses> boss, Player player, int i, float dodge){
+	cout << "\tTámadás [->]\t" << "Kitérés (" << dodge << "%) [<-]\t" << "Kilépés [ESC]\n" << endl;
 	cout << "\tYour health: " << player.health <<
 			"\tYour damage: " << player.damage <<
 			"\tYour armor: "  << player.armor << endl;

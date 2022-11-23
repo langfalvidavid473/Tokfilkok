@@ -45,29 +45,37 @@ public:
 
 class Bosses {
 public:
-	int health, level, damage;
-	string name;
-	Bosses(int hp, int lvl, int dmg, string n1)  { 
+	int health, level, damage, color;
+	string fileName, name;
+	Bosses(int hp, int lvl, int dmg, string fn, string n, int c)  { 
 		health = hp;
 		level = lvl;
 		damage = dmg;
-		name = n1;
+		fileName = fn;
+		name = n;
+		color = c;
 	}
 	// ---- Adott ellenfél beolvasása fájlból, ASCII art stílusban ----
-		int getBoss(string fileName, int color,int rows=0) {
+		int getBoss(string fn,int color1, int rows=0) {
 		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása 
 		string myText;
-		ifstream MyReadFile("../Enemies/" + fileName);
-		SetConsoleTextAttribute(h, color); // Parancssor betűszín változtatás 
-		while (getline(MyReadFile, myText)) {
+		ifstream MyReadFile("../Enemies/" + fn);
+		SetConsoleTextAttribute(h, color1); // Parancssor betűszín változtatás 
+		while(getline(MyReadFile, myText)){
+		if(myText == "$"){MyReadFile.close();}
+		else{
+
 			cout << "\t\t" << myText << endl;
 			rows++;
 		}
+		}
 		MyReadFile.close();
 		SetConsoleTextAttribute(h, 7);
+		cout << "\n\t\t\t\t\t\t" << name << "\n" << endl;
 		return rows;
-	}
-};
+		}
+	};
+
 
 class ShopItems{
 public:

@@ -21,13 +21,13 @@ int main(){
 	SetConsoleOutputCP(CP_UTF8); 						// UTF-8 karakterek megjelenítése
 	SetConsoleCP(1250);
 	string playerName;									// Játékos neve
-	int dodgeChance = 100;								// Kitérés esélye (alapértelmezett 20%)
-	int bossHeight=0;									// Fájlból beolvasott szörny magassága (sorok száma)
+	int dodgeChance = 150;
+	float dodgePercent = dodgeChance / 5;				// Kitérés esélye (alapértelmezett 30%)										// Fájlból beolvasott szörny magassága (sorok száma)
 	int i = 0;											// Ciklusváltozó (akkor nő, ha egy szörny meghal)
 	int pressedChar, combatOption, pickDoor,			// Különböző változók felhasználói bemenet ellenőrzésére
 	pickDebuff, pickShopItems;
-	int doorHeight=0, doorLeftHeight=0,
-	shopASCII=0, debuffsASCII=0;						// Különböző ASCII artok magasságának megszámolására
+	int bossHeight, doorHeight, doorLeftHeight,
+	shopASCII, debuffsASCII;						// Különböző ASCII artok magasságának megszámolására
 	bool gameOver = false, itemPicked;					// gameOver akkor igaz, ha a játékos meghal, itemPicked változót boltnál és kijáratnál használjuk
 	vector<Bosses> allBosses = generateBoss("../Enemies");			// Szörnyek
 	vector<ShopItems> shopGoods = shopSystem("../txtFiles/shop.txt");			// Áruk (bolt)
@@ -44,6 +44,12 @@ int main(){
 	// Fő ciklus
 	do
 	{
+		bossHeight = 0;
+		doorHeight = 0;
+		doorLeftHeight = 0;
+		shopASCII = 0;
+		debuffsASCII = 0;
+		dodgePercent = (dodgeChance / 5);
 		BlockInput(false);	/* User input engedélyezése (BlockInput függvény használata 
 							   rendszergazdaként való futtatást igényel, anélkül nem működik) */
 		system("cls");
@@ -60,7 +66,7 @@ int main(){
 		cout << "\t\t\t\t" << "Kulcsok: " << player.keys << endl;
 		pressedChar = _getch();		// User inputra várakozás, majd a kapott karakter eltárolása
 		if (pressedChar == 0 || pressedChar == 0xE0) pressedChar = _getch();	// Virtuális karakterek (nyilak) nem 1 értéket adnak vissza, ezért plusz ellenőrzés szükséges
-		if(pressedChar == LEFT && i < 16){			// ----Bal ajtó választása----
+		if(pressedChar == LEFT && i < allBosses.size()){			// ----Bal ajtó választása----
 			setCursorPosition(0,0);	/*
 									Kurzor pozíciója (innen kezdődik a nyomtatás)
 									A program működésének egyik fő eleme. Ha nem felülírnánk a nyomtatott karaktereket,
@@ -98,6 +104,8 @@ int main(){
 				newLine();
 				newLine();
 				cout << "\t" << shopGoods[0].name <<"[<]" << "\t" << shopGoods[1].name << "[^]" << "\t" << shopGoods[2].name << "[>]" << "\tFrissítés (300 arany) [v]" << "\tKilépés [ESC]\n"; // Instrukciók
+				newLine();
+				cout << "\t\t\t\t" << "Arany: " << player.gold << endl;
 				Sleep(2000);
 				itemPicked = false;	// Amíg a változó hamis, nem történt interakció
 				do
@@ -309,47 +317,78 @@ int main(){
 		}
 			
 		// ----Jobb ajtó választása (harc)----
-		else if(pressedChar == RIGHT && i < 16){	
+		else if(pressedChar == RIGHT && i < allBosses.size()){	
 			setCursorPosition(0,0);	
 			readFile("../txtFiles/doorsRight.txt", 7, "\t\t\t\t");
 			Sleep(2000);
 			system("cls");
-			bossHeight = allBosses[i].getBoss(allBosses[i].name,6,bossHeight);	// Megfelelő szörny megjelenítése, ASCII art sorainak számának eltárolása
+			bossHeight = allBosses[i].getBoss(allBosses[i].fileName, allBosses[i].color, bossHeight);	// Megfelelő szörny megjelenítése, ASCII art sorainak számának eltárolása
 			setCursorPosition(0,bossHeight+3);
-			displayStats(allBosses, player, i);					// Játékos és szörny tulajdonságok megjelenítése
+			displayStats(allBosses, player, i, dodgePercent);					// Játékos és szörny tulajdonságok megjelenítése
 				do
 				{	
 					BlockInput(false);							// User input engedélyezése, hogy ismét lehessen választani
 					combatOption = _getch();					// Változó a harc közben lenyomható billentyűkre
 					BlockInput(true);							/* User input megszűntetése (azért, hogy tudjon automatikusan működni a harc,
-														   		ne lépjen fel semmi furcsa jelenség, ha a felhasználó nyomkodja a gombokat) */
+														   		   ne lépjen fel semmi furcsa jelenség, ha a felhasználó nyomkodja a gombokat) */
 					if (combatOption == 0 || combatOption == 0xE0) combatOption = _getch();
-					if (combatOption == RIGHT && i < 16){ 		// Jobb nyíl lenyomása (támadás)
+					if (combatOption == RIGHT && i < allBosses.size()){ 		// Jobb nyíl lenyomása (támadás)
 						setCursorPosition(0,bossHeight+8);
 						cout << "\tTámadás!!!" << endl;
 						Sleep(1000);
-						allBosses[i].health -= player.damage;	// Támadás után a szörny életet veszít
-						// allBosses[i].health < 0 ? allBosses[i].health = 0 : allBosses[i].health;	
+						if((allBosses[i].health - player.damage) > 0){
+							allBosses[i].health -= player.damage;				// Támadás után a szörny életet veszít
+						}	
+						else{
+							allBosses[i].health = 0;
+							newLine();
+							int goldWon = generateNum(500,750);
+							player.gold += goldWon;									// Játékos kap 500-750 aranyat a győzelemért
+							int keyChance = generateNum(1,100);						// Szám generálás 1 és 100 között
+							bool giveKey;
+							keyChance % 2 == 0 ? giveKey = true : giveKey = false;	// A generált szám ellenőrzése
+							giveKey ? player.keys += 1 : player.keys += 0;			// Ha a generált szám páros, a játékos kap kulcsot (50% esély)
+							cout << "\tGratulálok! Legyőzted a szörnyet!" << endl;
+							newLine();
+							if(giveKey){
+								cout << "\t" << goldWon << " aranyat és 1 kulcsot nyertél!" << endl; 
+							}
+							else{
+							cout << "\t" << goldWon << " aranyat nyertél!" << endl;
+							}
+							Sleep(4000);
+							break;		
+						}
+						
 						setCursorPosition(0,bossHeight+5);
 						cout << "\x1b[2K";
 						setCursorPosition(0,bossHeight+6);
 						cout << "\x1b[2K";
 						setCursorPosition(0,bossHeight+3);
-						displayStats(allBosses, player, i);
+						displayStats(allBosses, player, i, dodgePercent);
 						setCursorPosition(0,bossHeight+10);
 						cout << "\t" << player.damage << " sebzést okoztál!" << endl;
 						Sleep(1000);
-					if (allBosses[i].health >= 1) {				// Ha a szörnynek maradt élete, támadjon vissza, ha nincs, akkor a játékos győzőtt
-						setCursorPosition(0,bossHeight+8);
+						if (allBosses[i].health > 0) {											// Ha a szörnynek maradt élete, támadjon vissza, ha nincs, akkor a játékos győzőtt
+						setCursorPosition(0, bossHeight+8);
 						cout << "\tSzörny támad!" << endl;
 						Sleep(1000);
-						player.health -= (allBosses[i].damage - player.armor);	// Játékos életet veszít (szörny sebzése - játékos páncélja)
+						if(player.health - (allBosses[i].damage - player.armor) > 0) {
+							player.health -= (allBosses[i].damage - player.armor); 			// Játékos életet veszít (szörny sebzése - játékos páncélja)
+							}
+							else {
+								player.health = 0;
+								Sleep(2000);
+								cout << "Game over!" << endl;
+								gameOver = true;
+								break;
+							}	
 						setCursorPosition(0,bossHeight+5);
 						cout << "\x1b[2K";
 						setCursorPosition(0,bossHeight+6);
 						cout << "\x1b[2K";
 						setCursorPosition(0,bossHeight+3);
-						displayStats(allBosses, player, i);
+						displayStats(allBosses, player, i, dodgePercent);
 						setCursorPosition(0,bossHeight+10);
 						cout << "\t" << allBosses[i].damage - player.armor << " sebzést szenvedtél!" << endl;	// Elveszített élet pontok kiírása
 						Sleep(1000);
@@ -357,26 +396,11 @@ int main(){
 						cout << "\x1b[2K";
 						setCursorPosition(0,bossHeight+10);
 						cout << "\x1b[2K";
-					}
-					else {														// Ha a szörny élete <= 0, a játékos győzött
-						newLine();
-						cout << "\tGratulálok! Győztél!" << endl;
-						Sleep(2000);
-						player.gold += 500;										// Játékos kap 500 aranyat a győzelemért
-						int keyChance = generateNum(1,100);						// Szám generálás 1 és 100 között
-						bool giveKey;
-						keyChance % 2 == 0 ? giveKey = true : giveKey = false;	// A generált szám ellenőrzése
-						giveKey ? player.keys += 1 : player.keys += 0;			// Ha a generált szám páros, a játékos kap kulcsot (50% esély)
 						}
-					if(player.health <= 0) {									// Ha a játékosnak elfogyott az élete, vége a játéknak
-						newLine();
-						cout << "Game over!" << endl;
-						Sleep(2000);
-						gameOver = true;										// Főciklus változója hamisra vált, a program leáll
-						}
-					}
-					else if(combatOption == LEFT && i < 16){					// Bal nyíl lenyomása, kitérés a szörny elől
-						int chance = generateNum(0, dodgeChance);				// Szám generálása 0 és 100 között, később változhat
+					}													// Ha a szörny élete <= 0, a játékos győzött
+				
+					else if(combatOption == LEFT && i < allBosses.size()){		// Bal nyíl lenyomása, kitérés a szörny elől
+						int chance = generateNum(0, dodgeChance);				// Szám generálása 0 és dodgeChance (150) között, később változhat
 						bool runAway;
 						chance % 5 == 0 ? runAway = true : runAway = false;		// Ha a generált szám osztható 5-tel, a játékos kitéra szörny elől (kezdetben 20% esély, később változhat)
 						if(runAway){											// Ha sikeres a kitérés, kilépés a harcból, főciklus elejére ugrás
@@ -394,13 +418,22 @@ int main(){
 							setCursorPosition(0,bossHeight+8);
 							cout << "\tSzörny támad!" << endl;
 							Sleep(1000);
+							if(player.health - (allBosses[i].damage - player.armor) > 0) {
 							player.health -= (allBosses[i].damage - player.armor);
+							}
+							else {
+								player.health = 0;
+								Sleep(2000);
+								cout << "Game over!" << endl;
+								gameOver = true;
+								break;
+							}
 							setCursorPosition(0,bossHeight+5);
 							cout << "\x1b[2K";
 							setCursorPosition(0,bossHeight+6);
 							cout << "\x1b[2K";
 							setCursorPosition(0,bossHeight+3);
-							displayStats(allBosses, player, i);
+							displayStats(allBosses, player, i, dodgePercent);
 							setCursorPosition(0,bossHeight+10);
 							cout << "\t" << allBosses[i].damage - player.armor << " sebzést szenvedtél!" << endl;
 							Sleep(1000);
@@ -409,18 +442,15 @@ int main(){
 							setCursorPosition(0,bossHeight+10);
 							cout << "\x1b[2K";
 						}
-						if(player.health <= 0) {									// Ha a játékosnak elfogyott az élete, vége a játéknak
-						newLine();
-						cout << "Game over!" << endl;
-						Sleep(2000);
-						gameOver = true;
-						}
 					}
-					else if(combatOption == ESC) {system("cls"); return 0;}		// ESC-re kilép a program (harc közben is)
-					else {														// Ha a felsorolt gombok közül egyiket se nyomta le a felhasználó, hibaüzenetet kap
+					else if(combatOption == ESC) {								// ESC-re kilép a program (harc közben is)
+						system("cls");
+						return 0;
+						}		
+					else {														// Ha a felsorolt gombok közül egyiket sem nyomta le a felhasználó, hibaüzenetet kap
 						setCursorPosition(0,bossHeight+10);
 						SetConsoleOutputCP(1250);
-						cout << playerName;
+						cout << "\t" << playerName;
 						SetConsoleOutputCP(65001);
 						cout << ", a folytatáshoz nyomd le a fent látható gombok egyikét!" << endl;
 						Sleep(2000);
@@ -436,6 +466,17 @@ int main(){
 			cout << "válassz ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";
 			Sleep(2000);
 			}
-	} while (!gameOver);														// Ha a változó hamis, folytatódhat a játék
-	return 0;																	// Ha a változó igaz, kilépés a ciklusból, a program leáll
+	} while (!gameOver);		
+													// Ha a változó hamis, folytatódhat a játék, ha a változó igaz, kilépés a ciklusból, a program leáll
+	if(gameOver && i < allBosses.size()){
+		system("cls");
+		readFile("../txtFiles/lose.txt", 7);
+		_getch();
+	}
+	else if(gameOver && i > allBosses.size()){
+		system("cls");
+		readFile("../txtFiles/victory.txt", 7);
+		_getch();
+	}																			
+	return 0;																	
 }
