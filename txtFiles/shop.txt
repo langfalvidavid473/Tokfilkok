@@ -5,8 +5,8 @@ name:Az egyszeri 10 fekvő varázsitala type:2 price:400 value:100 buff:true
 name:Az egyszeri 10 fekvő varázsitala II type:2 price:400 value:150 buff:true
 name:Az egyszeri 10 fekvő varázsitala III type:2 price:400 value:200 buff:true
 name:Az egyszeri sebezhetetlenség itala type:3 price:400 value:50 buff:true
-name:Az egyszeri sebezhetetlenség itala type:3 price:400 value:100 buff:true
-name:Az egyszeri sebezhetetlenség itala type:3 price:400 value:200 buff:true
+name:Az egyszeri sebezhetetlenség itala II type:3 price:400 value:100 buff:true
+name:Az egyszeri sebezhetetlenség itala  III type:3 price:400 value:200 buff:true
 name:Az örök élet bájitala type:4 price:500 value:105 buff:true
 name:Az örök élet bájitala II type:4 price:500 value:110 buff:true
 name:Az örök élet bájitala III type:4 price:500 value:120 buff:true
@@ -14,14 +14,14 @@ name:Az erőemelő itala type:5 price:500 value:105 buff:true
 name:Az erőemelő itala II type:5 price:500 value:110 buff:true
 name:Az erőemelő itala III type:5 price:500 value:120 buff:true
 name:A sebezhetetlenség itala type:6 price:300 value:105 buff:true
-name:A sebezhetetlenség itala type:6 price:300 value:110 buff:true
-name:A sebezhetetlenség itala type:6 price:300 value:120 buff:true
+name:A sebezhetetlenség itala II type:6 price:300 value:110 buff:true
+name:A sebezhetetlenség itala III type:6 price:300 value:120 buff:true
 name:A cselkirály itala type:7 price:400 value:105 buff:true
 name:A cselkirály itala II type:7 price:400 value:110 buff:true
 name:A cselkirály itala III type:7 price:400 value:120 buff:true
 name:Gyomirtó type:8 price:500 value:95 buff:false
 name:Gyomirtó II type:8 price:500 value:90 buff:false
 name:Gyomirtó III type:8 price:500 value:85 buff:false
-name:Metszőolló type:9 price:300 value:98 buff:false
-name:Metszőolló II type:9 price:300 value:95 buff:false
-name:Metszőolló III type:9 price:300 value:90 buff:false
+name:Metszőolló type:9 price:300 value:95 buff:false
+name:Metszőolló II type:9 price:300 value:90 buff:false
+name:Metszőolló III type:9 price:300 value:85 buff:false

@@ -20,7 +20,7 @@
 #include <locale>		// UTF-8 karakterek kiírása
 #include <future>		// delay
 #include <WinUser.h>	// BlockInput()
-#include <typeinfo>
+// #include <typeinfo>
 #include <sstream>
 
 using namespace std;
@@ -80,14 +80,15 @@ public:
 class ShopItems{
 public:
 int price, value, type;
-string name;
+string name, attribute;
 bool buff;
-ShopItems(string n, int t, int p, int v, bool b){
+ShopItems(string n, int t, int p, int v, bool b, string a){
 	name = n;
 	type = t;
 	price = p;
 	value = v;
 	buff = b;
+	attribute = a;
 }
 };
 

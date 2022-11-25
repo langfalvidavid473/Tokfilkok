@@ -20,14 +20,18 @@ int main(){
 	system("cls");
 	SetConsoleOutputCP(CP_UTF8); 						// UTF-8 karakterek megjelenítése
 	SetConsoleCP(1250);
+	CONSOLE_CURSOR_INFO info;							
+    info.dwSize = 100;
+    info.bVisible = false;								
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);	// Kurzor villogásának eltűntetése
 	string playerName;									// Játékos neve
 	int dodgeChance = 150;
-	float dodgePercent = dodgeChance / 5;				// Kitérés esélye (alapértelmezett 30%)										// Fájlból beolvasott szörny magassága (sorok száma)
+	float dodgePercent = dodgeChance / 5;				// Kitérés esélye (alapértelmezett 30%)										
 	int i = 0;											// Ciklusváltozó (akkor nő, ha egy szörny meghal)
 	int pressedChar, combatOption, pickDoor,			// Különböző változók felhasználói bemenet ellenőrzésére
 	pickDebuff, pickShopItems;
-	int bossHeight, doorHeight, doorLeftHeight,
-	shopASCII, debuffsASCII;						// Különböző ASCII artok magasságának megszámolására
+	int bossHeight, doorHeight, doorLeftHeight,			
+	shopASCII, debuffsASCII;							// Különböző ASCII artok magasságának megszámolására
 	bool gameOver = false, itemPicked;					// gameOver akkor igaz, ha a játékos meghal, itemPicked változót boltnál és kijáratnál használjuk
 	vector<Bosses> allBosses = generateBoss("../Enemies");			// Szörnyek
 	vector<ShopItems> shopGoods = shopSystem("../txtFiles/shop.txt");			// Áruk (bolt)
@@ -37,7 +41,7 @@ int main(){
 	shuffleArray(debuffs);
 	cout << "Játékos neve: "; getline(cin,playerName);
 	playerName[0] = toupper(playerName[0]);				// Nagy kezdőbetű a neveknek (cctype)
-	Player player(1500,300,50,0,0);						// Játékos(élet,sebzés,páncél,arany,kulcsok)
+	Player player(1500,300,50,10000,5);						// Játékos(élet,sebzés,páncél,arany,kulcsok)
 	readFile("../txtFiles/bevezeto.txt",2);				// Bevezető fájl beolvasása
 	system("pause");
 	system("cls");
@@ -91,21 +95,36 @@ int main(){
 			if(pickDoor == LEFT){
 				if(player.keys>0){	// Csak akkor enged be, ha a játékos rendelkezik kulccsal
 				player.keys--;		// Belépés után 1 kulcs elveszik
+
 				setCursorPosition(0,0);
 				readFile("../txtFiles/doorsLeft.txt", 7, "\t\t\t\t");	
 				Sleep(2000);
 				system("cls");
-				shopASCII = readFile("../txtFiles/shopASCII.txt", 7, "\t\t\t\t", shopASCII);	// Bolt menü beolvasása
-				newLine();
-				newLine();
-				newLine();
-				cout << "\t\t\t\t" << shopGoods[0].name << "\t" << shopGoods[1].name << "\t" << shopGoods[2].name << endl;		// Áruk neve
-				cout << "\t\t\t\t" << shopGoods[0].price << "\t" << shopGoods[1].price << "\t" << shopGoods[2].price << endl;	// Áruk ára
-				newLine();
-				newLine();
-				cout << "\t" << shopGoods[0].name <<"[<]" << "\t" << shopGoods[1].name << "[^]" << "\t" << shopGoods[2].name << "[>]" << "\tFrissítés (300 arany) [v]" << "\tKilépés [ESC]\n"; // Instrukciók
-				newLine();
-				cout << "\t\t\t\t" << "Arany: " << player.gold << endl;
+				cout << "\t\t\t" << "━━━━━━━━" << endl;
+				cout << "\t\t\t" << "┃ ÁRUK ┃" << endl;
+				cout << "\t\t\t" << "━━━━━━━━" << endl;
+				setCursorPosition(0,2);
+				shopASCII = readFile("../txtFiles/shopASCII.txt", 7, "\t\t\t", shopASCII);	// Bolt menü beolvasása
+				readFile("../txtFiles/shopASCII.txt", 7, "\t\t\t");	
+				readFile("../txtFiles/shopASCII.txt", 7, "\t\t\t");
+				int shopASCIIRows = countRows("../txtFiles/shopASCII.txt");
+				setCursorPosition(shopASCIIRows + 13, (shopASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
+				cout << "\t\t\t\t" << shopGoods[0].name << " (" << shopGoods[0].price << " arany) " << '[' << shopGoods[0].attribute << ']' << endl;
+				setCursorPosition(shopASCIIRows + 13, (shopASCII / 2) + 6 + shopASCII);
+				cout << "\t\t\t\t" << shopGoods[1].name << " (" << shopGoods[1].price << " arany) " << '[' << shopGoods[1].attribute << ']' << endl;
+				setCursorPosition(shopASCIIRows + 13, (shopASCII / 2) + 8 + shopASCII*2);
+				cout << "\t\t\t\t" << shopGoods[2].name << " (" << shopGoods[2].price << " arany) " << '[' << shopGoods[2].attribute << ']' << endl;
+				setCursorPosition(0,(shopASCII*3) + 9);
+				cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
+				cout << "\t\t\t" << "┃ INTERAKCIÓK ┃" << endl;
+				cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
+				setCursorPosition(0,(shopASCII*3) + 13);
+				cout << "\t\t\t" << "Vásárlás: " <<  shopGoods[0].name <<"(Balra nyíl) 🠰\n\n" << "\t\t\t" << "Vásárlás: " << shopGoods[1].name << "(Előre nyíl) 🠱\n\n" << "\t\t\t" << "Vásárlás: " << shopGoods[2].name << "(Jobbra nyíl) 🠲\n\n" << "\t\t\tFrissítés [300 arany] (Hátra nyíl) 🠳\n\n" << "\t\t\tKilépés [ESC]\n"; // Instrukciók
+				setCursorPosition(0,(shopASCII*3) + 23);
+				cout << "\t\t\t" << "━━━━━━━━━━" << endl;
+				cout << "\t\t\t" << "┃ STATOK ┃" << endl;
+				cout << "\t\t\t" << "━━━━━━━━━━\n" << endl;
+				cout << "\t\t\t" << "Arany: " << player.gold << "\t" << "Élet: " << player.health << "\t" << "Sebzés: " << player.damage << "\t" << "Páncél: " << player.armor << "\t" << "Kitérés: " << dodgePercent << "%" << endl;
 				Sleep(2000);
 				itemPicked = false;	// Amíg a változó hamis, nem történt interakció
 				do
@@ -115,14 +134,14 @@ int main(){
 				switch(pickShopItems){
 					case LEFT: {	// Első áru megvásárlása
 						if (player.gold >= shopGoods[0].price){	// Ha a játékos pénze elegendő, az áru megvásárolható
-							setCursorPosition(0,shopASCII+11);
-							cout << "\t\t\t\t" << shopGoods[0].name << " megvásárolva " << shopGoods[0].price << " aranyért!" << endl;
+							setCursorPosition(0, (shopASCII*3) + 29);
+							cout << "\t\t\t" << shopGoods[0].name << " megvásárolva " << shopGoods[0].price << " aranyért!" << endl;
 							player.gold-= shopGoods[0].price;	// Arany levonása az árnak megfelelően
 							itemPicked=true;					// Változó igazra vált, kilépés a boltból
 							switch (shopGoods[0].type){			// A vásárolt áru típusának ellenőrzése
-								case 1: shopGoods[0].buff == true ? player.health += shopGoods[0].value : player.health -= shopGoods[0].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (ÉLET)
-								case 2: shopGoods[0].buff == true ? player.damage += shopGoods[0].value : player.damage -= shopGoods[0].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (SEBZÉS)
-								case 3: shopGoods[0].buff == true ? player.armor += shopGoods[0].value : player.armor -= shopGoods[0].value; break;		// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (PÁNCÉL)
+								case 1: player.health += shopGoods[0].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (ÉLET)
+								case 2: player.damage += shopGoods[0].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (SEBZÉS)
+								case 3: player.armor += shopGoods[0].value; break;		// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (PÁNCÉL)
 								case 4: player.health = (player.health * shopGoods[0].value / 100); break;		// (ÉLET BUFF %)
 								case 5: player.damage = (player.damage * shopGoods[0].value / 100); break;		// (SEBZÉS BUFF %)
 								case 6: player.armor = (player.armor * shopGoods[0].value / 100); break; 		// (PÁNCÉL BUFF %)
@@ -130,23 +149,28 @@ int main(){
 								case 8: allBosses[i].health = (allBosses[i].health * shopGoods[0].value / 100) ; break; // (SZÖRNY ÉLET DEBUFF %)
 								case 9: allBosses[i].damage = (allBosses[i].damage * shopGoods[0].value / 100) ; break;	// (SZÖRNY SEBZÉS DEBUFF %)
 							}
+							setCursorPosition(0,(shopASCII*3) + 27);
+							cout << "\x1b[2K";
+							setCursorPosition(0,(shopASCII*3) + 27);
+							cout << "\t\t\t" << "Arany: " << player.gold << "\t" << "Élet: " << player.health << "\t" << "Sebzés: " << player.damage << "\t" << "Páncél: " << player.armor << "\t" << "Kitérés: " << dodgeChance / 5 << "%" << endl;
 							shopGoods.erase(shopGoods.begin()); // Vásárlás után a megvásárolt áru törlése a vektorból. hogy később ne legyen ismétlődés
+							Sleep(4000);
 						}
 						else {	// Ha a játékosnak nincs elég pénze, hibaüzenetet kap
-							setCursorPosition(0,shopASCII+11);
-							cout << "\t\t\t\t" << "További " << shopGoods[0].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
+							setCursorPosition(0,shopASCII+28);
+							cout << "\t\t\t" << "További " << shopGoods[0].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
 						}
 					} break;
 					case UP: {	// Második áru megvásárlása
 						if (player.gold >= shopGoods[1].price){
-							setCursorPosition(0,shopASCII+11);
-							cout << "\t\t\t\t" << shopGoods[1].name << " megvásárolva " << shopGoods[1].price << " aranyért!" << endl;
+							setCursorPosition(0, (shopASCII*3) + 29);
+							cout << "\t\t\t" << shopGoods[1].name << " megvásárolva " << shopGoods[1].price << " aranyért!" << endl;
 							player.gold-= shopGoods[1].price;
 							itemPicked=true;
 							switch(shopGoods[1].type){
-								case 1: shopGoods[1].buff == true ? player.health += shopGoods[1].value : player.health -= shopGoods[1].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (ÉLET)
-								case 2: shopGoods[1].buff == true ? player.damage += shopGoods[1].value : player.damage -= shopGoods[1].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (SEBZÉS)
-								case 3: shopGoods[1].buff == true ? player.armor += shopGoods[1].value : player.armor -= shopGoods[1].value; break;		// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (PÁNCÉL)
+								case 1: player.health += shopGoods[1].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (ÉLET)
+								case 2: player.damage += shopGoods[1].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (SEBZÉS)
+								case 3: player.armor += shopGoods[1].value; break;		// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (PÁNCÉL)
 								case 4: player.health = (player.health * shopGoods[1].value / 100); break;		// (ÉLET BUFF %)
 								case 5: player.damage = (player.damage * shopGoods[1].value / 100); break;		// (SEBZÉS BUFF %)
 								case 6: player.armor = (player.armor * shopGoods[1].value / 100); break; 		// (PÁNCÉL BUFF %)
@@ -154,23 +178,28 @@ int main(){
 								case 8: allBosses[i].health = (allBosses[i].health * shopGoods[1].value / 100) ; break; // (SZÖRNY ÉLET DEBUFF %)
 								case 9: allBosses[i].damage = (allBosses[i].damage * shopGoods[1].value / 100) ; break;	// (SZÖRNY SEBZÉS DEBUFF %)
 							}
+							setCursorPosition(0,(shopASCII*3) + 27);
+							cout << "\x1b[2K";
+							setCursorPosition(0,(shopASCII*3) + 27);
+							cout << "\t\t\t" << "Arany: " << player.gold << "\t" << "Élet: " << player.health << "\t" << "Sebzés: " << player.damage << "\t" << "Páncél: " << player.armor << "\t" << "Kitérés: " << dodgeChance / 5 << "%" << endl;
 							shopGoods.erase(shopGoods.begin()+1);
+							Sleep(4000);
 						}
 						else {
-							setCursorPosition(0,shopASCII+11);
-							cout << "\t\t\t\t" << "További " << shopGoods[1].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
+							setCursorPosition(0,shopASCII+29);
+							cout << "\t\t\t" << "További " << shopGoods[1].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
 						}
 					} break;
 					case RIGHT: {	// Harmadik áru megvásárlása
 						if (player.gold >= shopGoods[2].price){
-							setCursorPosition(0,shopASCII+11);
-							cout << "\t\t\t\t" << shopGoods[2].name << " megvásárolva " << shopGoods[2].price << " aranyért!" << endl;
+							setCursorPosition(0,(shopASCII*3) + 29);
+							cout << "\t\t\t" << shopGoods[2].name << " megvásárolva " << shopGoods[2].price << " aranyért!" << endl;
 							player.gold-= shopGoods[2].price;
 							itemPicked=true;
 							switch(shopGoods[2].type){
-								case 1: shopGoods[2].buff == true ? player.health += shopGoods[2].value : player.health -= shopGoods[2].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (ÉLET)
-								case 2: shopGoods[2].buff == true ? player.damage += shopGoods[2].value : player.damage -= shopGoods[2].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (SEBZÉS)
-								case 3: shopGoods[2].buff == true ? player.armor += shopGoods[2].value : player.armor -= shopGoods[2].value; break;		// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (PÁNCÉL)
+								case 1: player.health += shopGoods[2].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (ÉLET)
+								case 2: player.damage += shopGoods[2].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (SEBZÉS)
+								case 3: player.armor += shopGoods[2].value; break;		// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (PÁNCÉL)
 								case 4: player.health = (player.health * shopGoods[2].value / 100); break;		// (ÉLET BUFF %)
 								case 5: player.damage = (player.damage * shopGoods[2].value / 100); break;		// (SEBZÉS BUFF %)
 								case 6: player.armor = (player.armor * shopGoods[2].value / 100); break; 		// (PÁNCÉL BUFF %)
@@ -178,28 +207,46 @@ int main(){
 								case 8: allBosses[i].health = (allBosses[i].health * shopGoods[2].value / 100) ; break; // (SZÖRNY ÉLET DEBUFF %)
 								case 9: allBosses[i].damage = (allBosses[i].damage * shopGoods[2].value / 100) ; break;	// (SZÖRNY SEBZÉS DEBUFF %)
 							}
+							setCursorPosition(0,(shopASCII*3) + 27);
+							cout << "\x1b[2K";
+							setCursorPosition(0,(shopASCII*3) + 27);
+							cout << "\t\t\t" << "Arany: " << player.gold << "\t" << "Élet: " << player.health << "\t" << "Sebzés: " << player.damage << "\t" << "Páncél: " << player.armor << "\t" << "Kitérés: " << dodgeChance / 5 << "%" << endl;
 							shopGoods.erase(shopGoods.begin()+2);
+							Sleep(4000);
 						}
 						else {
-							setCursorPosition(0,shopASCII+11);
-							cout << "\t\t\t\t" << "További " << shopGoods[2].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
+							setCursorPosition(0,shopASCII+29);
+							cout << "\t\t\t" << "További " << shopGoods[2].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
 						}
 					} break;
 					case DOWN: {	// Bolt frissítése
 						if(player.gold >= shopRefresh) { // Ha a játékosnak van elég pénze, frissítheti az árukat
 							player.gold -= shopRefresh;	 // Az arany levonódik frissítés után
 							shuffleArray(shopGoods);	 // Az árukat tároló vektor összekeverése
-							setCursorPosition(0, shopASCII+5);
+							setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
+								cout << "                                                                                                ";
+							setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
+								cout << "\t\t\t" << shopGoods[0].name << " (" << shopGoods[0].price << " arany) " << '[' << shopGoods[0].attribute << ']' << endl;
+								setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 6 + shopASCII);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
+									cout << "                                                                                                ";
+								setCursorPosition(shopASCIIRows + 22, (shopASCII / 2) + 6 + shopASCII);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
+									cout << "\t\t\t" << shopGoods[1].name << " (" << shopGoods[1].price << " arany) " << '[' << shopGoods[1].attribute << ']' << endl;
+									setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 8 + shopASCII * 2);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
+										cout << "                                                                                                ";
+									setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 8 + shopASCII * 2);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
+										cout << "\t\t\t" <<  shopGoods[2].name << " (" << shopGoods[2].price << " arany) " << '[' << shopGoods[2].attribute << ']' << endl;							
+							setCursorPosition(0,(shopASCII*3) + 13);
 							cout << "\x1b[2K";
-							setCursorPosition(0, shopASCII+6);
+							setCursorPosition(0,(shopASCII*3) + 15);
 							cout << "\x1b[2K";
-							setCursorPosition(0, shopASCII+5);
-							cout << "\t\t\t\t" << shopGoods[0].name << "\t" << shopGoods[1].name << "\t" << shopGoods[2].name << endl;		// Új áruk megjelenítése
-							cout << "\t\t\t\t" << shopGoods[0].price << "\t" << shopGoods[1].price << "\t" << shopGoods[2].price << endl;	// Új áruk árának megjelenítése
-							setCursorPosition(0,shopASCII+9);
+							setCursorPosition(0,(shopASCII*3) + 17);
 							cout << "\x1b[2K";
-							setCursorPosition(0,shopASCII+9);
-							cout << "\t" << shopGoods[0].name <<"[<]" << "\t" << shopGoods[1].name << "[^]" << "\t" << shopGoods[2].name << "[>]" << "\tFrissítés (300 arany) [v]" << "\tKilépés [ESC]\n";	// Instrukciók
+							setCursorPosition(0,(shopASCII*3) + 13);
+							cout << "\t\t\t" << "Vásárlás: " << shopGoods[0].name <<"(Balra nyíl) 🠰";
+							setCursorPosition(0,(shopASCII*3) + 15);
+							cout << "\t\t\t" << "Vásárlás: " << shopGoods[1].name << "(Előre nyíl) 🠱";
+							setCursorPosition(0,(shopASCII*3) + 17);
+							cout <<"\t\t\t" << "Vásárlás: " << shopGoods[2].name << "(Jobbra nyíl) 🠲";
 							newLine();
 						}
 						else {	// Ha nincs elegendő arany a frissítéshez, a játékos hibaüzenetet kap
@@ -211,10 +258,10 @@ int main(){
 							itemPicked=true;
 					} break;
 					default: {	// Ha a felsorolt gombok közül egyiket sem nyomta meg a játékos, hibaüzenetet kap, ami 1.5s múlva el is tűnik
-						setCursorPosition(0,shopASCII+8);
+						setCursorPosition(0,shopASCII+28);
 						cout << "Helytelen input!" << endl;
 						Sleep(1500);
-						setCursorPosition(0,shopASCII+8);
+						setCursorPosition(0,shopASCII+28);
 						cout << "\x1b[2K";
 						} break;
 				}
