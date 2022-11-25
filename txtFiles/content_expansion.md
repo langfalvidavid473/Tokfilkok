@@ -54,12 +54,26 @@ type: int =>
 
 6 - BOSS DAMAGE
 
-<<<<<<< Updated upstream Példa: name:trágya value:500 type:2 => Trágya, amely 500 ponttal csökkenti a játékos sebzését
-Példa: name:trágya value:500 type:6 => Trágya, amely 10%-kal növeli a szörny sebzését
+Példa: name:gumikard value:500 type:2 => Gumikard, ami 500 ponttal csökkenti a játékos sebzését
+Példa: name:trágya value:500 type:6 => Trágya, ami 10%-kal növeli a szörny sebzését
 
 Stashed changes
 
 A sorrend fontos!
 
 Ellenfelek - szörnyek bővítése:
-Enemies mappába elég bemásolni a szörny ASCII art-ját, és kész is, a program magától generál hozzá értékeket.
+
+Enemies mappába elég bemásolni egy text fájlt, és kész is, a program magától generál hozzá értékeket.
+A fájlnak tartalmaznia kell az entitás ASCII art-ját, nevét és színét.
+A fájl neve az adott zöldség / gyümölcs neve, pl: ananász (a program több helyen felhasználja a fájl nevét)
+
+Lehetséges színek: red, green, blue, yellow, aqua, purple, white, gray
+
+Példa:
+
+Ananász.txt
+{
+    [ASCII ART]
+    name:Arnold az ananász
+    color:yellow
+}

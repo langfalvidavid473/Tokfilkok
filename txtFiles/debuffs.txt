@@ -1,6 +1,18 @@
 name:Mérgezés value:90 type:1
+name:Mérgezés II value:85 type:1
+name:Mérgezés III value:80 type:1
 name:Pillanatnyi gyengeség value:90 type:2
+name:Pillanatnyi gyengeség II value:85 type:2
+name:Pillanatnyi gyengeség III value:80 type:2
 name:Ólom lábak value:90 type:3
+name:Ólom lábak II value:85 type:3
+name:Ólom lábak  III value:80 type:3
 name:Bababőr value:90 type:4
+name:Bababőr II value:85 type:4
+name:Bababőr III value:80 type:4
 name:Fás szár value:110 type:5
+name:Fás szár II value:115 type:5
+name:Fás szár III value:120 type:5
 name:Trágya value:110 type:6
+name:Trágya II value:115 type:6
+name:Trágya III value:120 type:6

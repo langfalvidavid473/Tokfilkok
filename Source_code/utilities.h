@@ -159,7 +159,7 @@ vector<Bosses> generateBoss(string filename)
 					correctColor = 5;
 				else if (color.find("white") != std::string::npos)
 					correctColor = 7;
-				else if (color.find("blue") != std::string::npos)
+				else if (color.find("gray") != std::string::npos)
 					correctColor = 8;
 				else
 					correctColor = 7;
@@ -245,8 +245,19 @@ vector<Debuffs> debuffSystem(string path)
 		int v, t;
 		value >> v;
 		type >> t;
-		v = generateNum(v, v * 1.1);
-		Debuffs *d = new Debuffs(name, v, t);
+		t > 4 ? v = generateNum(v, v * 1.1) : v = generateNum(v * 0.9, v);
+		stringstream attr;
+		switch(t){
+			case 1: attr << "ÉLET - " << 100 - v << '%'; break;
+			case 2: attr << "SEBZÉS - " << 100 - v << '%'; break;
+			case 3: attr << "KITÉRÉS - " << 100 - v << '%'; break;
+			case 4: attr << "PÁNCÉL - " << 100 - v << '%'; break;
+			case 5: attr << "SZÖRNY ÉLET + " << v - 100 << '%'; break;
+			case 6: attr << "SZÖRNY SEBZÉS + " << v - 100 << '%'; break;
+			default: attr << ""; break;
+		}
+		string attribute = attr.str();
+		Debuffs *d = new Debuffs(name, v, t, attribute);
 		debuffs.push_back(*d);
 	}
 	MyReadFile.close(); // Fájl bezárása

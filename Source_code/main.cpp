@@ -95,7 +95,16 @@ int main(){
 			if(pickDoor == LEFT){
 				if(player.keys>0){	// Csak akkor enged be, ha a játékos rendelkezik kulccsal
 				player.keys--;		// Belépés után 1 kulcs elveszik
-
+					if(shopGoods.size() > 5){
+						do
+						{
+							shuffleArray(shopGoods);	// Az árukat tároló vektor összekeverése
+						} while ((shopGoods[0].type == shopGoods[1].type) ||
+								(shopGoods[0].type == shopGoods[2].type) ||
+								(shopGoods[1].type == shopGoods[2].type));	 
+							}
+					else {shuffleArray(shopGoods);}
+				
 				setCursorPosition(0,0);
 				readFile("../txtFiles/doorsLeft.txt", 7, "\t\t\t\t");	
 				Sleep(2000);
@@ -119,12 +128,13 @@ int main(){
 				cout << "\t\t\t" << "┃ INTERAKCIÓK ┃" << endl;
 				cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
 				setCursorPosition(0,(shopASCII*3) + 13);
-				cout << "\t\t\t" << "Vásárlás: " <<  shopGoods[0].name <<"(Balra nyíl) 🠰\n\n" << "\t\t\t" << "Vásárlás: " << shopGoods[1].name << "(Előre nyíl) 🠱\n\n" << "\t\t\t" << "Vásárlás: " << shopGoods[2].name << "(Jobbra nyíl) 🠲\n\n" << "\t\t\tFrissítés [300 arany] (Hátra nyíl) 🠳\n\n" << "\t\t\tKilépés [ESC]\n"; // Instrukciók
+				cout << "\t\t\t" << "Vásárlás: " <<  shopGoods[0].name <<"(Balra nyíl) 🠰\n\n\t\t\tVásárlás: " << shopGoods[1].name << "(Előre nyíl) 🠱\n\n\t\t\tVásárlás: " << shopGoods[2].name << "(Jobbra nyíl) 🠲\n\n\t\t\tFrissítés [300 arany] (Hátra nyíl) 🠳\n\n\t\t\tKilépés [ESC]\n"; // Instrukciók
 				setCursorPosition(0,(shopASCII*3) + 23);
 				cout << "\t\t\t" << "━━━━━━━━━━" << endl;
 				cout << "\t\t\t" << "┃ STATOK ┃" << endl;
 				cout << "\t\t\t" << "━━━━━━━━━━\n" << endl;
-				cout << "\t\t\t" << "Arany: " << player.gold << "\t" << "Élet: " << player.health << "\t" << "Sebzés: " << player.damage << "\t" << "Páncél: " << player.armor << "\t" << "Kitérés: " << dodgePercent << "%" << endl;
+				cout << "\t\t\t" << "Arany: " << player.gold << "\tÉlet: " << player.health << "\tSebzés: " << player.damage << "\tPáncél: " << player.armor << "\tKitérés: " << dodgePercent << "%\n" << endl;
+				cout << "\t\t\t" << allBosses[i].name << " élete: " << allBosses[i].health << "\t" << allBosses[i].name << " sebzése: " << allBosses[i].damage << endl;
 				Sleep(2000);
 				itemPicked = false;	// Amíg a változó hamis, nem történt interakció
 				do
@@ -134,7 +144,7 @@ int main(){
 				switch(pickShopItems){
 					case LEFT: {	// Első áru megvásárlása
 						if (player.gold >= shopGoods[0].price){	// Ha a játékos pénze elegendő, az áru megvásárolható
-							setCursorPosition(0, (shopASCII*3) + 29);
+							setCursorPosition(0, (shopASCII*3) + 31);
 							cout << "\t\t\t" << shopGoods[0].name << " megvásárolva " << shopGoods[0].price << " aranyért!" << endl;
 							player.gold-= shopGoods[0].price;	// Arany levonása az árnak megfelelően
 							itemPicked=true;					// Változó igazra vált, kilépés a boltból
@@ -151,19 +161,25 @@ int main(){
 							}
 							setCursorPosition(0,(shopASCII*3) + 27);
 							cout << "\x1b[2K";
+							setCursorPosition(0,(shopASCII*3) + 28);
+							cout << "\x1b[2K";
 							setCursorPosition(0,(shopASCII*3) + 27);
-							cout << "\t\t\t" << "Arany: " << player.gold << "\t" << "Élet: " << player.health << "\t" << "Sebzés: " << player.damage << "\t" << "Páncél: " << player.armor << "\t" << "Kitérés: " << dodgeChance / 5 << "%" << endl;
+							cout << "\t\t\t" << "Arany: " << player.gold << "\t" << "Élet: " << player.health << "\t" << "Sebzés: " << player.damage << "\t" << "Páncél: " << player.armor << "\t" << "Kitérés: " << dodgeChance / 5 << "%\n" << endl;
+							cout << "\t\t\t" << allBosses[i].name << " élete: " << allBosses[i].health << "\t" << allBosses[i].name << "sebzése: " << allBosses[i].damage << endl;
+							
 							shopGoods.erase(shopGoods.begin()); // Vásárlás után a megvásárolt áru törlése a vektorból. hogy később ne legyen ismétlődés
 							Sleep(4000);
 						}
 						else {	// Ha a játékosnak nincs elég pénze, hibaüzenetet kap
-							setCursorPosition(0,shopASCII+28);
+							setCursorPosition(0,shopASCII+31);
+							cout << "\x1b[2K";
+							setCursorPosition(0,shopASCII+31);
 							cout << "\t\t\t" << "További " << shopGoods[0].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
 						}
 					} break;
 					case UP: {	// Második áru megvásárlása
 						if (player.gold >= shopGoods[1].price){
-							setCursorPosition(0, (shopASCII*3) + 29);
+							setCursorPosition(0, (shopASCII*3) + 31);
 							cout << "\t\t\t" << shopGoods[1].name << " megvásárolva " << shopGoods[1].price << " aranyért!" << endl;
 							player.gold-= shopGoods[1].price;
 							itemPicked=true;
@@ -180,19 +196,26 @@ int main(){
 							}
 							setCursorPosition(0,(shopASCII*3) + 27);
 							cout << "\x1b[2K";
+							setCursorPosition(0,(shopASCII*3) + 28);
+							cout << "\x1b[2K";
 							setCursorPosition(0,(shopASCII*3) + 27);
-							cout << "\t\t\t" << "Arany: " << player.gold << "\t" << "Élet: " << player.health << "\t" << "Sebzés: " << player.damage << "\t" << "Páncél: " << player.armor << "\t" << "Kitérés: " << dodgeChance / 5 << "%" << endl;
+							cout << "\t\t\t" << "Arany: " << player.gold << "\tÉlet: " << player.health << "\tSebzés: " << player.damage << "\tPáncél: " << player.armor << "\tKitérés: " << dodgeChance / 5 << "%\n" << endl;
+							cout << "\t\t\t" << allBosses[i].name << " élete: " << allBosses[i].health << "\t" << allBosses[i].name << "sebzése: " << allBosses[i].damage << endl;
 							shopGoods.erase(shopGoods.begin()+1);
 							Sleep(4000);
 						}
 						else {
-							setCursorPosition(0,shopASCII+29);
+							setCursorPosition(0,shopASCII+31);
+							cout << "\x1b[2K";
+							setCursorPosition(0,shopASCII+31);
 							cout << "\t\t\t" << "További " << shopGoods[1].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
 						}
 					} break;
 					case RIGHT: {	// Harmadik áru megvásárlása
 						if (player.gold >= shopGoods[2].price){
-							setCursorPosition(0,(shopASCII*3) + 29);
+							setCursorPosition(0,(shopASCII*3) + 31);
+							cout << "\x1b[2K";
+							setCursorPosition(0,(shopASCII*3) + 31);
 							cout << "\t\t\t" << shopGoods[2].name << " megvásárolva " << shopGoods[2].price << " aranyért!" << endl;
 							player.gold-= shopGoods[2].price;
 							itemPicked=true;
@@ -209,20 +232,33 @@ int main(){
 							}
 							setCursorPosition(0,(shopASCII*3) + 27);
 							cout << "\x1b[2K";
+							setCursorPosition(0,(shopASCII*3) + 28);
+							cout << "\x1b[2K";
 							setCursorPosition(0,(shopASCII*3) + 27);
-							cout << "\t\t\t" << "Arany: " << player.gold << "\t" << "Élet: " << player.health << "\t" << "Sebzés: " << player.damage << "\t" << "Páncél: " << player.armor << "\t" << "Kitérés: " << dodgeChance / 5 << "%" << endl;
+							cout << "\t\t\t" << "Arany: " << player.gold << "\tÉlet: " << player.health << "\tSebzés: " << player.damage << "\tPáncél: " << player.armor << "\tKitérés: " << dodgeChance / 5 << "%\n" << endl;
+							cout << "\t\t\t" << allBosses[i].name << " élete: " << allBosses[i].health << "\t" << allBosses[i].name << "sebzése: " << allBosses[i].damage << endl;
 							shopGoods.erase(shopGoods.begin()+2);
 							Sleep(4000);
 						}
 						else {
-							setCursorPosition(0,shopASCII+29);
+							setCursorPosition(0,shopASCII+31);
+							cout << "\x1b[2K";
+							setCursorPosition(0,shopASCII+31);
 							cout << "\t\t\t" << "További " << shopGoods[2].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
 						}
 					} break;
 					case DOWN: {	// Bolt frissítése
 						if(player.gold >= shopRefresh) { // Ha a játékosnak van elég pénze, frissítheti az árukat
 							player.gold -= shopRefresh;	 // Az arany levonódik frissítés után
-							shuffleArray(shopGoods);	 // Az árukat tároló vektor összekeverése
+							if(shopGoods.size() > 5){
+							do
+							{
+								shuffleArray(shopGoods);	// Az árukat tároló vektor összekeverése
+							} while ((shopGoods[0].type == shopGoods[1].type) ||
+									(shopGoods[0].type == shopGoods[2].type) ||
+									(shopGoods[1].type == shopGoods[2].type));	 
+							}
+							else {shuffleArray(shopGoods);}
 							setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
 								cout << "                                                                                                ";
 							setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
@@ -247,7 +283,10 @@ int main(){
 							cout << "\t\t\t" << "Vásárlás: " << shopGoods[1].name << "(Előre nyíl) 🠱";
 							setCursorPosition(0,(shopASCII*3) + 17);
 							cout <<"\t\t\t" << "Vásárlás: " << shopGoods[2].name << "(Jobbra nyíl) 🠲";
-							newLine();
+							setCursorPosition(0,(shopASCII*3) + 27);
+							cout << "\x1b[2K";
+							setCursorPosition(0,(shopASCII*3) + 27);
+							cout << "\t\t\t" << "Arany: " << player.gold << "\tÉlet: " << player.health << "\tSebzés: " << player.damage << "\tPáncél: " << player.armor << "\tKitérés: " << dodgeChance / 5 << "%\n" << endl;
 						}
 						else {	// Ha nincs elegendő arany a frissítéshez, a játékos hibaüzenetet kap
 							cout << "\t\t\t\t" << "További " << shopRefresh - player.gold << " arany szükséges az áruk frissítéséhez!" << endl;
@@ -278,18 +317,46 @@ int main(){
 				}
 			// ---- Kijárat ----
 			else if(pickDoor == RIGHT){
+				if(debuffs.size() > 5){
+					do
+					{
+						shuffleArray(debuffs);	// Az árukat tároló vektor összekeverése
+					} while ((debuffs[0].type == debuffs[1].type) ||
+							(debuffs[0].type == debuffs[2].type) ||
+							(debuffs[1].type == debuffs[2].type));	 
+					}
+				else {shuffleArray(debuffs);}
 				setCursorPosition(0,0);
 				readFile("../txtFiles/doorsRight.txt", 7, "\t\t\t\t");
 				Sleep(2000);
 				system("cls");
-				debuffsASCII = readFile("../txtFiles/debuffsASCII.txt", 4, "\t\t\t\t", debuffsASCII);					// Gyengítésekhez tartozó ASCII-k beolvasása
-				setCursorPosition(0, debuffsASCII+4);
-				cout << "\t\t\t\t" << debuffs[0].name << "\t" << debuffs[1].name << "\t" << debuffs[2].name << endl;	// Gyengítések neve
-				cout << "\t\t\t\t" << debuffs[0].value << "\t" << debuffs[1].value << "\t" << debuffs[2].value << endl;	// Gyengítések értéke
-				newLine();
-				newLine();
-				cout << "\t" << debuffs[0].name << "[<]" << "\t" << debuffs[1].name << "[^]" << "\t" << debuffs[2].name << "[>]" << "\tKilépés [ESC]\n";
-				newLine();
+				cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
+				cout << "\t\t\t" << "┃ GYENGÍTÉSEK ┃" << endl;
+				cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
+				setCursorPosition(0,2);
+				debuffsASCII = readFile("../txtFiles/debuffsASCII.txt", 4, "\t\t\t", debuffsASCII);					// Gyengítésekhez tartozó ASCII-k beolvasása
+				readFile("../txtFiles/debuffsASCII.txt", 4, "\t\t\t");
+				readFile("../txtFiles/debuffsASCII.txt", 4, "\t\t\t");
+				int debuffsASCIIRows = countRows("../txtFiles/debuffsASCII.txt");
+				setCursorPosition(debuffsASCIIRows + 13, (debuffsASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
+				cout << "\t\t\t\t" << debuffs[0].name << '[' << debuffs[0].attribute << ']' << endl;
+				setCursorPosition(debuffsASCIIRows + 13, (debuffsASCII / 2) + 6 + debuffsASCII);
+				cout << "\t\t\t\t" << debuffs[1].name << '[' << debuffs[1].attribute << ']' << endl;
+				setCursorPosition(debuffsASCIIRows + 13, (debuffsASCII / 2) + 8 + debuffsASCII*2);
+				cout << "\t\t\t\t" << debuffs[2].name << '[' << debuffs[2].attribute << ']' << endl;
+				setCursorPosition(0,(debuffsASCII*3) + 9);
+				cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
+				cout << "\t\t\t" << "┃ INTERAKCIÓK ┃" << endl;
+				cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
+				setCursorPosition(0,(debuffsASCII*3) + 13);
+				cout << "\t\t\t" << "Kiválasztás: " <<  debuffs[0].name <<"(Balra nyíl) 🠰\n\n\t\t\tKiválasztás: " << debuffs[1].name << "(Előre nyíl) 🠱\n\n\t\t\tKiválasztás: " << debuffs[2].name << "(Jobbra nyíl) 🠲\n\n\t\t\tKilépés [ESC]"; // Instrukciók
+				setCursorPosition(0,(debuffsASCII*3) + 22);
+				cout << "\t\t\t" << "━━━━━━━━━━" << endl;
+				cout << "\t\t\t" << "┃ STATOK ┃" << endl;
+				cout << "\t\t\t" << "━━━━━━━━━━\n" << endl;
+				cout << "\t\t\t" << "Arany: " << player.gold << "\tÉlet: " << player.health << "\tSebzés: " << player.damage << "\tPáncél: " << player.armor << "\tKitérés: " << dodgePercent << "%\n" << endl;
+				cout << "\t\t\t" << allBosses[i].name << " élete: " << allBosses[i].health << "\t" << allBosses[i].name << " sebzése: " << allBosses[i].damage << endl;
+				Sleep(2000);
 				do
 				{
 					pickShopItems = _getch();
@@ -305,6 +372,9 @@ int main(){
 								case 5: allBosses[i].health = (allBosses[i].health * debuffs[0].value / 100);	// SZÖRNY ÉLET NÖVELÉS
 								case 6: allBosses[i].damage = (allBosses[i].damage * debuffs[0].value / 100);	// SZÖRNY SEBZÉS NÖVELÉS
 							}
+							setCursorPosition(0,(debuffsASCII*3) + 31);
+							cout << "\x1b[2K";
+							setCursorPosition(0,(debuffsASCII*3) + 31);
 							cout << "\t\t\t\t" << debuffs[0].name << "kiválasztva!" << endl;
 							debuffs.erase(debuffs.begin());							// Választás után a gyengítés törlése a vektorból, hogy ne ismétlődjön később
 							itemPicked=true;
@@ -319,7 +389,9 @@ int main(){
 								case 5: allBosses[i].health = (allBosses[i].health * debuffs[1].value / 100);	// SZÖRNY ÉLET NÖVELÉS
 								case 6: allBosses[i].damage = (allBosses[i].damage * debuffs[1].value / 100);	// SZÖRNY SEBZÉS NÖVELÉS
 							}
-							cout << "\t\t\t\t" << debuffs[1].name << "kiválasztva!" << endl;
+							setCursorPosition(0,(debuffsASCII*3) + 31);
+							cout << "\x1b[2K";
+							setCursorPosition(0,(debuffsASCII*3) + 31);
 							debuffs.erase(debuffs.begin()+1);
 							itemPicked=true;
 						} break;
@@ -333,16 +405,20 @@ int main(){
 								case 5: allBosses[i].health = (allBosses[i].health * debuffs[2].value / 100);	// SZÖRNY ÉLET NÖVELÉS
 								case 6: allBosses[i].damage = (allBosses[i].damage * debuffs[2].value / 100);	// SZÖRNY SEBZÉS NÖVELÉS
 							}
-							cout << "\t\t\t\t" << debuffs[2].name << "kiválasztva!" << endl;
+							setCursorPosition(0,(debuffsASCII*3) + 31);
+							cout << "\x1b[2K";
+							setCursorPosition(0,(debuffsASCII*3) + 31);
 							debuffs.erase(debuffs.begin()+2);
 							itemPicked=true;
 						} break;
 						case ESC: return 0; break;	// ESC-re leáll a program
 						default: {					// Ha a felsorolt gombok közül egyiket sem nyomja meg a felhasználó, hibaüzenetet kap
-							setCursorPosition(0,debuffsASCII+11);
+							setCursorPosition(0,(debuffsASCII*3) + 31);
+							cout << "\x1b[2K";
+							setCursorPosition(0,(debuffsASCII*3) + 31);
 							cout << "Helytelen input!" << endl;
 							Sleep(1500);
-							setCursorPosition(0,debuffsASCII+11);
+							setCursorPosition(0,(debuffsASCII*3) + 31);
 							cout << "\x1b[2K";
 						} break;
 						
@@ -370,7 +446,10 @@ int main(){
 			Sleep(2000);
 			system("cls");
 			bossHeight = allBosses[i].getBoss(allBosses[i].fileName, allBosses[i].color, bossHeight);	// Megfelelő szörny megjelenítése, ASCII art sorainak számának eltárolása
-			setCursorPosition(0,bossHeight+3);
+			int middlePoint = allBosses[i].middlePoint();
+			setCursorPosition(middlePoint, bossHeight);
+			cout << "\n\t\t\t\t\t\t" << allBosses[i].name << "\n" << endl;
+			setCursorPosition(0,bossHeight+4);
 			displayStats(allBosses, player, i, dodgePercent);					// Játékos és szörny tulajdonságok megjelenítése
 				do
 				{	

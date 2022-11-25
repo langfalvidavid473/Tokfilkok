@@ -62,7 +62,7 @@ public:
 		ifstream MyReadFile("../Enemies/" + fn);
 		SetConsoleTextAttribute(h, color1); // Parancssor betűszín változtatás 
 		while(getline(MyReadFile, myText)){
-		if(myText == "$"){MyReadFile.close();}
+		if(myText.find("name") != std::string::npos ){MyReadFile.close();}
 		else{
 
 			cout << "\t\t" << myText << endl;
@@ -71,8 +71,22 @@ public:
 		}
 		MyReadFile.close();
 		SetConsoleTextAttribute(h, 7);
-		cout << "\n\t\t\t\t\t\t" << name << "\n" << endl;
 		return rows;
+		}
+		int middlePoint(){			// ASCII art középpontjának keresése
+			int middlePoint = 0;
+			int row = 0;
+			int i = 0;
+			string myText;								// Fájl egy sora
+			ifstream MyReadFile("../Enemies/" + fileName);				// Fájl megnyitása
+			while (getline(MyReadFile, myText))
+			{ 
+				row = myText.length();
+				middlePoint += row;
+				i++;
+			}
+			MyReadFile.close(); // Fájl bezárása
+			return middlePoint / i;
 		}
 	};
 
@@ -95,11 +109,12 @@ ShopItems(string n, int t, int p, int v, bool b, string a){
 class Debuffs{
 	public:
 	int value, type;
-	string name;
-	Debuffs(string n, int v, int t){
+	string name, attribute;
+	Debuffs(string n, int v, int t, string a){
 		value = v;
 		name = n;
 		type = t;
+		attribute = a;
 	}
 };
 

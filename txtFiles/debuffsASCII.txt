@@ -1,1 +1,5 @@
-halálfej1   halálfej2   halálfej3
+batyu1  batyu2  batyu3
+
+batyu1  batyu2  batyu3
+
+batyu1  batyu2  batyu3
