@@ -20,6 +20,7 @@ int main(){
 	system("cls");
 	SetConsoleOutputCP(CP_UTF8); 						// UTF-8 karakterek megjelenítése
 	SetConsoleCP(1250);
+	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); 		// Parancssor hívása
 	CONSOLE_CURSOR_INFO info;							
     info.dwSize = 100;
     info.bVisible = false;								
@@ -41,13 +42,15 @@ int main(){
 	shuffleArray(debuffs);
 	cout << "Játékos neve: "; getline(cin,playerName);
 	playerName[0] = toupper(playerName[0]);				// Nagy kezdőbetű a neveknek (cctype)
-	Player player(1500,300,50,10000,5);						// Játékos(élet,sebzés,páncél,arany,kulcsok)
+	Player player(1500,300,50,0,0);						// Játékos(élet,sebzés,páncél,arany,kulcsok)
 	readFile("../txtFiles/bevezeto.txt",2);				// Bevezető fájl beolvasása
 	system("pause");
 	system("cls");
 	// Fő ciklus
 	do
 	{
+		string bossName = allBosses[i].fileName.substr(1, allBosses[i].fileName.length()-5);
+		bossName[0] = toupper(bossName[0]);
 		bossHeight = 0;
 		doorHeight = 0;
 		doorLeftHeight = 0;
@@ -109,32 +112,83 @@ int main(){
 				readFile("../txtFiles/doorsLeft.txt", 7, "\t\t\t\t");	
 				Sleep(2000);
 				system("cls");
+				SetConsoleTextAttribute(h, 7);	// Parancssor betűszín változtatás (fehér)
 				cout << "\t\t\t" << "━━━━━━━━" << endl;
 				cout << "\t\t\t" << "┃ ÁRUK ┃" << endl;
 				cout << "\t\t\t" << "━━━━━━━━" << endl;
 				setCursorPosition(0,2);
+					SetConsoleTextAttribute(h, shopGoods[0].color);	// Parancssor betűszín változtatás 
 				shopASCII = readFile("../txtFiles/shopASCII.txt", 7, "\t\t\t", shopASCII);	// Bolt menü beolvasása
+					SetConsoleTextAttribute(h, shopGoods[1].color);	// Parancssor betűszín változtatás 
 				readFile("../txtFiles/shopASCII.txt", 7, "\t\t\t");	
+					SetConsoleTextAttribute(h, shopGoods[2].color);	// Parancssor betűszín változtatás 
 				readFile("../txtFiles/shopASCII.txt", 7, "\t\t\t");
 				int shopASCIIRows = countRows("../txtFiles/shopASCII.txt");
-				setCursorPosition(shopASCIIRows + 13, (shopASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
+					SetConsoleTextAttribute(h, shopGoods[0].color);	// Parancssor betűszín változtatás 
+					setCursorPosition(shopASCIIRows + 13, (shopASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
 				cout << "\t\t\t\t" << shopGoods[0].name << " (" << shopGoods[0].price << " arany) " << '[' << shopGoods[0].attribute << ']' << endl;
-				setCursorPosition(shopASCIIRows + 13, (shopASCII / 2) + 6 + shopASCII);
+					SetConsoleTextAttribute(h, shopGoods[1].color);	// Parancssor betűszín változtatás 
+					setCursorPosition(shopASCIIRows + 13, (shopASCII / 2) + 6 + shopASCII);
 				cout << "\t\t\t\t" << shopGoods[1].name << " (" << shopGoods[1].price << " arany) " << '[' << shopGoods[1].attribute << ']' << endl;
-				setCursorPosition(shopASCIIRows + 13, (shopASCII / 2) + 8 + shopASCII*2);
+					SetConsoleTextAttribute(h, shopGoods[2].color);	// Parancssor betűszín változtatás 
+					setCursorPosition(shopASCIIRows + 13, (shopASCII / 2) + 8 + shopASCII*2);
 				cout << "\t\t\t\t" << shopGoods[2].name << " (" << shopGoods[2].price << " arany) " << '[' << shopGoods[2].attribute << ']' << endl;
-				setCursorPosition(0,(shopASCII*3) + 9);
+					SetConsoleTextAttribute(h, 7);	// Parancssor betűszín változtatás (fehér)
+					setCursorPosition(0,(shopASCII*3) + 9);
 				cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
 				cout << "\t\t\t" << "┃ INTERAKCIÓK ┃" << endl;
 				cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
-				setCursorPosition(0,(shopASCII*3) + 13);
-				cout << "\t\t\t" << "Vásárlás: " <<  shopGoods[0].name <<"(Balra nyíl) 🠰\n\n\t\t\tVásárlás: " << shopGoods[1].name << "(Előre nyíl) 🠱\n\n\t\t\tVásárlás: " << shopGoods[2].name << "(Jobbra nyíl) 🠲\n\n\t\t\tFrissítés [300 arany] (Hátra nyíl) 🠳\n\n\t\t\tKilépés [ESC]\n"; // Instrukciók
-				setCursorPosition(0,(shopASCII*3) + 23);
-				cout << "\t\t\t" << "━━━━━━━━━━" << endl;
-				cout << "\t\t\t" << "┃ STATOK ┃" << endl;
-				cout << "\t\t\t" << "━━━━━━━━━━\n" << endl;
-				cout << "\t\t\t" << "Arany: " << player.gold << "\tÉlet: " << player.health << "\tSebzés: " << player.damage << "\tPáncél: " << player.armor << "\tKitérés: " << dodgePercent << "%\n" << endl;
-				cout << "\t\t\t" << allBosses[i].name << " élete: " << allBosses[i].health << "\t" << allBosses[i].name << " sebzése: " << allBosses[i].damage << endl;
+					setCursorPosition(0,(shopASCII*3) + 13);
+					SetConsoleTextAttribute(h, shopGoods[0].color);	// Parancssor betűszín változtatás 
+				cout << "\t\t\tVásárlás: " <<  shopGoods[0].name <<"(Balra nyíl)";
+					setCursorPosition(0,(shopASCII*3) + 15);
+					SetConsoleTextAttribute(h, shopGoods[1].color);	// Parancssor betűszín változtatás 
+				cout << "\t\t\tVásárlás: " << shopGoods[1].name << "(Előre nyíl)";
+					setCursorPosition(0,(shopASCII*3) + 17);
+					SetConsoleTextAttribute(h, shopGoods[2].color);	// Parancssor betűszín változtatás 
+				cout << "\t\t\tVásárlás: " << shopGoods[2].name << "(Jobbra nyíl)";
+					setCursorPosition(0,(shopASCII*3) + 19);
+					SetConsoleTextAttribute(h, 6);	// Parancssor betűszín változtatás (sárga)
+				cout << "\t\t\tFrissítés [300 arany] (Hátra nyíl)";
+					setCursorPosition(0,(shopASCII*3) + 21);
+					SetConsoleTextAttribute(h, 8);	// Parancssor betűszín változtatás (szürke)
+				cout << "\t\t\tKilépés [ESC]"; // Instrukciók
+					setCursorPosition(0,(shopASCII*3) + 23);
+					SetConsoleTextAttribute(h, 7);	// Parancssor betűszín változtatás (fehér)
+					setCursorPosition(0,(shopASCII*3) + 23);
+				cout << "\t\t\t" << "━━━━━━━━━━━━━━━━━━";
+					setCursorPosition(0,(shopASCII*3) + 24);
+				cout << "\t\t\t" << "┃ JÁTÉKOS STATOK ┃";
+					setCursorPosition(0,(shopASCII*3) + 25);
+				cout << "\t\t\t" << "━━━━━━━━━━━━━━━━━━";
+					SetConsoleTextAttribute(h, 6);	// Parancssor betűszín változtatás (sárga)
+					setCursorPosition(30,(shopASCII*3) + 26);
+				cout << "\t\t\tArany: " << player.gold;
+					SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
+					setCursorPosition(30,(shopASCII*3) + 28);
+				cout << "\t\t\tÉlet: " << player.health;
+					SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
+					setCursorPosition(30,(shopASCII*3) + 30);
+				cout << "\t\t\tSebzés: " << player.damage;
+					SetConsoleTextAttribute(h, 5);	// Parancssor betűszín változtatás (lila)
+					setCursorPosition(30,(shopASCII*3) + 32);
+				cout << "\t\t\tPáncél: " << player.armor;
+					SetConsoleTextAttribute(h, 9);	// Parancssor betűszín változtatás (világoskék)
+					setCursorPosition(30,(shopASCII*3) + 34);
+				cout << "\t\t\tKitérés: " << dodgePercent;
+					SetConsoleTextAttribute(h, 7);	// Parancssor betűszín változtatás (fehér)
+					setCursorPosition(50,(shopASCII*3) + 23);
+				cout << "\t\t\t" << "━━━━━━━━━━━━━━━━━";
+					setCursorPosition(50,(shopASCII*3) + 24);
+				cout << "\t\t\t" << "┃ SZÖRNY STATOK ┃";
+					setCursorPosition(50,(shopASCII*3) + 25);
+				cout << "\t\t\t" << "━━━━━━━━━━━━━━━━━";
+					SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
+					setCursorPosition(75,(shopASCII*3) + 26);
+				cout << "\t\t\t" << bossName << " élete: " << allBosses[i].health;
+					SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
+					setCursorPosition(75,(shopASCII*3) + 28);
+				cout << "\t\t\t" << bossName << " sebzése: " << allBosses[i].damage;
 				Sleep(2000);
 				itemPicked = false;	// Amíg a változó hamis, nem történt interakció
 				do
@@ -144,7 +198,9 @@ int main(){
 				switch(pickShopItems){
 					case LEFT: {	// Első áru megvásárlása
 						if (player.gold >= shopGoods[0].price){	// Ha a játékos pénze elegendő, az áru megvásárolható
-							setCursorPosition(0, (shopASCII*3) + 31);
+							setCursorPosition(120,(shopASCII*3) + 15);
+							cout << "                                                                                                                                    ";
+							setCursorPosition(120, (shopASCII*3) + 15);
 							cout << "\t\t\t" << shopGoods[0].name << " megvásárolva " << shopGoods[0].price << " aranyért!" << endl;
 							player.gold-= shopGoods[0].price;	// Arany levonása az árnak megfelelően
 							itemPicked=true;					// Változó igazra vált, kilépés a boltból
@@ -159,27 +215,52 @@ int main(){
 								case 8: allBosses[i].health = (allBosses[i].health * shopGoods[0].value / 100) ; break; // (SZÖRNY ÉLET DEBUFF %)
 								case 9: allBosses[i].damage = (allBosses[i].damage * shopGoods[0].value / 100) ; break;	// (SZÖRNY SEBZÉS DEBUFF %)
 							}
-							setCursorPosition(0,(shopASCII*3) + 27);
+							setCursorPosition(0,(shopASCII*3) + 26);
 							cout << "\x1b[2K";
 							setCursorPosition(0,(shopASCII*3) + 28);
 							cout << "\x1b[2K";
-							setCursorPosition(0,(shopASCII*3) + 27);
-							cout << "\t\t\t" << "Arany: " << player.gold << "\t" << "Élet: " << player.health << "\t" << "Sebzés: " << player.damage << "\t" << "Páncél: " << player.armor << "\t" << "Kitérés: " << dodgeChance / 5 << "%\n" << endl;
-							cout << "\t\t\t" << allBosses[i].name << " élete: " << allBosses[i].health << "\t" << allBosses[i].name << "sebzése: " << allBosses[i].damage << endl;
-							
-							shopGoods.erase(shopGoods.begin()); // Vásárlás után a megvásárolt áru törlése a vektorból. hogy később ne legyen ismétlődés
+							setCursorPosition(0,(shopASCII*3) + 30);
+							cout << "\x1b[2K";
+							setCursorPosition(0,(shopASCII*3) + 32);
+							cout << "\x1b[2K";
+							setCursorPosition(0,(shopASCII*3) + 34);
+								SetConsoleTextAttribute(h, 6);	// Parancssor betűszín változtatás (sárga)
+								setCursorPosition(30,(shopASCII*3) + 26);
+							cout << "\t\t\tArany: " << player.gold;
+								SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
+								setCursorPosition(30,(shopASCII*3) + 28);
+							cout << "\t\t\tÉlet: " << player.health;
+								SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
+								setCursorPosition(30,(shopASCII*3) + 30);
+							cout << "\t\t\tSebzés: " << player.damage;
+								SetConsoleTextAttribute(h, 5);	// Parancssor betűszín változtatás (lila)
+								setCursorPosition(30,(shopASCII*3) + 32);
+							cout << "\t\t\tPáncél: " << player.armor;
+								SetConsoleTextAttribute(h, 9);	// Parancssor betűszín változtatás (világoskék)
+								setCursorPosition(30,(shopASCII*3) + 34);
+							cout << "\t\t\tKitérés: " << dodgePercent;
+								SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
+								setCursorPosition(75,(shopASCII*3) + 26);
+							cout << "\t\t\t" << bossName << " élete: " << allBosses[i].health;
+								SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
+								setCursorPosition(75,(shopASCII*3) + 28);
+							cout << "\t\t\t" << bossName << " sebzése: " << allBosses[i].damage;
+							shopGoods.erase(shopGoods.begin());
 							Sleep(4000);
 						}
-						else {	// Ha a játékosnak nincs elég pénze, hibaüzenetet kap
-							setCursorPosition(0,shopASCII+31);
-							cout << "\x1b[2K";
-							setCursorPosition(0,shopASCII+31);
-							cout << "\t\t\t" << "További " << shopGoods[0].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
+						else {
+							setCursorPosition(120,shopASCII + 15);
+							cout << "                                                                                                                                    ";
+							SetConsoleTextAttribute(h, 4);
+							setCursorPosition(120,shopASCII + 15);
+							cout << "\t\t\t" << "További " << shopGoods[1].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
 						}
 					} break;
 					case UP: {	// Második áru megvásárlása
 						if (player.gold >= shopGoods[1].price){
-							setCursorPosition(0, (shopASCII*3) + 31);
+							setCursorPosition(120,(shopASCII*3) + 15);
+							cout << "                                                                                                                                    ";
+							setCursorPosition(120, (shopASCII*3) + 15);
 							cout << "\t\t\t" << shopGoods[1].name << " megvásárolva " << shopGoods[1].price << " aranyért!" << endl;
 							player.gold-= shopGoods[1].price;
 							itemPicked=true;
@@ -194,28 +275,52 @@ int main(){
 								case 8: allBosses[i].health = (allBosses[i].health * shopGoods[1].value / 100) ; break; // (SZÖRNY ÉLET DEBUFF %)
 								case 9: allBosses[i].damage = (allBosses[i].damage * shopGoods[1].value / 100) ; break;	// (SZÖRNY SEBZÉS DEBUFF %)
 							}
-							setCursorPosition(0,(shopASCII*3) + 27);
-							cout << "\x1b[2K";
+							setCursorPosition(0,(shopASCII*3) + 26);
+							cout << "                                                                                                                                    ";
 							setCursorPosition(0,(shopASCII*3) + 28);
-							cout << "\x1b[2K";
-							setCursorPosition(0,(shopASCII*3) + 27);
-							cout << "\t\t\t" << "Arany: " << player.gold << "\tÉlet: " << player.health << "\tSebzés: " << player.damage << "\tPáncél: " << player.armor << "\tKitérés: " << dodgeChance / 5 << "%\n" << endl;
-							cout << "\t\t\t" << allBosses[i].name << " élete: " << allBosses[i].health << "\t" << allBosses[i].name << "sebzése: " << allBosses[i].damage << endl;
+							cout << "                                                                                                                                    ";
+							setCursorPosition(0,(shopASCII*3) + 30);
+							cout << "                                                                                                                                    ";
+							setCursorPosition(0,(shopASCII*3) + 32);
+							cout << "                                                                                                                                    ";
+							setCursorPosition(0,(shopASCII*3) + 34);
+								SetConsoleTextAttribute(h, 6);	// Parancssor betűszín változtatás (sárga)
+								setCursorPosition(30,(shopASCII*3) + 26);
+							cout << "\t\t\tArany: " << player.gold;
+								SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
+								setCursorPosition(30,(shopASCII*3) + 28);
+							cout << "\t\t\tÉlet: " << player.health;
+								SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
+								setCursorPosition(30,(shopASCII*3) + 30);
+							cout << "\t\t\tSebzés: " << player.damage;
+								SetConsoleTextAttribute(h, 5);	// Parancssor betűszín változtatás (lila)
+								setCursorPosition(30,(shopASCII*3) + 32);
+							cout << "\t\t\tPáncél: " << player.armor;
+								SetConsoleTextAttribute(h, 9);	// Parancssor betűszín változtatás (világoskék)
+								setCursorPosition(30,(shopASCII*3) + 34);
+							cout << "\t\t\tKitérés: " << dodgePercent;
+								SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
+								setCursorPosition(75,(shopASCII*3) + 26);
+							cout << "\t\t\t" << bossName << " élete: " << allBosses[i].health;
+								SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
+								setCursorPosition(75,(shopASCII*3) + 28);
+							cout << "\t\t\t" << bossName << " sebzése: " << allBosses[i].damage;
 							shopGoods.erase(shopGoods.begin()+1);
 							Sleep(4000);
 						}
 						else {
-							setCursorPosition(0,shopASCII+31);
-							cout << "\x1b[2K";
-							setCursorPosition(0,shopASCII+31);
+							setCursorPosition(120,shopASCII + 15);
+							cout << "                                                                                                                                    ";
+							SetConsoleTextAttribute(h, 4);
+							setCursorPosition(120,shopASCII + 15);
 							cout << "\t\t\t" << "További " << shopGoods[1].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
 						}
 					} break;
 					case RIGHT: {	// Harmadik áru megvásárlása
 						if (player.gold >= shopGoods[2].price){
-							setCursorPosition(0,(shopASCII*3) + 31);
-							cout << "\x1b[2K";
-							setCursorPosition(0,(shopASCII*3) + 31);
+							setCursorPosition(120,(shopASCII*3) + 15);
+							cout << "                                                                                                                                    ";
+							setCursorPosition(120,(shopASCII*3) + 15);
 							cout << "\t\t\t" << shopGoods[2].name << " megvásárolva " << shopGoods[2].price << " aranyért!" << endl;
 							player.gold-= shopGoods[2].price;
 							itemPicked=true;
@@ -230,20 +335,44 @@ int main(){
 								case 8: allBosses[i].health = (allBosses[i].health * shopGoods[2].value / 100) ; break; // (SZÖRNY ÉLET DEBUFF %)
 								case 9: allBosses[i].damage = (allBosses[i].damage * shopGoods[2].value / 100) ; break;	// (SZÖRNY SEBZÉS DEBUFF %)
 							}
-							setCursorPosition(0,(shopASCII*3) + 27);
-							cout << "\x1b[2K";
+							setCursorPosition(0,(shopASCII*3) + 26);
+							cout << "                                                                                                                                    ";
 							setCursorPosition(0,(shopASCII*3) + 28);
-							cout << "\x1b[2K";
-							setCursorPosition(0,(shopASCII*3) + 27);
-							cout << "\t\t\t" << "Arany: " << player.gold << "\tÉlet: " << player.health << "\tSebzés: " << player.damage << "\tPáncél: " << player.armor << "\tKitérés: " << dodgeChance / 5 << "%\n" << endl;
-							cout << "\t\t\t" << allBosses[i].name << " élete: " << allBosses[i].health << "\t" << allBosses[i].name << "sebzése: " << allBosses[i].damage << endl;
+							cout << "                                                                                                                                    ";
+							setCursorPosition(0,(shopASCII*3) + 30);
+							cout << "                                                                                                                                    ";
+							setCursorPosition(0,(shopASCII*3) + 32);
+							cout << "                                                                                                                                    ";
+							setCursorPosition(0,(shopASCII*3) + 34);
+								SetConsoleTextAttribute(h, 6);	// Parancssor betűszín változtatás (sárga)
+								setCursorPosition(30,(shopASCII*3) + 26);
+							cout << "\t\t\tArany: " << player.gold;
+								SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
+								setCursorPosition(30,(shopASCII*3) + 28);
+							cout << "\t\t\tÉlet: " << player.health;
+								SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
+								setCursorPosition(30,(shopASCII*3) + 30);
+							cout << "\t\t\tSebzés: " << player.damage;
+								SetConsoleTextAttribute(h, 5);	// Parancssor betűszín változtatás (lila)
+								setCursorPosition(30,(shopASCII*3) + 32);
+							cout << "\t\t\tPáncél: " << player.armor;
+								SetConsoleTextAttribute(h, 9);	// Parancssor betűszín változtatás (világoskék)
+								setCursorPosition(30,(shopASCII*3) + 34);
+							cout << "\t\t\tKitérés: " << dodgePercent;
+								SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
+								setCursorPosition(75,(shopASCII*3) + 26);
+							cout << "\t\t\t" << bossName << " élete: " << allBosses[i].health;
+								SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
+								setCursorPosition(75,(shopASCII*3) + 28);
+							cout << "\t\t\t" << bossName << " sebzése: " << allBosses[i].damage;
 							shopGoods.erase(shopGoods.begin()+2);
 							Sleep(4000);
 						}
 						else {
-							setCursorPosition(0,shopASCII+31);
-							cout << "\x1b[2K";
-							setCursorPosition(0,shopASCII+31);
+							setCursorPosition(120,shopASCII+15);
+							cout << "                                                                                                                                    ";
+							SetConsoleTextAttribute(h, 4);
+							setCursorPosition(120,shopASCII+15);
 							cout << "\t\t\t" << "További " << shopGoods[2].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
 						}
 					} break;
@@ -259,49 +388,82 @@ int main(){
 									(shopGoods[1].type == shopGoods[2].type));	 
 							}
 							else {shuffleArray(shopGoods);}
+							SetConsoleTextAttribute(h, shopGoods[0].color);	// Parancssor betűszín változtatás
 							setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
 								cout << "                                                                                                ";
-							setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
+								setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
 								cout << "\t\t\t" << shopGoods[0].name << " (" << shopGoods[0].price << " arany) " << '[' << shopGoods[0].attribute << ']' << endl;
 								setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 6 + shopASCII);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
 									cout << "                                                                                                ";
+								SetConsoleTextAttribute(h, shopGoods[1].color);	// Parancssor betűszín változtatás
 								setCursorPosition(shopASCIIRows + 22, (shopASCII / 2) + 6 + shopASCII);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
 									cout << "\t\t\t" << shopGoods[1].name << " (" << shopGoods[1].price << " arany) " << '[' << shopGoods[1].attribute << ']' << endl;
 									setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 8 + shopASCII * 2);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
+									SetConsoleTextAttribute(h, shopGoods[2].color);	// Parancssor betűszín változtatás
 										cout << "                                                                                                ";
 									setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 8 + shopASCII * 2);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2 
 										cout << "\t\t\t" <<  shopGoods[2].name << " (" << shopGoods[2].price << " arany) " << '[' << shopGoods[2].attribute << ']' << endl;							
-							setCursorPosition(0,(shopASCII*3) + 13);
-							cout << "\x1b[2K";
-							setCursorPosition(0,(shopASCII*3) + 15);
-							cout << "\x1b[2K";
-							setCursorPosition(0,(shopASCII*3) + 17);
-							cout << "\x1b[2K";
-							setCursorPosition(0,(shopASCII*3) + 13);
+								setCursorPosition(0,(shopASCII*3) + 13);
+							cout << "                                                                                                                                    ";
+								setCursorPosition(0,(shopASCII*3) + 15);
+							cout << "                                                                                                                                    ";
+								setCursorPosition(0,(shopASCII*3) + 17);
+							cout << "                                                                                                                                    ";
+							SetConsoleTextAttribute(h, shopGoods[0].color);	// Parancssor betűszín változtatás
+								setCursorPosition(0,(shopASCII*3) + 13);
 							cout << "\t\t\t" << "Vásárlás: " << shopGoods[0].name <<"(Balra nyíl) 🠰";
-							setCursorPosition(0,(shopASCII*3) + 15);
+							SetConsoleTextAttribute(h, shopGoods[1].color);	// Parancssor betűszín változtatás
+								setCursorPosition(0,(shopASCII*3) + 15);
 							cout << "\t\t\t" << "Vásárlás: " << shopGoods[1].name << "(Előre nyíl) 🠱";
-							setCursorPosition(0,(shopASCII*3) + 17);
-							cout <<"\t\t\t" << "Vásárlás: " << shopGoods[2].name << "(Jobbra nyíl) 🠲";
-							setCursorPosition(0,(shopASCII*3) + 27);
-							cout << "\x1b[2K";
-							setCursorPosition(0,(shopASCII*3) + 27);
-							cout << "\t\t\t" << "Arany: " << player.gold << "\tÉlet: " << player.health << "\tSebzés: " << player.damage << "\tPáncél: " << player.armor << "\tKitérés: " << dodgeChance / 5 << "%\n" << endl;
+							SetConsoleTextAttribute(h, shopGoods[2].color);	// Parancssor betűszín változtatás
+								setCursorPosition(0,(shopASCII*3) + 17);
+							cout << "\t\t\t" << "Vásárlás: " << shopGoods[2].name << "(Jobbra nyíl) 🠲";
+								setCursorPosition(0,(shopASCII*3) + 27);
+							cout << "                                                                                                                                    ";
+								SetConsoleTextAttribute(h, 6);	// Parancssor betűszín változtatás (sárga)
+								setCursorPosition(30,(shopASCII*3) + 26);
+							cout << "\t\t\tArany: " << player.gold;
+								SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
+								setCursorPosition(30,(shopASCII*3) + 28);
+							cout << "\t\t\tÉlet: " << player.health;
+								SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
+								setCursorPosition(30,(shopASCII*3) + 30);
+							cout << "\t\t\tSebzés: " << player.damage;
+								SetConsoleTextAttribute(h, 5);	// Parancssor betűszín változtatás (lila)
+								setCursorPosition(30,(shopASCII*3) + 32);
+							cout << "\t\t\tPáncél: " << player.armor;
+								SetConsoleTextAttribute(h, 9);	// Parancssor betűszín változtatás (világoskék)
+								setCursorPosition(30,(shopASCII*3) + 34);
+							cout << "\t\t\tKitérés: " << dodgePercent;
+								SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
+								setCursorPosition(75,(shopASCII*3) + 26);
+							cout << "\t\t\t" << bossName << " élete: " << allBosses[i].health;
+								SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
+								setCursorPosition(75,(shopASCII*3) + 28);
+							cout << "\t\t\t" << bossName << " sebzése: " << allBosses[i].damage;
 						}
 						else {	// Ha nincs elegendő arany a frissítéshez, a játékos hibaüzenetet kap
+							setCursorPosition(120,shopASCII + 15);
+							cout << "                                                                                                                                    ";
+							SetConsoleTextAttribute(h, 4);
+							setCursorPosition(120,shopASCII + 15);
 							cout << "\t\t\t\t" << "További " << shopRefresh - player.gold << " arany szükséges az áruk frissítéséhez!" << endl;
 						}
 					} break;	
-					case ESC: {	// Kilépés a boltból, ha semmire sem elegendő a játékos aranya  
-							cout << "\t\t\t\t" << "Kilépés!" << endl;
+					case ESC: {	// Kilépés a boltból, ha semmire sem elegendő a játékos aranya
+							setCursorPosition(75,shopASCII + 15);
+								cout << "                                                                                                                                    ";
+							SetConsoleTextAttribute(h, 4);
+							setCursorPosition(75,shopASCII + 15);  
+								cout << "\t\t\t\t" << "Kilépés!";
 							itemPicked=true;
 					} break;
 					default: {	// Ha a felsorolt gombok közül egyiket sem nyomta meg a játékos, hibaüzenetet kap, ami 1.5s múlva el is tűnik
-						setCursorPosition(0,shopASCII+28);
+						setCursorPosition(75,shopASCII + 15);
 						cout << "Helytelen input!" << endl;
 						Sleep(1500);
 						setCursorPosition(0,shopASCII+28);
-						cout << "\x1b[2K";
+						cout << "                                                                                                                                    ";
 						} break;
 				}
 				} while (!itemPicked);	// do-while ciklus vége (BOLT)
@@ -311,7 +473,7 @@ int main(){
 					cout << "\t\t\t\tNincs elegendő kulcs a belépéshez!" << endl;
 					Sleep(1500);
 					setCursorPosition(0,doorHeight+6);
-					cout << "\x1b[2K";
+					cout << "                                                                                                                                    ";
 					}
 					shuffleArray(shopGoods);	// Árukat tároló vektor elemeinek összekeverése, hogy a következő megnyitásnál más áruk legyenek
 				}
@@ -355,7 +517,7 @@ int main(){
 				cout << "\t\t\t" << "┃ STATOK ┃" << endl;
 				cout << "\t\t\t" << "━━━━━━━━━━\n" << endl;
 				cout << "\t\t\t" << "Arany: " << player.gold << "\tÉlet: " << player.health << "\tSebzés: " << player.damage << "\tPáncél: " << player.armor << "\tKitérés: " << dodgePercent << "%\n" << endl;
-				cout << "\t\t\t" << allBosses[i].name << " élete: " << allBosses[i].health << "\t" << allBosses[i].name << " sebzése: " << allBosses[i].damage << endl;
+				cout << "\t\t\t" << bossName << " élete: " << allBosses[i].health << "\t" << bossName << " sebzése: " << allBosses[i].damage << endl;
 				Sleep(2000);
 				do
 				{
@@ -373,7 +535,7 @@ int main(){
 								case 6: allBosses[i].damage = (allBosses[i].damage * debuffs[0].value / 100);	// SZÖRNY SEBZÉS NÖVELÉS
 							}
 							setCursorPosition(0,(debuffsASCII*3) + 31);
-							cout << "\x1b[2K";
+							cout << "                                                                                                                                    ";
 							setCursorPosition(0,(debuffsASCII*3) + 31);
 							cout << "\t\t\t\t" << debuffs[0].name << "kiválasztva!" << endl;
 							debuffs.erase(debuffs.begin());							// Választás után a gyengítés törlése a vektorból, hogy ne ismétlődjön később
@@ -390,7 +552,7 @@ int main(){
 								case 6: allBosses[i].damage = (allBosses[i].damage * debuffs[1].value / 100);	// SZÖRNY SEBZÉS NÖVELÉS
 							}
 							setCursorPosition(0,(debuffsASCII*3) + 31);
-							cout << "\x1b[2K";
+							cout << "                                                                                                                                    ";
 							setCursorPosition(0,(debuffsASCII*3) + 31);
 							debuffs.erase(debuffs.begin()+1);
 							itemPicked=true;
@@ -406,7 +568,7 @@ int main(){
 								case 6: allBosses[i].damage = (allBosses[i].damage * debuffs[2].value / 100);	// SZÖRNY SEBZÉS NÖVELÉS
 							}
 							setCursorPosition(0,(debuffsASCII*3) + 31);
-							cout << "\x1b[2K";
+							cout << "                                                                                                                                    ";
 							setCursorPosition(0,(debuffsASCII*3) + 31);
 							debuffs.erase(debuffs.begin()+2);
 							itemPicked=true;
@@ -414,12 +576,12 @@ int main(){
 						case ESC: return 0; break;	// ESC-re leáll a program
 						default: {					// Ha a felsorolt gombok közül egyiket sem nyomja meg a felhasználó, hibaüzenetet kap
 							setCursorPosition(0,(debuffsASCII*3) + 31);
-							cout << "\x1b[2K";
+							cout << "                                                                                                                                    ";
 							setCursorPosition(0,(debuffsASCII*3) + 31);
 							cout << "Helytelen input!" << endl;
 							Sleep(1500);
 							setCursorPosition(0,(debuffsASCII*3) + 31);
-							cout << "\x1b[2K";
+							cout << "                                                                                                                                    ";
 						} break;
 						
 				}
@@ -446,11 +608,13 @@ int main(){
 			Sleep(2000);
 			system("cls");
 			bossHeight = allBosses[i].getBoss(allBosses[i].fileName, allBosses[i].color, bossHeight);	// Megfelelő szörny megjelenítése, ASCII art sorainak számának eltárolása
-			int middlePoint = allBosses[i].middlePoint();
-			setCursorPosition(middlePoint, bossHeight);
-			cout << "\n\t\t\t\t\t\t" << allBosses[i].name << "\n" << endl;
-			setCursorPosition(0,bossHeight+4);
-			displayStats(allBosses, player, i, dodgePercent);					// Játékos és szörny tulajdonságok megjelenítése
+			int middleX = allBosses[i].middlePoint();												// Szörny vízszintes közepének meghatározása
+			int longestRow = countRows("../Enemies/" + allBosses[i].fileName);						//Szörny függőleges közepének meghatározása
+			setCursorPosition(middleX, bossHeight + 6);
+			SetConsoleTextAttribute(h, allBosses[i].color);
+			cout << "\n\t\t\t\t\t\t   " << allBosses[i].name << "\n" << endl;
+			SetConsoleTextAttribute(h, 7);
+			displayStats(allBosses, player, i, dodgePercent, longestRow + 20, (bossHeight / 2) - 6);					// Játékos és szörny tulajdonságok megjelenítése
 				do
 				{	
 					BlockInput(false);							// User input engedélyezése, hogy ismét lehessen választani
@@ -459,7 +623,7 @@ int main(){
 														   		   ne lépjen fel semmi furcsa jelenség, ha a felhasználó nyomkodja a gombokat) */
 					if (combatOption == 0 || combatOption == 0xE0) combatOption = _getch();
 					if (combatOption == RIGHT && i < allBosses.size()){ 		// Jobb nyíl lenyomása (támadás)
-						setCursorPosition(0,bossHeight+8);
+						setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);
 						cout << "\tTámadás!!!" << endl;
 						Sleep(1000);
 						if((allBosses[i].health - player.damage) > 0){
@@ -474,30 +638,27 @@ int main(){
 							bool giveKey;
 							keyChance % 2 == 0 ? giveKey = true : giveKey = false;	// A generált szám ellenőrzése
 							giveKey ? player.keys += 1 : player.keys += 0;			// Ha a generált szám páros, a játékos kap kulcsot (50% esély)
+							setCursorPosition(longestRow + 40, (bossHeight / 2) + 28);
 							cout << "\tGratulálok! Legyőzted a szörnyet!" << endl;
 							newLine();
 							if(giveKey){
+							setCursorPosition(longestRow + 40, (bossHeight / 2) + 30);
 								cout << "\t" << goldWon << " aranyat és 1 kulcsot nyertél!" << endl; 
 							}
 							else{
+							setCursorPosition(longestRow + 40, (bossHeight / 2) + 30);
 							cout << "\t" << goldWon << " aranyat nyertél!" << endl;
 							}
 							Sleep(4000);
 							break;		
 						}
-						
-						setCursorPosition(0,bossHeight+5);
-						cout << "\x1b[2K";
-						setCursorPosition(0,bossHeight+6);
-						cout << "\x1b[2K";
-						setCursorPosition(0,bossHeight+3);
-						displayStats(allBosses, player, i, dodgePercent);
-						setCursorPosition(0,bossHeight+10);
+						displayStats(allBosses, player, i, dodgePercent, longestRow + 20, (bossHeight / 2) - 6);
+						setCursorPosition(longestRow + 40, (bossHeight / 2) + 26);
 						cout << "\t" << player.damage << " sebzést okoztál!" << endl;
 						Sleep(1000);
 						if (allBosses[i].health > 0) {											// Ha a szörnynek maradt élete, támadjon vissza, ha nincs, akkor a játékos győzőtt
-						setCursorPosition(0, bossHeight+8);
-						cout << "\tSzörny támad!" << endl;
+						setCursorPosition(longestRow + 40, (bossHeight / 2) + 28);						
+						cout << "\t" << bossName << " támad!" << endl;
 						Sleep(1000);
 						if(player.health - (allBosses[i].damage - player.armor) > 0) {
 							player.health -= (allBosses[i].damage - player.armor); 			// Játékos életet veszít (szörny sebzése - játékos páncélja)
@@ -509,19 +670,18 @@ int main(){
 								gameOver = true;
 								break;
 							}	
-						setCursorPosition(0,bossHeight+5);
-						cout << "\x1b[2K";
-						setCursorPosition(0,bossHeight+6);
-						cout << "\x1b[2K";
-						setCursorPosition(0,bossHeight+3);
-						displayStats(allBosses, player, i, dodgePercent);
-						setCursorPosition(0,bossHeight+10);
+						displayStats(allBosses, player, i, dodgePercent, longestRow + 20, (bossHeight / 2) - 6);
+						setCursorPosition(longestRow + 40, (bossHeight / 2) + 30);						
 						cout << "\t" << allBosses[i].damage - player.armor << " sebzést szenvedtél!" << endl;	// Elveszített élet pontok kiírása
 						Sleep(1000);
-						setCursorPosition(0,bossHeight+8);
-						cout << "\x1b[2K";
-						setCursorPosition(0,bossHeight+10);
-						cout << "\x1b[2K";
+						setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);						
+							cout << "                                                                  ";
+						setCursorPosition(longestRow + 40, (bossHeight / 2) + 26);						
+							cout << "                                                                  ";
+						setCursorPosition(longestRow + 40, (bossHeight / 2) + 28);						
+							cout << "                                                                  ";
+						setCursorPosition(longestRow + 40, (bossHeight / 2) + 30);						
+							cout << "                                                                  ";
 						}
 					}													// Ha a szörny élete <= 0, a játékos győzött
 				
@@ -530,43 +690,39 @@ int main(){
 						bool runAway;
 						chance % 5 == 0 ? runAway = true : runAway = false;		// Ha a generált szám osztható 5-tel, a játékos kitéra szörny elől (kezdetben 20% esély, később változhat)
 						if(runAway){											// Ha sikeres a kitérés, kilépés a harcból, főciklus elejére ugrás
-							setCursorPosition(0,bossHeight+8);
+							setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);						
 							cout << "\tSikeres kitérés!" << endl;
 							Sleep(2000);
 							break;	
 						}
 						else{													// Ha nem sikerült a kitérés, a szörny támad
-							setCursorPosition(0,bossHeight+8);
+							setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);						
 							cout << "\tSikertelen kitérés!" << endl;
 							Sleep(1000);
-							setCursorPosition(0,bossHeight+8);
-							cout << "\x1b[2K";
-							setCursorPosition(0,bossHeight+8);
-							cout << "\tSzörny támad!" << endl;
+							setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);						
+								cout << "                                                                  ";
+							setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);						
+							cout << "\t" << bossName << " támad!" << endl;
 							Sleep(1000);
 							if(player.health - (allBosses[i].damage - player.armor) > 0) {
 							player.health -= (allBosses[i].damage - player.armor);
 							}
 							else {
+								newLine();
 								player.health = 0;
 								Sleep(2000);
 								cout << "Game over!" << endl;
 								gameOver = true;
 								break;
 							}
-							setCursorPosition(0,bossHeight+5);
-							cout << "\x1b[2K";
-							setCursorPosition(0,bossHeight+6);
-							cout << "\x1b[2K";
-							setCursorPosition(0,bossHeight+3);
-							displayStats(allBosses, player, i, dodgePercent);
-							setCursorPosition(0,bossHeight+10);
+							displayStats(allBosses, player, i, dodgePercent, longestRow + 20, (bossHeight / 2) - 6);
+							setCursorPosition(longestRow + 40, (bossHeight / 2) + 26);						
 							cout << "\t" << allBosses[i].damage - player.armor << " sebzést szenvedtél!" << endl;
 							Sleep(1000);
-							setCursorPosition(0,bossHeight+8);
-							cout << "\x1b[2K";
-							setCursorPosition(0,bossHeight+10);
-							cout << "\x1b[2K";
+							setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);						
+								cout << "                                                                  ";
+							setCursorPosition(longestRow + 40, (bossHeight / 2) + 26);						
+								cout << "                                                                  ";
 						}
 					}
 					else if(combatOption == ESC) {								// ESC-re kilép a program (harc közben is)
@@ -574,12 +730,14 @@ int main(){
 						return 0;
 						}		
 					else {														// Ha a felsorolt gombok közül egyiket sem nyomta le a felhasználó, hibaüzenetet kap
-						setCursorPosition(0,bossHeight+10);
+						setCursorPosition(longestRow + 40, (bossHeight / 2) + 32);						
 						SetConsoleOutputCP(1250);
 						cout << "\t" << playerName;
 						SetConsoleOutputCP(65001);
 						cout << ", a folytatáshoz nyomd le a fent látható gombok egyikét!" << endl;
 						Sleep(2000);
+						setCursorPosition(longestRow + 40, (bossHeight / 2) + 32);						
+							cout << "                                                                  ";
 					}
 				} while ((player.health >= 0) && (allBosses[i].health >= 0));	// Ha mind két félnek maradt élete, folytatódhat a harc
 			i++;																// A harcnak vége, ciklusváltozó nő 1-gyel (azért, hogy a következő harcban más szörny legyen)

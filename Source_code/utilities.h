@@ -173,16 +173,78 @@ vector<Bosses> generateBoss(string filename)
 	return allBosses;
 }
 
-void displayStats(vector<Bosses> boss, Player player, int i, float dodge)
+void displayStats(vector<Bosses> boss, Player player, int i, float dodge, int x, int y)
 {
+	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása 
+	SetConsoleTextAttribute(h, 7); // Parancssor betűszín változtatás (fehér)
 	string bossName = boss[i].fileName.substr(1, boss[i].fileName.length()-5);
 	bossName[0] = toupper(bossName[0]);
-	cout << "\tTámadás [->]\t"
-		 << "Kitérés (" << dodge << "%) [<-]\t"
-		 << "Kilépés [ESC]\n"
-		 << endl;
-	cout << "\tÉlet: " << player.health << "\tSebzés: " << player.damage << "\tPáncél: " << player.armor << endl;
-	cout << "\t" << bossName << " élete: " << boss[i].health << "\t" << bossName << " sebzése: " << boss[i].damage << endl;
+	setCursorPosition(x + 20, y - 2);
+	cout << "\t" << "━━━━━━━━━━━━━━━";
+	setCursorPosition(x + 20, y - 1);
+	cout << "\t" << "┃ INTERAKCIÓK ┃";
+	setCursorPosition(x + 20, y);
+	cout << "\t" << "━━━━━━━━━━━━━━━";
+	setCursorPosition(x + 20, y + 4);
+	cout << "                                                                  ";
+	setCursorPosition(x + 20, y + 6);
+	cout << "                                                                  ";
+	setCursorPosition(x + 20, y + 8);
+	cout << "                                                                  ";
+	setCursorPosition(x + 20, y + 14);
+	cout << "                                                                  ";
+	setCursorPosition(x + 20, y + 16);
+	cout << "                                                                  ";
+	setCursorPosition(x + 20, y + 2);
+		SetConsoleTextAttribute(h, 4);	// Parancssor betűszín változtatás (piros)
+	cout << "\tTámadás [->]";
+	setCursorPosition(x + 20, y + 4);
+		SetConsoleTextAttribute(h, 6);	// Parancssor betűszín változtatás (sárga)
+	cout << "\tKitérés (" << dodge << "%) [<-]";
+	setCursorPosition(x + 20, y + 6);
+		SetConsoleTextAttribute(h, 8);	// Parancssor betűszín változtatás (szürke)
+	cout << "\tKilépés [ESC]";
+		SetConsoleTextAttribute(h, 7); // Parancssor betűszín változtatás (fehér)
+	setCursorPosition(x + 20, y + 10);
+	cout << "\t" << "━━━━━━━━━━━━━━━━━━";
+	setCursorPosition(x + 20, y + 11);
+	cout << "\t" << "┃ JÁTÉKOS STATOK ┃";
+	setCursorPosition(x + 20, y + 12);
+	cout << "\t" << "━━━━━━━━━━━━━━━━━━";
+		SetConsoleTextAttribute(h, 2); // Parancssor betűszín változtatás (zöld)
+	setCursorPosition(x + 20, y + 14);
+	cout << "                                                                  ";
+	setCursorPosition(x + 20, y + 14);
+	cout << "\tÉlet: " << player.health;
+		SetConsoleTextAttribute(h, 3); // Parancssor betűszín változtatás (aqua)
+	setCursorPosition(x + 20, y + 16);
+	cout << "                                                                  ";
+	setCursorPosition(x + 20, y + 16);
+	cout << "\tSebzés: " << player.damage;
+		SetConsoleTextAttribute(h, 5); // Parancssor betűszín változtatás (lila)
+	setCursorPosition(x + 20, y + 18);
+	cout << "                                                                  ";
+	setCursorPosition(x + 20, y + 18);
+	cout << "\tPáncél: " << player.armor;
+		SetConsoleTextAttribute(h, 7); // Parancssor betűszín változtatás (fehér)
+	setCursorPosition(x + 20, y + 22);
+	cout << "\t" << "━━━━━━━━━━━━━━━━━━";
+	setCursorPosition(x + 20, y + 23);
+	cout << "\t" << "┃ SZÖRNY STATOK  ┃";
+	setCursorPosition(x + 20, y + 24);
+	cout << "\t" << "━━━━━━━━━━━━━━━━━━";
+	SetConsoleTextAttribute(h, 2); // Parancssor betűszín változtatás (zöld)
+	setCursorPosition(x + 20, y + 26);
+	cout << "                                                                  ";
+	setCursorPosition(x + 20, y + 26);
+	cout << "\t" << bossName << " élete: " << boss[i].health;
+	SetConsoleTextAttribute(h, 3); // Parancssor betűszín változtatás (aqua)
+	setCursorPosition(x + 20, y + 28);
+	cout << "                                                                  ";
+	setCursorPosition(x + 20, y + 28);
+	cout << "\t" << bossName << " sebzése: " << boss[i].damage;
+	SetConsoleTextAttribute(h, 7); // Parancssor betűszín változtatás
+
 }
 
 vector<ShopItems> shopSystem(string path)
@@ -212,20 +274,21 @@ vector<ShopItems> shopSystem(string path)
 		}
 		p = generateNum(p, p * 1.1 );
 		stringstream attr;
+		int color;
 		switch(t){
-			case 1: attr << "ÉLET + " << v; break;
-			case 2: attr << "SEBZÉS + " << v; break;
-			case 3: attr << "PÁNCÉL + " << v; break;
-			case 4: attr << "ÉLET + " << v - 100 << '%'; break;
-			case 5: attr << "SEBZÉS + " << v - 100 << '%'; break;
-			case 6: attr << "PÁNCÉL + " << v - 100 << '%'; break;
-			case 7: attr << "KITÉRÉS + " << v - 100 << '%'; break;
-			case 8: attr << "SZÖRNY ÉLET - " << 100 - v << '%'; break;
-			case 9: attr << "SZÖRNY SEBZÉS - " << 100 - v << '%'; break;
+			case 1: attr << "ÉLET + " << v; color = 2; break;
+			case 2: attr << "SEBZÉS + " << v; color = 3;  break;
+			case 3: attr << "PÁNCÉL + " << v; color = 5;  break;
+			case 4: attr << "ÉLET + " << v - 100 << '%'; color = 2;  break;
+			case 5: attr << "SEBZÉS + " << v - 100 << '%'; color = 3; break;
+			case 6: attr << "PÁNCÉL + " << v - 100 << '%'; color = 5;  break;
+			case 7: attr << "KITÉRÉS + " << v - 100 << '%'; color = 9;  break;
+			case 8: attr << "SZÖRNY ÉLET - " << 100 - v << '%'; color = 4;  break;
+			case 9: attr << "SZÖRNY SEBZÉS - " << 100 - v << '%'; color = 4;  break;
 			default: attr << ""; break;
 		}
 		string attribute = attr.str();
-		ShopItems *s = new ShopItems(name, t, p, v, b, attribute);
+		ShopItems *s = new ShopItems(name, t, p, v, b, attribute, color);
 		shopVector.push_back(*s);
 	}
 	MyReadFile.close(); // Fájl bezárása

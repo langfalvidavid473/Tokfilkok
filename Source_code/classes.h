@@ -23,6 +23,8 @@
 // #include <typeinfo>
 #include <sstream>
 
+
+
 using namespace std;
 
 #pragma execution_character_set( "utf-8" ) // UTF-8 karakterek engedélyezése
@@ -60,11 +62,11 @@ public:
 		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása 
 		string myText;
 		ifstream MyReadFile("../Enemies/" + fn);
-		SetConsoleTextAttribute(h, color1); // Parancssor betűszín változtatás 
+		SetConsoleTextAttribute(h, color1); // Parancssor betűszín változtatás
+		cout << "\n\n\n\n\n";
 		while(getline(MyReadFile, myText)){
 		if(myText.find("name") != std::string::npos ){MyReadFile.close();}
 		else{
-
 			cout << "\t\t" << myText << endl;
 			rows++;
 		}
@@ -93,16 +95,17 @@ public:
 
 class ShopItems{
 public:
-int price, value, type;
+int price, value, type, color;
 string name, attribute;
 bool buff;
-ShopItems(string n, int t, int p, int v, bool b, string a){
+ShopItems(string n, int t, int p, int v, bool b, string a, int c){
 	name = n;
 	type = t;
 	price = p;
 	value = v;
 	buff = b;
 	attribute = a;
+	color = c;
 }
 };
 
