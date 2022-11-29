@@ -42,6 +42,7 @@
                 :=+*#%%%###########%%############%%%%%%%%%%%%%%%%%%%%%%#+-.               
                      .::--===+*#%%%%%%%%#%#####%%%%%%%%%%%%%%%#+=--:.                     
                                 .::-==+++++#%%%%%%#*++++=--:.             
-name:Arnold az ananasz
-color:blue                 
+name:A Tiszteletlen Tök
+color:yellow
+szöveg:Vigyázz, mert bosszút forral a Halloweeni megpróbáltatásai miatt!                 
                                                                                         

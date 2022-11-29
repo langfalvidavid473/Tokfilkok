@@ -39,5 +39,6 @@
                                         .=##+-::::::::::::::::::::::#:
                                            .=*#*=-::::::::::::::::::*#
                                                :=*%#*+=-::::::::-=*%+ 
-name:Arnold az ananasz
-color:yellow 
+name:A Bajkeverő Banán
+color:yellow
+szöveg:Ha már most elviselhetetlennek tűnik, csak várd ki, amíg bebarnul!

@@ -35,5 +35,6 @@
                           .+=-------=+=----------=+=====-====+:                      
                           .+==------=+=-----------==---------==                      
                            -=+=-----==+=---------=+=---------+-            
-name:Arnold az ananasz
-color:blue           
+name:A Kedvtelen Kukorica
+color:yellow
+szöveg:Hajléktalan, de pont ez teszi veszélyessé!     

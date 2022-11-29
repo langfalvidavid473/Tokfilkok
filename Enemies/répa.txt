@@ -41,7 +41,8 @@
                                  #%===*%+*%%##%%*+@#===%%                                                
                                  =@+=+%*          +@*==%*                                                
                                   %%*%*            +@*#%-        
-name:Arnold az ananasz
-color:blue                                      
+name:A Rosszindulatú Répa
+color:white
+szöveg:Ha nem vigyázol elrágja a fogaidat!                                     
                                                         
                                                      

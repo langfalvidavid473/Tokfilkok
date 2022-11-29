@@ -39,5 +39,6 @@
                 -%#######################################****#######%#:-=+#%%+.           
                  *%################################################%#####*+-.             
                   *%%#####%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#####%%+.                     
-name:Arnold az ananasz
-color:blue 
+name:A Királyi Krumpli
+color:yellow
+szöveg:Nem csak hosszútávon és nagy mennyiségben okoz halált!

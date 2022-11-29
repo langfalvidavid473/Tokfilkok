@@ -38,6 +38,7 @@
                                              -+%@%%###%%@@@+.                                                                
                                                  .=#@%%%@%=                                                                   
                                                     .+@%-              
-name:Arnold az ananasz
-color:blue                                                        
+name:A Rettenetes Retek
+color:gray
+szöveg:Puszta érintése is soha nem látott járványokat indíthat el!                                                        
        

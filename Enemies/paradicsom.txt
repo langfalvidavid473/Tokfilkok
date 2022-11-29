@@ -36,6 +36,7 @@
                                #%%###%%.          .%%####%%                                                             
                                -%%##%%+            +%%##%%=.                                                            
                                 =%%%%*:             +%%%%+      
-name:Arnold az ananasz
-color:blue                                                                                                      
+name:A Pancser Paradicsom
+color:red
+szöveg:Végső elkeseredésében legalább az ingedet megöli!                                                                                                    
                                                                 

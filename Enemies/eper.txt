@@ -39,5 +39,6 @@
                                   =##********************#*.                                    
                                     :=*##************##+-.                                      
                                         :=+*#####**+-.      
-name:Arnold az ananasz
-color:blue                                     
+name:Az Erjedt Eper
+color:red
+szöveg:Elsőre, de még másodjára is finomnak tűnő íze csak a megtévesztésedre szolgál!                                     

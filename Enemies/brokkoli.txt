@@ -36,6 +36,7 @@
                                     ::-:::::------: :.                                                        
                                     ::-::::::::---. -.                                                        
                                    ..::::::::::---::-.            
-name:Arnold az ananasz
-color:purple                                            
+name:A Borzasztó Brokkoli
+color:green
+szöveg:A legenda szerint minden harapás után a duplája nő vissza!                                            
                                         

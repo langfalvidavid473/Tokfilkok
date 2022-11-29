@@ -41,5 +41,6 @@
                                  +%+=+%*          *%+=+%+                                                
                                  :%#+%#            *%*#%-                                               
                                   -**=              =**=                
-name:Arnold az ananasz
-color:blue                           
+name:A Konok Körte
+color:green
+szöveg:Ne várd, hogy észérvekkel le tudod majd beszélni a harcról!                           

@@ -40,5 +40,6 @@
                      .-++======================++++++++++++++++=-                                                
                         :-=+++++++++++++++++++++++++++++++++=-.                                                  
                            .::--==+++++++++++++++++==--:..       
-name:Arnold az ananasz
-color:blue                                                
+name:A Gonosz Gomba
+color:purple
+szöveg:Elég mérgesnek tűnik, rendkívül sok harci tapasztalattal!                                              
