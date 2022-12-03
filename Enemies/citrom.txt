@@ -34,3 +34,6 @@
                                 :=++=----------=--=-------------------------=#.           
                                     :==+++=-----==========+++=====+++*+++*+=-             
                                          .:-===++++++===-:                               
+name:A Cinikus Citrom
+color:yellow
+szöveg:Legyőzéséhez valamilyen édesítőszer javasolt!

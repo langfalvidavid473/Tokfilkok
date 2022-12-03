@@ -41,4 +41,7 @@
                                       +%####*#=                                                     
                                        :*%###*#                                                     
                                          :*%%%%:                                                    
-                                            :==.                                                    
+                                            :==.              
+name:A Pimasz Paprika
+color:red
+szöveg:Nehéz megmondani, hogy ő vagy a megjegyzései csípősebbek!                                      

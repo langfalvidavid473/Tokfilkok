@@ -40,4 +40,7 @@
                                 *#*****+++++++++++******##.                                    
                                  -*##*****************##+.                                     
                                    .=*###*********###+:                                        
-                                       :-==+++++=-:.                                           
+                                       :-==+++++=-:.                
+name:A Szellemes Szőlő
+color:blue
+szöveg:Ha nem vigyázol, most belőled lesz bor!                          

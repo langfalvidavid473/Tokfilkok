@@ -40,4 +40,7 @@
                                -++=+****-         .####*=+=-.                             
                              :. ::**+=-:.          :=+*##=-. .                            
                              -.   .::                 .--:.   .                           
-                              ...                       .....                             
+                              ...                       .....      
+name:Az Anarchista Ananász
+color:yellow
+szöveg:Csinálj bármit, de a hajához ne nyúlj, nagyon érzékeny rá!

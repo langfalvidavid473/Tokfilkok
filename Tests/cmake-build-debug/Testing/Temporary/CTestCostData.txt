@@ -1,0 +1,8 @@
+PlayerTest.PlayerStatsPositive 7 0.00161994
+BossTest.BossVectorNotEmpty 6 0.00185773
+BossTest.BossStatsPositive 2 0.00545395
+ShopTest.ShopVectorNotEmpty 6 0.00735173
+ShopTest.ShopObjectsHaveValues 7 0.00158307
+ShopTest.DebuffsObjectsHaveValues 7 0.00144507
+DebuffsTest.DebuffsVectorNotEmpty 7 0.00136984
+---
