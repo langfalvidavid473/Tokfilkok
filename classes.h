@@ -12,6 +12,7 @@
 #include <windows.h>	// Parancssorral történő interakciókhoz
 #include <random>		// Véletlenszerű értékek generálásához
 #include <filesystem>	// fájlokkal való munkálatokhoz
+//#include <utility>
 #include <vector>		// Az elemek könnyebb tárolásához
 #include <algorithm>	// shuffle()
 #include <cctype>		// toupper() 
@@ -20,10 +21,7 @@
 #include <locale>		// UTF-8 karakterek kiírása
 #include <future>		// delay
 #include <WinUser.h>	// BlockInput()
-// #include <typeinfo>
-#include <sstream>
-
-
+#include <sstream>      // stringstream
 
 using namespace std;
 
@@ -58,7 +56,7 @@ public:
 		color = c;
 	}
 	// ---- Adott ellenfél beolvasása fájlból, ASCII art stílusban ----
-		int getBoss(string fn,int color1, int rows=0) {
+		static int getBoss(const string& fn,int color1, int rows=0) {
 		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása 
 		string myText;
 		ifstream MyReadFile("../Enemies/" + fn);
@@ -75,7 +73,7 @@ public:
 		SetConsoleTextAttribute(h, 7);
 		return rows;
 		}
-		int middlePoint(){			// ASCII art középpontjának keresése
+		int middlePoint() const{			// ASCII art középpontjának keresése
 			int middlePoint = 0;
 			int row = 0;
 			int i = 0;
@@ -111,13 +109,14 @@ ShopItems(string n, int t, int p, int v, bool b, string a, int c){
 
 class Debuffs{
 	public:
-	int value, type;
+	int value, type, color;
 	string name, attribute;
-	Debuffs(string n, int v, int t, string a){
+	Debuffs(string n, int v, int t, string a, int c){
 		value = v;
 		name = n;
 		type = t;
 		attribute = a;
+        color = c;
 	}
 };
 

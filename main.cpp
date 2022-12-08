@@ -26,13 +26,11 @@ int main(){
     info.bVisible = false;
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);	// Kurzor villogásának eltűntetése
     string playerName;									// Játékos neve
-    float dodgeChance = 150;
-    float dodgePercent = dodgeChance / 5;				// Kitérés esélye (alapértelmezett 30%)
+    int dodgeChance = 150;                            // Kitérés esélye (alapértelmezett 30%)
     int i = 0;											// Ciklusváltozó (akkor nő, ha egy szörny meghal)
-    int pressedChar, combatOption, pickDoor,			// Különböző változók felhasználói bemenet ellenőrzésére
-    pickShopItems;
+    int combatOption;			                        // Különböző változók felhasználói bemenet ellenőrzésére
     int bossHeight, doorHeight, doorLeftHeight,
-    shopASCII, debuffsASCII, shopASCIIRows, DebuffsASCIIRows;	// Különböző ASCII artok magasságának és szélességének megszámolására
+    shopASCII, debuffsASCII;	                        // Különböző ASCII artok magasságának és szélességének megszámolására
     bool gameOver = false, itemPicked;					// gameOver akkor igaz, ha a játékos meghal, itemPicked változót boltnál és kijáratnál használjuk
     vector<Bosses> allBosses = generateBoss("../Enemies");// Szörnyek
     vector<ShopItems> shopGoods = shopSystem("../txtFiles/shop.txt");			// Áruk (bolt)
@@ -42,13 +40,13 @@ int main(){
     shuffleArray(debuffs);
     cout << "Játékos neve: "; getline(cin,playerName);
     playerName[0] = toupper(playerName[0]);				// Nagy kezdőbetű a neveknek (cctype)
-    Player player(1500,300,50,1000,1000);						// Játékos(élet,sebzés,páncél,arany,kulcsok)
+    Player player(1500,300,50,10000,1000);						// Játékos(élet,sebzés,páncél,arany,kulcsok)
     readFile("../txtFiles/bevezeto.txt",2);				// Bevezető fájl beolvasása
     system("pause");
     system("cls");
     // Fő ciklus
     gameLoop(h, &player, allBosses, shopGoods, debuffs, i, &dodgeChance, playerName, shopRefresh, &gameOver, &itemPicked, &bossHeight, &doorHeight, &doorLeftHeight, &shopASCII, &debuffsASCII, &combatOption);
-    if(gameOver && i > allBosses.size()){
+    if(i > allBosses.size()){
         Sleep(2000);
         system("cls");
         readFile("../txtFiles/victory.txt", 7);

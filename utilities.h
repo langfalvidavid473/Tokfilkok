@@ -15,7 +15,7 @@ void setCursorPosition(int y, int x)
 
 // Segédfüggvény ellenfelek generálásához (megszámolja a fájlokat az adott mappában)
 
-int countEnemies(string filename)
+int countEnemies(const string& filename)
 {
 	int count = 0;
 	std::filesystem::path p1{filename};
@@ -28,7 +28,7 @@ int countEnemies(string filename)
 
 // ---- Függvény általános fájlból olvasáshoz + kiíráshoz ----
 
-auto readFile(string fileName, int color, string tab = "", int rows = 0)
+auto readFile(const string& fileName, int color, const string& tab = "", int rows = 0)
 {
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása
 	string myText;								// Fájl egy sora
@@ -46,7 +46,7 @@ auto readFile(string fileName, int color, string tab = "", int rows = 0)
 	return rows;
 }
 
-auto countRows(string fileName){
+auto countRows(const string& fileName){
 	int longestRow = 0;
 	string myText;								// Fájl egy sora
 	ifstream MyReadFile(fileName);				// Fájl megnyitása
@@ -67,7 +67,7 @@ ezt sztringgé konvertálja, a mappa elérési útját levágja a .substr() met�
 majd eltárolja egy sztring típusú vektorban
 */
 
-vector<string> getFileNames(string path)
+vector<string> getFileNames(const string& path)
 {
 	vector<string> fileNames;
 	for (const auto &entry : std::filesystem::directory_iterator(path))
@@ -116,7 +116,7 @@ void shuffleArray(vector<T> &v)
 
 // ---- Ellenfelek generálása (random értékek) ----
 
-vector<Bosses> generateBoss(string filename)
+vector<Bosses> generateBoss(const string& filename)
 {
 	vector<string> v = getFileNames(filename); // A mappában lévő összes txt fájl nevének eltárolása
 
@@ -129,7 +129,6 @@ vector<Bosses> generateBoss(string filename)
 
 		int randomHealth = 1000 + generateNum((sqr(i + 1) * 60) - i * 100, (sqr(i + 1) * 70) - i * 100); // Random értékek generálása (1)
 		int randomDamage = 150 + generateNum(sqr(i + 1) * 10, sqr(i + 1) * 20);							 // (2)
-		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);														 // Parancssor hívása
 		string myText;
 		string name;
 		string color;
@@ -247,7 +246,7 @@ void displayStats(vector<Bosses> boss, Player player, int i, float dodge, int x,
 
 }
 
-vector<ShopItems> shopSystem(string path)
+vector<ShopItems> shopSystem(const string& path)
 {
 	vector<ShopItems> shopVector;
 	string myText;			   // Fájl egy sora
@@ -295,7 +294,7 @@ vector<ShopItems> shopSystem(string path)
 	return shopVector;
 }
 
-vector<Debuffs> debuffSystem(string path)
+vector<Debuffs> debuffSystem(const string& path)
 {
 	vector<Debuffs> debuffs;
 	string myText;			   // Fájl egy sora
@@ -310,17 +309,18 @@ vector<Debuffs> debuffSystem(string path)
 		type >> t;
 		t > 4 ? v = generateNum(v, v * 1.1) : v = generateNum(v * 0.9, v);
 		stringstream attr;
+        int color;
 		switch(t){
-			case 1: attr << "ÉLET - " << 100 - v << '%'; break;
-			case 2: attr << "SEBZÉS - " << 100 - v << '%'; break;
-			case 3: attr << "KITÉRÉS - " << 100 - v << '%'; break;
-			case 4: attr << "PÁNCÉL - " << 100 - v << '%'; break;
-			case 5: attr << "SZÖRNY ÉLET + " << v - 100 << '%'; break;
-			case 6: attr << "SZÖRNY SEBZÉS + " << v - 100 << '%'; break;
+			case 1: attr << "ÉLET - " << 100 - v << '%'; color=2; break;
+			case 2: attr << "SEBZÉS - " << 100 - v << '%'; color=3; break;
+			case 3: attr << "KITÉRÉS - " << 100 - v << '%'; color=9; break;
+			case 4: attr << "PÁNCÉL - " << 100 - v << '%'; color=5; break;
+			case 5: attr << "SZÖRNY ÉLET + " << v - 100 << '%'; color=4; break;
+			case 6: attr << "SZÖRNY SEBZÉS + " << v - 100 << '%'; color=4; break;
 			default: attr << ""; break;
 		}
 		string attribute = attr.str();
-		Debuffs *d = new Debuffs(name, v, t, attribute);
+		Debuffs *d = new Debuffs(name, v, t, attribute, color);
 		debuffs.push_back(*d);
 	}
 	MyReadFile.close(); // Fájl bezárása
