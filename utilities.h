@@ -176,7 +176,8 @@ void displayStats(vector<Bosses> boss, Player player, int i, float dodge, int x,
 {
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása 
 	SetConsoleTextAttribute(h, 7); // Parancssor betűszín változtatás (fehér)
-	string bossName = boss[i].fileName.substr(1, boss[i].fileName.length()-5);
+	string bossNameEnglishChars = boss[i].fileName.substr(1, boss[i].fileName.length()-5);
+    string bossName = boss[i].name.substr(boss[i].name.find(' ', bossNameEnglishChars.length() - 2) ,boss[i].name.length());
 	bossName[0] = toupper(bossName[0]);
 	setCursorPosition(x + 20, y - 2);
 	cout << "\t" << "━━━━━━━━━━━━━━━";
