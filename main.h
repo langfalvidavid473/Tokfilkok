@@ -82,7 +82,7 @@ int shopDisplay(HANDLE h, vector<ShopItems> shopGoods, vector<Bosses> allBosses,
     return shopASCII;
 }
 
-void buyItems(HANDLE h, Player &player, vector<ShopItems> &shopGoods, vector<Bosses> &allBosses, int shopASCII, int shopASCIIRows, int i, int &dodgeChance, const string &bossName, int nthGood){
+void buyItems(HANDLE h, Player &player, vector<ShopItems> &shopGoods, vector<Bosses> &allBosses, int shopASCII, int shopASCIIRows, int i, float &dodgeChance, const string &bossName, int nthGood){
         switch (shopGoods[nthGood].type){			// A vásárolt áru típusának ellenőrzése
             case 1: player.health += shopGoods[nthGood].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (ÉLET)
             case 2: player.damage += shopGoods[nthGood].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (SEBZÉS)
@@ -125,7 +125,7 @@ void buyItems(HANDLE h, Player &player, vector<ShopItems> &shopGoods, vector<Bos
         cout << "Páncél: " << player.armor;
         SetConsoleTextAttribute(h, 9);	// Parancssor betűszín változtatás (világoskék)
         setCursorPosition(90,(shopASCII*3) + 21);
-        cout << "Kitérés: " << int(dodgeChance / 5) << '%';
+        cout << "Kitérés: " << (dodgeChance / 5) << '%';
         SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
         setCursorPosition(150,(shopASCII*3) + 13);
         cout << "" << bossName << " élete: " << allBosses[i].health;
@@ -146,7 +146,7 @@ void buyItems(HANDLE h, Player &player, vector<ShopItems> &shopGoods, vector<Bos
 }
 
 
-void refreshShop(HANDLE h, Player &player, vector<ShopItems> shopGoods, vector<Bosses> allBosses, int shopASCIIRows, int &shopASCII, int i, int &dodgePercent, string &bossName ) {
+void refreshShop(HANDLE h, Player &player, vector<ShopItems> shopGoods, vector<Bosses> allBosses, int shopASCIIRows, int &shopASCII, int i, float &dodgePercent, string &bossName ) {
         setCursorPosition(0,2);
         readFile("../txtFiles/shopASCII.txt", shopGoods[0].color, "\t\t  ");	// Bolt menü beolvasása
         setCursorPosition(0,4 + shopASCII);
@@ -207,15 +207,16 @@ void refreshShop(HANDLE h, Player &player, vector<ShopItems> shopGoods, vector<B
         setCursorPosition(0, (shopASCII * 3) + 23);
     }
 
-    int exitDisplay(HANDLE h, Player &player, vector<Debuffs> &debuffs, vector<Bosses> &allBosses, int &debuffsASCII, int debuffsASCIIRows, int i, int &dodgePercent, const string& bossName ){
+    int exitDisplay(HANDLE h, Player &player, vector<Debuffs> &debuffs, vector<Bosses> &allBosses, int &debuffsASCII, int debuffsASCIIRows, int i, float &dodgePercent){
+        const string bossName = getBossName(allBosses,i);
         SetConsoleTextAttribute(h, 7);	// Parancssor betűszín változtatás (fehér)
         cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
         cout << "\t\t\t" << "┃ GYENGÍTÉSEK ┃" << endl;
         cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
         setCursorPosition(0,2);
-        debuffsASCII = readFile("../txtFiles/debuffsASCII.txt", debuffs[0].color, "\t\t", debuffsASCII);					// Gyengítésekhez tartozó ASCII-k beolvasása
-        readFile("../txtFiles/debuffsASCII.txt", debuffs[1].color, "\t\t");
-        readFile("../txtFiles/debuffsASCII.txt", debuffs[2].color, "\t\t");
+        debuffsASCII = readFile("../txtFiles/debuffsASCII.txt", debuffs[0].color, "\t\t ", debuffsASCII);					// Gyengítésekhez tartozó ASCII-k beolvasása
+        readFile("../txtFiles/debuffsASCII.txt", debuffs[1].color, "\t\t ");
+        readFile("../txtFiles/debuffsASCII.txt", debuffs[2].color, "\t\t ");
         setCursorPosition(debuffsASCIIRows + 13, (debuffsASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2
         SetConsoleTextAttribute(h,debuffs[0].color);
         cout << "\t\t\t\t" << debuffs[0].name << '[' << debuffs[0].attribute << ']' << endl;
@@ -279,7 +280,8 @@ void refreshShop(HANDLE h, Player &player, vector<ShopItems> shopGoods, vector<B
         return debuffsASCII;
 }
 
-void pickDebuff(HANDLE h, Player &player, vector<Debuffs> &debuffs, vector<Bosses> &allBosses, int &dodgeChance, int i, int nthDebuff, int debuffsASCII, int debuffsASCIIRows, const string& bossName){
+void pickDebuff(HANDLE h, Player &player, vector<Debuffs> &debuffs, vector<Bosses> &allBosses, float &dodgeChance, int i, int nthDebuff, int debuffsASCII, int debuffsASCIIRows){
+    const string bossName = getBossName(allBosses,i);
     switch(debuffs[nthDebuff].type) {    // Gyengítés típusának ellenőrzése (debuffs.txt)
         case 1: player.health = (player.health * debuffs[nthDebuff].value / 100); break;               // JÁTÉKOS ÉLET CSÖKKENTÉS
         case 2: player.damage = (player.damage * debuffs[nthDebuff].value / 100); break;               // JÁTÉKOS SEBZÉS CSÖKKENTÉS
@@ -312,7 +314,7 @@ void pickDebuff(HANDLE h, Player &player, vector<Debuffs> &debuffs, vector<Bosse
     cout << "Páncél: " << player.armor;
     SetConsoleTextAttribute(h, 9);	// Parancssor betűszín változtatás (világoskék)
     setCursorPosition(90,(debuffsASCII*3) + 19);
-    cout << "Kitérés: " << int(dodgeChance / 5) << '%';
+    cout << "Kitérés: " << (dodgeChance / 5) << '%';
     SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
     setCursorPosition(150,(debuffsASCII*3) + 13);
     cout << "" << bossName << " élete: " << allBosses[i].health;
@@ -323,8 +325,9 @@ void pickDebuff(HANDLE h, Player &player, vector<Debuffs> &debuffs, vector<Bosse
     debuffs.erase(debuffs.begin() + nthDebuff);
 }
 
-void bossDies(Player *player, vector<Bosses> allBosses, int i, int longestRow, int bossHeight){
-    allBosses[i].health = 0;
+void bossDies(Player *player, vector<Bosses> allBosses, const int *i, int dodgePercent, int longestRow, int bossHeight){
+    allBosses[*i].health = 0;
+    displayStats(allBosses, *player, *i, dodgePercent, longestRow + 20, (bossHeight / 2) - 6);
     newLine();
     int goldWon = generateNum(500,750);
     player->gold += goldWon;									// Játékos kap 500-750 aranyat a győzelemért
@@ -334,18 +337,26 @@ void bossDies(Player *player, vector<Bosses> allBosses, int i, int longestRow, i
     giveKey ? player->keys += 1 : player->keys += 0;			// Ha a generált szám páros, a játékos kap kulcsot (50% esély)
     setCursorPosition(longestRow + 40, (bossHeight / 2) + 28);
     cout << "\tGratulálok! Legyőzted a szörnyet!" << endl;
+    int healthRegen = generateNum((150 * ( 1 + allBosses[*i].level / 10)), 200 * allBosses[*i].level);
     newLine();
     if(giveKey){
         setCursorPosition(longestRow + 40, (bossHeight / 2) + 30);
         cout << "\t" << goldWon << " aranyat és 1 kulcsot nyertél!" << endl;
+        player->health += healthRegen;
+        setCursorPosition(longestRow + 40, (bossHeight / 2) + 32);
+        cout << "\t" << healthRegen << " életet regeneráltál!";
     }
     else{
         setCursorPosition(longestRow + 40, (bossHeight / 2) + 30);
         cout << "\t" << goldWon << " aranyat nyertél!" << endl;
+        player->health += healthRegen;
+        setCursorPosition(longestRow + 40, (bossHeight / 2) + 32);
+        cout << "\t" << healthRegen / 2 << " életet regeneráltál!";
     }
 }
 
-size_t combatInteractions(Player *player, vector<Bosses> allBosses, const int *i, int combatOption, int longestRow, int bossHeight, int &dodgePercent, int &dodgeChance, const string& bossName, const string& playerName){
+size_t combatInteractions(Player *player, vector<Bosses> allBosses, const int *i, int combatOption, int longestRow, int bossHeight, float &dodgePercent, float &dodgeChance, const string& playerName){
+    const string bossName = getBossName(allBosses,*i);
     do
     {
         BlockInput(false);							// User input engedélyezése, hogy ismét lehessen választani
@@ -361,7 +372,7 @@ size_t combatInteractions(Player *player, vector<Bosses> allBosses, const int *i
                 allBosses[*i].health -= player->damage;				// Támadás után a szörny életet veszít
             }
             else{
-                bossDies(player, allBosses, *i, longestRow, bossHeight);
+                bossDies(player, allBosses, i, dodgePercent, longestRow, bossHeight);
                 Sleep(4000);
                 break;
             }
@@ -460,13 +471,12 @@ size_t combatInteractions(Player *player, vector<Bosses> allBosses, const int *i
 }
 
 size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopItems> shopGoods, vector<Debuffs> debuffs,
-                int i, int *dodgeChance, const string& playerName, int shopRefresh, bool *gameOver, bool *itemPicked, int *bossHeight, int *doorHeight,
+                int i, float *dodgeChance, const string& playerName, int shopRefresh, bool *gameOver, bool *itemPicked, int *bossHeight, int *doorHeight,
                 int *doorLeftHeight, int *shopASCII, int *debuffsASCII, int *combatOption){
     string bossName;
     do
     {
-        bossName = allBosses[i].fileName.substr(1, allBosses[i].fileName.length()-5);
-        bossName[0] = toupper(bossName[0]);
+        bossName = getBossName(allBosses,i);
         *bossHeight = 0;
         *doorHeight = 0;
         *doorLeftHeight = 0;
@@ -474,7 +484,7 @@ size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopI
         *debuffsASCII = 0;
         *combatOption = 0;
         *gameOver = false;
-        int dodgePercent = (*dodgeChance / 5);
+        float dodgePercent = (*dodgeChance / 5);
         BlockInput(false);	/* User input engedélyezése (BlockInput függvény használata
 							   rendszergazdaként való futtatást igényel, anélkül nem működik) */
         system("cls");
@@ -636,7 +646,7 @@ size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopI
                     Sleep(2000);
                     system("cls");
                     int debuffsASCIIRows = countRows("../txtFiles/debuffsASCII.txt");
-                    exitDisplay(h, *player, debuffs, allBosses, *debuffsASCII, debuffsASCIIRows, i, dodgePercent, bossName);
+                    exitDisplay(h, *player, debuffs, allBosses, *debuffsASCII, debuffsASCIIRows, i, dodgePercent);
                     Sleep(2000);
                     do
                     {
@@ -646,19 +656,19 @@ size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopI
                             case LEFT: {		// Első gyengítés választása
                                 player->keys++;	// Játékos kap 1 kulcsot miután választott
                                 *itemPicked=true;
-                                pickDebuff(h,*player, debuffs, allBosses, *dodgeChance, i, 0, *debuffsASCII, debuffsASCIIRows, bossName);
+                                pickDebuff(h,*player, debuffs, allBosses, *dodgeChance, i, 0, *debuffsASCII, debuffsASCIIRows);
                                 Sleep(4000);
                             } break;
                             case UP:{			// Második gyengítés választása
                                 player->keys++;
                                 *itemPicked=true;
-                                pickDebuff(h,*player, debuffs, allBosses, *dodgeChance, i, 1, *debuffsASCII, debuffsASCIIRows, bossName);
+                                pickDebuff(h,*player, debuffs, allBosses, *dodgeChance, i, 1, *debuffsASCII, debuffsASCIIRows);
                                 Sleep(4000);
                             } break;
                             case RIGHT: {		// Harmadik gyengítés választása
                                 player->keys++;
                                 *itemPicked=true;
-                                pickDebuff(h,*player, debuffs, allBosses, *dodgeChance, i, 2, *debuffsASCII, debuffsASCIIRows, bossName);
+                                pickDebuff(h,*player, debuffs, allBosses, *dodgeChance, i, 2, *debuffsASCII, debuffsASCIIRows);
                                 Sleep(4000);
                             } break;
                             case ESC: {                 // ESC-re leáll a program
@@ -669,12 +679,12 @@ size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopI
                             }
                             default: {					// Ha a felsorolt gombok közül egyiket sem nyomja meg a felhasználó, hibaüzenetet kap
                                 setCursorPosition(debuffsASCIIRows*5 + 13, (*debuffsASCII / 2) + 6 + *debuffsASCII);
-                                cout << "                                                                                                                                    ";
+                                cout << "                                                                         ";
                                 setCursorPosition(debuffsASCIIRows*5 + 13, (*debuffsASCII / 2) + 6 + *debuffsASCII);
                                 cout << "Helytelen input!" << endl;
                                 Sleep(1500);
-                                setCursorPosition(0,(*debuffsASCII*3) + 31);
-                                cout << "                                                                                                                                    ";
+                                setCursorPosition(debuffsASCIIRows*5 + 13, (*debuffsASCII / 2) + 6 + *debuffsASCII);
+                                cout << "                                                                         ";
                             } break;
                         }
                     } while (!*itemPicked);
@@ -711,7 +721,7 @@ size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopI
             cout << "\n\t\t\t\t\t\t   " << allBosses[i].name << "\n" << endl;
             SetConsoleTextAttribute(h, 7);
             displayStats(allBosses, *player,i, dodgePercent, longestRow + 20, (*bossHeight / 2) - 6);					// Játékos és szörny tulajdonságok megjelenítése
-            combatInteractions(player, allBosses, &i, *combatOption, longestRow, *bossHeight, dodgePercent, *dodgeChance, bossName, playerName);
+            combatInteractions(player, allBosses, &i, *combatOption, longestRow, *bossHeight, dodgePercent, *dodgeChance, playerName);
             i++;																// A harcnak vége, ciklusváltozó nő 1-gyel (azért, hogy a következő harcban más szörny legyen)
         }
         else if(pressedChar == ESC) {system("cls"); break;}					    // ESC-re kilép a program

@@ -172,13 +172,18 @@ vector<Bosses> generateBoss(const string& filename)
 	return allBosses;
 }
 
+string getBossName(vector<Bosses> boss, int i){
+    string bossNameEnglishChars = boss[i].fileName.substr(1, boss[i].fileName.length()-5);
+    string bossName = boss[i].name.substr(boss[i].name.find(' ', bossNameEnglishChars.length()-1)+1 ,boss[i].name.length());
+    bossName[0] = toupper(bossName[0]);
+    return bossName;
+}
+
 void displayStats(vector<Bosses> boss, Player player, int i, float dodge, int x, int y)
 {
-	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása 
+	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása
+    string bossName = getBossName(boss,i);
 	SetConsoleTextAttribute(h, 7); // Parancssor betűszín változtatás (fehér)
-	string bossNameEnglishChars = boss[i].fileName.substr(1, boss[i].fileName.length()-5);
-    string bossName = boss[i].name.substr(boss[i].name.find(' ', bossNameEnglishChars.length() - 2) ,boss[i].name.length());
-	bossName[0] = toupper(bossName[0]);
 	setCursorPosition(x + 20, y - 2);
 	cout << "\t" << "━━━━━━━━━━━━━━━";
 	setCursorPosition(x + 20, y - 1);
@@ -247,7 +252,7 @@ void displayStats(vector<Bosses> boss, Player player, int i, float dodge, int x,
 
 }
 
-vector<ShopItems> shopSystem(const string& path)
+vector<ShopItems> shopSystem(const string& path, float *dodgeChance)
 {
 	vector<ShopItems> shopVector;
 	string myText;			   // Fájl egy sora
@@ -261,6 +266,7 @@ vector<ShopItems> shopSystem(const string& path)
 		stringstream buff(myText.substr(myText.find("buff:") + 5, myText.length()));
 		unsigned int p, v, t;
 		bool b;
+        float valueCalc = v;
 		type >> t;
 		price >> p;
 		value >> v;
@@ -272,6 +278,9 @@ vector<ShopItems> shopSystem(const string& path)
 		else if(t>7){
 			v = generateNum(v * 0.9, v);
 		}
+        if(t==7){
+            valueCalc = generateNum(valueCalc, valueCalc * 1.1);
+        }
 		p = generateNum(p, p * 1.1 );
 		stringstream attr;
 		int color;
@@ -282,7 +291,12 @@ vector<ShopItems> shopSystem(const string& path)
 			case 4: attr << "ÉLET + " << v - 100 << '%'; color = 2;  break;
 			case 5: attr << "SEBZÉS + " << v - 100 << '%'; color = 3; break;
 			case 6: attr << "PÁNCÉL + " << v - 100 << '%'; color = 5;  break;
-			case 7: attr << "KITÉRÉS + " << v - 100 << '%'; color = 9;  break;
+            case 7: {
+                float dodge = *dodgeChance * (valueCalc / 100);
+                attr << "KITÉRÉS + " << (dodge / 5) - (*dodgeChance / 5) << '%';
+                color=9;
+                break;
+            }
 			case 8: attr << "SZÖRNY ÉLET - " << 100 - v << '%'; color = 4;  break;
 			case 9: attr << "SZÖRNY SEBZÉS - " << 100 - v << '%'; color = 4;  break;
 			default: attr << ""; break;
@@ -295,7 +309,7 @@ vector<ShopItems> shopSystem(const string& path)
 	return shopVector;
 }
 
-vector<Debuffs> debuffSystem(const string& path)
+vector<Debuffs> debuffSystem(const string& path, float *dodgeChance)
 {
 	vector<Debuffs> debuffs;
 	string myText;			   // Fájl egy sora
@@ -307,14 +321,21 @@ vector<Debuffs> debuffSystem(const string& path)
 		stringstream type(myText.substr(myText.find("type:") + 5, myText.length()));
 		int v, t;
 		value >> v;
+        float valueCalc = v;
 		type >> t;
-		t > 4 ? v = generateNum(v, v * 1.1) : v = generateNum(v * 0.9, v);
+        t > 4 ? v = generateNum(v, v * 1.1) : v = generateNum(v * 0.9, v);
+        t == 3 ? valueCalc = generateNum(valueCalc, valueCalc * 1.1) : valueCalc = generateNum(valueCalc * 0.9, valueCalc);
 		stringstream attr;
         int color;
 		switch(t){
 			case 1: attr << "ÉLET - " << 100 - v << '%'; color=2; break;
 			case 2: attr << "SEBZÉS - " << 100 - v << '%'; color=3; break;
-			case 3: attr << "KITÉRÉS - " << 100 - v << '%'; color=9; break;
+			case 3: {
+                float dodge = (*dodgeChance * valueCalc / 100);
+                attr << "KITÉRÉS - " << (*dodgeChance-dodge)/5 << '%';
+                color=9;
+                break;
+            }
 			case 4: attr << "PÁNCÉL - " << 100 - v << '%'; color=5; break;
 			case 5: attr << "SZÖRNY ÉLET + " << v - 100 << '%'; color=4; break;
 			case 6: attr << "SZÖRNY SEBZÉS + " << v - 100 << '%'; color=4; break;

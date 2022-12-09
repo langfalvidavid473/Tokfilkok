@@ -26,21 +26,21 @@ int main(){
     info.bVisible = false;
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);	// Kurzor villogásának eltűntetése
     string playerName;									// Játékos neve
-    int dodgeChance = 150;                            // Kitérés esélye (alapértelmezett 30%)
+    float dodgeChance = 150;                            // Kitérés esélye (alapértelmezett 30%)
     int i = 0;											// Ciklusváltozó (akkor nő, ha egy szörny meghal)
     int combatOption;			                        // Különböző változók felhasználói bemenet ellenőrzésére
     int bossHeight, doorHeight, doorLeftHeight,
     shopASCII, debuffsASCII;	                        // Különböző ASCII artok magasságának és szélességének megszámolására
     bool gameOver = false, itemPicked;					// gameOver akkor igaz, ha a játékos meghal, itemPicked változót boltnál és kijáratnál használjuk
     vector<Bosses> allBosses = generateBoss("../Enemies");// Szörnyek
-    vector<ShopItems> shopGoods = shopSystem("../txtFiles/shop.txt");			// Áruk (bolt)
+    vector<ShopItems> shopGoods = shopSystem("../txtFiles/shop.txt", &dodgeChance);			// Áruk (bolt)
     int shopRefresh = 300;								// Áruk frissítésének költsége
-    vector<Debuffs> debuffs = debuffSystem("../txtFiles/debuffs.txt");			// Kijárat (gyengítések)
+    vector<Debuffs> debuffs = debuffSystem("../txtFiles/debuffs.txt", &dodgeChance);			// Kijárat (gyengítések)
     shuffleArray(shopGoods);
     shuffleArray(debuffs);
     cout << "Játékos neve: "; getline(cin,playerName);
     playerName[0] = toupper(playerName[0]);				// Nagy kezdőbetű a neveknek (cctype)
-    Player player(1500,300,50,10000,1000);						// Játékos(élet,sebzés,páncél,arany,kulcsok)
+    Player player(1500,300,50,0,0);						// Játékos(élet,sebzés,páncél,arany,kulcsok)
     readFile("../txtFiles/bevezeto.txt",2);				// Bevezető fájl beolvasása
     system("pause");
     system("cls");
