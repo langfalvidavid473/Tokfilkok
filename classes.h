@@ -46,14 +46,15 @@ public:
 class Bosses {
 public:
 	int health, level, damage, color;
-	string fileName, name;
-	Bosses(int hp, int lvl, int dmg, string fn, string n, int c)  { 
+	string fileName, name, text;
+	Bosses(int hp, int lvl, int dmg, string fn, string n, int c, string t)  {
 		health = hp;
 		level = lvl;
 		damage = dmg;
 		fileName = fn;
 		name = n;
 		color = c;
+        text = t;
 	}
 	// ---- Adott ellenfél beolvasása fájlból, ASCII art stílusban ----
 		static int getBoss(const string& fn,int color1, int rows=0) {

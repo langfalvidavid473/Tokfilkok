@@ -331,9 +331,9 @@ void bossDies(Player *player, vector<Bosses> allBosses, const int *i, int dodgeP
     newLine();
     int goldWon = generateNum(500,750);
     player->gold += goldWon;									// Játékos kap 500-750 aranyat a győzelemért
-    int keyChance = generateNum(1,100);						// Szám generálás 1 és 100 között
+    int keyChance = generateNum(1,100);						    // Szám generálás 1 és 100 között
     bool giveKey;
-    keyChance % 2 == 0 ? giveKey = true : giveKey = false;	// A generált szám ellenőrzése
+    keyChance % 2 == 0 ? giveKey = true : giveKey = false;	    // A generált szám ellenőrzése
     giveKey ? player->keys += 1 : player->keys += 0;			// Ha a generált szám páros, a játékos kap kulcsot (50% esély)
     setCursorPosition(longestRow + 40, (bossHeight / 2) + 28);
     cout << "\tGratulálok! Legyőzted a szörnyet!" << endl;
@@ -719,6 +719,8 @@ size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopI
             setCursorPosition(middleX, *bossHeight + 6);
             SetConsoleTextAttribute(h, allBosses[i].color);
             cout << "\n\t\t\t\t\t\t   " << allBosses[i].name << "\n" << endl;
+            setCursorPosition(middleX, *bossHeight + 8);
+            cout << "\n\t\t\t\t\t\t   " << allBosses[i].text << "\n" << endl;
             SetConsoleTextAttribute(h, 7);
             displayStats(allBosses, *player,i, dodgePercent, longestRow + 20, (*bossHeight / 2) - 6);					// Játékos és szörny tulajdonságok megjelenítése
             combatInteractions(player, allBosses, &i, *combatOption, longestRow, *bossHeight, dodgePercent, *dodgeChance, playerName);

@@ -132,6 +132,7 @@ vector<Bosses> generateBoss(const string& filename)
 		string myText;
 		string name;
 		string color;
+        string text;
 		int correctColor;
 		ifstream MyReadFile("../Enemies/" + v[i]);
 		while (getline(MyReadFile, myText))
@@ -163,11 +164,16 @@ vector<Bosses> generateBoss(const string& filename)
 				else
 					correctColor = 7;
 			}
+            if (myText.find("text") != std::string::npos)
+            {
+                text = (myText.substr(myText.find("text:") + 5, myText.length()));
+            }
 		}
 		MyReadFile.close();
-		Bosses *newBoss = new Bosses(randomHealth, i + 1, randomDamage, v[i], name, correctColor); // Új objektum létrehozása, értékek hozzárendelése konstruktorral
-		allBosses.push_back(*newBoss);															   // vektor feltöltése a generált objektummal
-	}
+		Bosses *newBoss = new Bosses(randomHealth, i + 1, randomDamage, v[i], name, correctColor, text); // Új objektum létrehozása, értékek hozzárendelése konstruktorral
+        allBosses.push_back(*newBoss);															   // vektor feltöltése a generált objektummal
+	    delete newBoss;
+    }
 
 	return allBosses;
 }
@@ -304,7 +310,8 @@ vector<ShopItems> shopSystem(const string& path, float *dodgeChance)
 		string attribute = attr.str();
 		ShopItems *s = new ShopItems(name, t, p, v, b, attribute, color);
 		shopVector.push_back(*s);
-	}
+        delete s;
+    }
 	MyReadFile.close(); // Fájl bezárása
 	return shopVector;
 }
@@ -344,7 +351,8 @@ vector<Debuffs> debuffSystem(const string& path, float *dodgeChance)
 		string attribute = attr.str();
 		Debuffs *d = new Debuffs(name, v, t, attribute, color);
 		debuffs.push_back(*d);
-	}
+	    delete d;
+    }
 	MyReadFile.close(); // Fájl bezárása
 	return debuffs;
 }
