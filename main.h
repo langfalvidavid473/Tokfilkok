@@ -3,86 +3,86 @@
 #ifndef TOKFILKOK_MAIN_H
 #define TOKFILKOK_MAIN_H
 
-int shopDisplay(HANDLE h, vector<ShopItems> shopGoods, vector<Bosses> allBosses, Player player, int shopASCII, int i, int dodgePercent, string &bossName, int shopASCIIRows){
+int shopDisplay(HANDLE h, std::vector<ShopItems> shopGoods, std::vector<Bosses> allBosses, Player player, int shopASCII, int i, int dodgePercent, std::string &bossName, int shopASCIIRows){
     SetConsoleTextAttribute(h, 7);	// Parancssor betűszín változtatás (fehér)
-    cout << "\t\t\t" << "━━━━━━━━" << endl;
-    cout << "\t\t\t" << "┃ ÁRUK ┃" << endl;
-    cout << "\t\t\t" << "━━━━━━━━" << endl;
+    std::cout << "\t\t\t" << "━━━━━━━━" << std::endl;
+    std::cout << "\t\t\t" << "┃ ÁRUK ┃" << std::endl;
+    std::cout << "\t\t\t" << "━━━━━━━━" << std::endl;
     setCursorPosition(0,2);
     shopASCII = readFile("../txtFiles/shopASCII.txt", shopGoods[0].color, "\t\t  ", shopASCII);	// Bolt menü beolvasása
     readFile("../txtFiles/shopASCII.txt", shopGoods[1].color, "\t\t  ");
     readFile("../txtFiles/shopASCII.txt", shopGoods[2].color, "\t\t  ");
     SetConsoleTextAttribute(h, shopGoods[0].color);	// Parancssor betűszín változtatás
     setCursorPosition(shopASCIIRows + 13, (shopASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2
-    cout << "\t\t\t\t" << shopGoods[0].name << " (" << shopGoods[0].price << " arany) " << '[' << shopGoods[0].attribute << ']' << endl;
+    std::cout << "\t\t\t\t" << shopGoods[0].name << " (" << shopGoods[0].price << " arany) " << '[' << shopGoods[0].attribute << ']' << std::endl;
     SetConsoleTextAttribute(h, shopGoods[1].color);	// Parancssor betűszín változtatás
     setCursorPosition(shopASCIIRows + 13, (shopASCII / 2) + 6 + shopASCII);
-    cout << "\t\t\t\t" << shopGoods[1].name << " (" << shopGoods[1].price << " arany) " << '[' << shopGoods[1].attribute << ']' << endl;
+    std::cout << "\t\t\t\t" << shopGoods[1].name << " (" << shopGoods[1].price << " arany) " << '[' << shopGoods[1].attribute << ']' << std::endl;
     SetConsoleTextAttribute(h, shopGoods[2].color);	// Parancssor betűszín változtatás
     setCursorPosition(shopASCIIRows + 13, (shopASCII / 2) + 8 + shopASCII*2);
-    cout << "\t\t\t\t" << shopGoods[2].name << " (" << shopGoods[2].price << " arany) " << '[' << shopGoods[2].attribute << ']' << endl;
+    std::cout << "\t\t\t\t" << shopGoods[2].name << " (" << shopGoods[2].price << " arany) " << '[' << shopGoods[2].attribute << ']' << std::endl;
     SetConsoleTextAttribute(h, 7);	// Parancssor betűszín változtatás (fehér)
     setCursorPosition(shopASCIIRows/2,(shopASCII*3) + 9);
-    cout << "\t    ━━━━━━━━━━━━━━━" << endl;
+    std::cout << "\t    ━━━━━━━━━━━━━━━" << std::endl;
     setCursorPosition(shopASCIIRows/2,(shopASCII*3) + 10);
-    cout << "\t    ┃ INTERAKCIÓK ┃" << endl;
+    std::cout << "\t    ┃ INTERAKCIÓK ┃" << std::endl;
     setCursorPosition(shopASCIIRows/2,(shopASCII*3) + 11);
-    cout << "\t    ━━━━━━━━━━━━━━━" << endl;
+    std::cout << "\t    ━━━━━━━━━━━━━━━" << std::endl;
     setCursorPosition(shopASCIIRows/2,(shopASCII*3) + 13);
     SetConsoleTextAttribute(h, shopGoods[0].color);	// Parancssor betűszín változtatás
-    cout << "\t    Vásárlás: " <<  shopGoods[0].name <<"(Balra nyíl)";
+    std::cout << "\t    Vásárlás: " <<  shopGoods[0].name <<"(Balra nyíl)";
     setCursorPosition(shopASCIIRows/2,(shopASCII*3) + 15);
     SetConsoleTextAttribute(h, shopGoods[1].color);	// Parancssor betűszín változtatás
-    cout << "\t    Vásárlás: " << shopGoods[1].name << "(Előre nyíl)";
+    std::cout << "\t    Vásárlás: " << shopGoods[1].name << "(Előre nyíl)";
     setCursorPosition(shopASCIIRows/2,(shopASCII*3) + 17);
     SetConsoleTextAttribute(h, shopGoods[2].color);	// Parancssor betűszín változtatás
-    cout << "\t    Vásárlás: " << shopGoods[2].name << "(Jobbra nyíl)";
+    std::cout << "\t    Vásárlás: " << shopGoods[2].name << "(Jobbra nyíl)";
     setCursorPosition(shopASCIIRows/2,(shopASCII*3) + 19);
     SetConsoleTextAttribute(h, 6);	// Parancssor betűszín változtatás (sárga)
-    cout << "\t    Frissítés [300 arany] (Hátra nyíl)";
+    std::cout << "\t    Frissítés [300 arany] (Hátra nyíl)";
     setCursorPosition(shopASCIIRows/2,(shopASCII*3) + 21);
     SetConsoleTextAttribute(h, 8);	// Parancssor betűszín változtatás (szürke)
-    cout << "\t    Kilépés [ESC]"; // Instrukciók
+    std::cout << "\t    Kilépés [ESC]"; // Instrukciók
     SetConsoleTextAttribute(h, 7);	// Parancssor betűszín változtatás (fehér)
     setCursorPosition(90,(shopASCII*3) + 9);
-    cout << "━━━━━━━━━━━━━━━━━━";
+    std::cout << "━━━━━━━━━━━━━━━━━━";
     setCursorPosition(90,(shopASCII*3) + 10);
-    cout << "┃ JÁTÉKOS STATOK ┃";
+    std::cout << "┃ JÁTÉKOS STATOK ┃";
     setCursorPosition(90,(shopASCII*3) + 11);
-    cout << "━━━━━━━━━━━━━━━━━━";
+    std::cout << "━━━━━━━━━━━━━━━━━━";
     SetConsoleTextAttribute(h, 6);	// Parancssor betűszín változtatás (sárga)
     setCursorPosition(90,(shopASCII*3) + 13);
-    cout << "Arany: " << player.gold;
+    std::cout << "Arany: " << player.gold;
     SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
     setCursorPosition(90,(shopASCII*3) + 15);
-    cout << "Élet: " << player.health;
+    std::cout << "Élet: " << player.health;
     SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
     setCursorPosition(90,(shopASCII*3) + 17);
-    cout << "Sebzés: " << player.damage;
+    std::cout << "Sebzés: " << player.damage;
     SetConsoleTextAttribute(h, 5);	// Parancssor betűszín változtatás (lila)
     setCursorPosition(90,(shopASCII*3) + 19);
-    cout << "Páncél: " << player.armor;
+    std::cout << "Páncél: " << player.armor;
     SetConsoleTextAttribute(h, 9);	// Parancssor betűszín változtatás (világoskék)
     setCursorPosition(90,(shopASCII*3) + 21);
-    cout << "Kitérés: " << dodgePercent << '%';
+    std::cout << "Kitérés: " << dodgePercent << '%';
     SetConsoleTextAttribute(h, 7);	// Parancssor betűszín változtatás (fehér)
     setCursorPosition(150,(shopASCII*3) + 9);
-    cout << "━━━━━━━━━━━━━━━━━";
+    std::cout << "━━━━━━━━━━━━━━━━━";
     setCursorPosition(150,(shopASCII*3) + 10);
-    cout << "┃ SZÖRNY STATOK ┃";
+    std::cout << "┃ SZÖRNY STATOK ┃";
     setCursorPosition(150,(shopASCII*3) + 11);
-    cout << "━━━━━━━━━━━━━━━━━";
+    std::cout << "━━━━━━━━━━━━━━━━━";
     SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
     setCursorPosition(150,(shopASCII*3) + 13);
-    cout << bossName << " élete: " << allBosses[i].health;
+    std::cout << bossName << " élete: " << allBosses[i].health;
     SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
     setCursorPosition(150,(shopASCII*3) + 15);
-    cout << bossName << " sebzése: " << allBosses[i].damage;
+    std::cout << bossName << " sebzése: " << allBosses[i].damage;
     setCursorPosition(0, (shopASCII * 3) + 23);
     return shopASCII;
 }
 
-void buyItems(HANDLE h, Player &player, vector<ShopItems> &shopGoods, vector<Bosses> &allBosses, int shopASCII, int shopASCIIRows, int i, float &dodgeChance, const string &bossName, int nthGood){
+void buyItems(HANDLE h, Player &player, std::vector<ShopItems> &shopGoods, std::vector<Bosses> &allBosses, int shopASCII, int shopASCIIRows, int i, float &dodgeChance, const std::string &bossName, int nthGood){
         switch (shopGoods[nthGood].type){			// A vásárolt áru típusának ellenőrzése
             case 1: player.health += shopGoods[nthGood].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (ÉLET)
             case 2: player.damage += shopGoods[nthGood].value; break;	// Ha a vásárolt áru buff, az adott típusú stat hozzáadódik, ha nem akkor kivonódik az eddigi értékből (SEBZÉS)
@@ -96,57 +96,57 @@ void buyItems(HANDLE h, Player &player, vector<ShopItems> &shopGoods, vector<Bos
         }
         SetConsoleTextAttribute(h,shopGoods[nthGood].color);
         setCursorPosition(shopASCIIRows*6 + 13, (shopASCII / 2) + 6 + shopASCII);
-        cout << shopGoods[nthGood].name;
+        std::cout << shopGoods[nthGood].name;
         SetConsoleTextAttribute(h,7);
-        cout << " megvásárolva ";
+        std::cout << " megvásárolva ";
         SetConsoleTextAttribute(h,6);
-        cout <<  shopGoods[nthGood].price << " aranyért!";
+        std::cout <<  shopGoods[nthGood].price << " aranyért!";
         setCursorPosition(90,(shopASCII*3) + 13);
-        cout << "                                                                                                                                    ";
+        std::cout << "                                                                                                                                    ";
         setCursorPosition(90,(shopASCII*3) + 15);
-        cout << "                                                                                                                                    ";
+        std::cout << "                                                                                                                                    ";
         setCursorPosition(90,(shopASCII*3) + 17);
-        cout << "                                                                                                                                    ";
+        std::cout << "                                                                                                                                    ";
         setCursorPosition(90,(shopASCII*3) + 19);
-        cout << "                                                                                                                                    ";
+        std::cout << "                                                                                                                                    ";
         setCursorPosition(90,(shopASCII*3) + 21);
-        cout << "                                                                                                                                    ";
+        std::cout << "                                                                                                                                    ";
         SetConsoleTextAttribute(h, 6);	// Parancssor betűszín változtatás (sárga)
         setCursorPosition(90,(shopASCII*3) + 13);
-        cout << "Arany: " << player.gold;
+        std::cout << "Arany: " << player.gold;
         SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
         setCursorPosition(90,(shopASCII*3) + 15);
-        cout << "Élet: " << player.health;
+        std::cout << "Élet: " << player.health;
         SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
         setCursorPosition(90,(shopASCII*3) + 17);
-        cout << "Sebzés: " << player.damage;
+        std::cout << "Sebzés: " << player.damage;
         SetConsoleTextAttribute(h, 5);	// Parancssor betűszín változtatás (lila)
         setCursorPosition(90,(shopASCII*3) + 19);
-        cout << "Páncél: " << player.armor;
+        std::cout << "Páncél: " << player.armor;
         SetConsoleTextAttribute(h, 9);	// Parancssor betűszín változtatás (világoskék)
         setCursorPosition(90,(shopASCII*3) + 21);
-        cout << "Kitérés: " << (dodgeChance / 5) << '%';
+        std::cout << "Kitérés: " << (dodgeChance / 5) << '%';
         SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
         setCursorPosition(150,(shopASCII*3) + 13);
-        cout << "" << bossName << " élete: " << allBosses[i].health;
+        std::cout << "" << bossName << " élete: " << allBosses[i].health;
         SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
         setCursorPosition(150,(shopASCII*3) + 15);
-        cout << "" << bossName << " sebzése: " << allBosses[i].damage;
+        std::cout << "" << bossName << " sebzése: " << allBosses[i].damage;
         setCursorPosition(0, (shopASCII * 3) + 23);
         shopGoods.erase(shopGoods.begin() + nthGood);
         Sleep(4000);
     }
 
-    void notEnoughGold(HANDLE h, int shopASCII, vector<ShopItems> shopGoods, Player player, int nthGood){
+    void notEnoughGold(HANDLE h, int shopASCII, std::vector<ShopItems> shopGoods, Player player, int nthGood){
         setCursorPosition(120,shopASCII + 15);
-        cout << "                                                                                                                                    ";
+        std::cout << "                                                                                                                                    ";
         SetConsoleTextAttribute(h, 4);
         setCursorPosition(120,shopASCII + 15);
-        cout << "\t\t\t" << "További " << shopGoods[nthGood].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << endl;
+        std::cout << "\t\t\t" << "További " << shopGoods[nthGood].price - player.gold << " arany szükséges a tárgy megvásárlásához!" << std::endl;
 }
 
 
-void refreshShop(HANDLE h, Player &player, vector<ShopItems> shopGoods, vector<Bosses> allBosses, int shopASCIIRows, int &shopASCII, int i, float &dodgePercent, string &bossName ) {
+void refreshShop(HANDLE h, Player &player, std::vector<ShopItems> shopGoods, std::vector<Bosses> allBosses, int shopASCIIRows, int &shopASCII, int i, float &dodgePercent, std::string &bossName ) {
         setCursorPosition(0,2);
         readFile("../txtFiles/shopASCII.txt", shopGoods[0].color, "\t\t  ");	// Bolt menü beolvasása
         setCursorPosition(0,4 + shopASCII);
@@ -155,133 +155,133 @@ void refreshShop(HANDLE h, Player &player, vector<ShopItems> shopGoods, vector<B
         readFile("../txtFiles/shopASCII.txt", shopGoods[2].color, "\t\t  ");
         SetConsoleTextAttribute(h, shopGoods[0].color);    // Parancssor betűszín változtatás
         setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 4);    // leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2
-        cout << "                                                                                                ";
+        std::cout << "                                                                                                ";
         setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 4);    // leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2
-        cout << "\t\t\t" << shopGoods[0].name << " (" << shopGoods[0].price << " arany) " << '[' << shopGoods[0].attribute << ']' << endl;
+        std::cout << "\t\t\t" << shopGoods[0].name << " (" << shopGoods[0].price << " arany) " << '[' << shopGoods[0].attribute << ']' << std::endl;
         setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 6 + shopASCII);    // leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2
-        cout << "                                                                                                ";
+        std::cout << "                                                                                                ";
         SetConsoleTextAttribute(h, shopGoods[1].color);    // Parancssor betűszín változtatás
         setCursorPosition(shopASCIIRows + 22, (shopASCII / 2) + 6 + shopASCII);    // leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2
-        cout << "\t\t\t" << shopGoods[1].name << " (" << shopGoods[1].price << " arany) " << '[' << shopGoods[1].attribute << ']' << endl;
+        std::cout << "\t\t\t" << shopGoods[1].name << " (" << shopGoods[1].price << " arany) " << '[' << shopGoods[1].attribute << ']' << std::endl;
         setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 8 + shopASCII * 2);    // leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2
         SetConsoleTextAttribute(h, shopGoods[2].color);    // Parancssor betűszín változtatás
-        cout << "                                                                                                ";
+        std::cout << "                                                                                                ";
         setCursorPosition(shopASCIIRows + 25, (shopASCII / 2) + 8 + shopASCII * 2);    // leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2
-        cout << "\t\t\t" << shopGoods[2].name << " (" << shopGoods[2].price << " arany) " << '[' << shopGoods[2].attribute << ']' << endl;
+        std::cout << "\t\t\t" << shopGoods[2].name << " (" << shopGoods[2].price << " arany) " << '[' << shopGoods[2].attribute << ']' << std::endl;
         setCursorPosition(0, (shopASCII * 3) + 13);
-        cout << "                                                                                                                                    ";
+        std::cout << "                                                                                                                                    ";
         setCursorPosition(0, (shopASCII * 3) + 15);
-        cout << "                                                                                                                                    ";
+        std::cout << "                                                                                                                                    ";
         setCursorPosition(0, (shopASCII * 3) + 17);
-        cout << "                                                                                                                                    ";
+        std::cout << "                                                                                                                                    ";
         setCursorPosition(shopASCIIRows/2,(shopASCII*3) + 13);
         SetConsoleTextAttribute(h, shopGoods[0].color);	// Parancssor betűszín változtatás
-        cout << "\t    Vásárlás: " <<  shopGoods[0].name <<"(Balra nyíl)";
+        std::cout << "\t    Vásárlás: " <<  shopGoods[0].name <<"(Balra nyíl)";
         setCursorPosition(shopASCIIRows/2,(shopASCII*3) + 15);
         SetConsoleTextAttribute(h, shopGoods[1].color);	// Parancssor betűszín változtatás
-        cout << "\t    Vásárlás: " << shopGoods[1].name << "(Előre nyíl)";
+        std::cout << "\t    Vásárlás: " << shopGoods[1].name << "(Előre nyíl)";
         setCursorPosition(shopASCIIRows/2,(shopASCII*3) + 17);
         SetConsoleTextAttribute(h, shopGoods[2].color);	// Parancssor betűszín változtatás
-        cout << "\t    Vásárlás: " << shopGoods[2].name << "(Jobbra nyíl)";
+        std::cout << "\t    Vásárlás: " << shopGoods[2].name << "(Jobbra nyíl)";
         SetConsoleTextAttribute(h, 6);    // Parancssor betűszín változtatás (sárga)
         setCursorPosition(90, (shopASCII * 3) + 13);
-        cout << "Arany: " << player.gold;
+        std::cout << "Arany: " << player.gold;
         SetConsoleTextAttribute(h, 2);    // Parancssor betűszín változtatás (zöld)
         setCursorPosition(90, (shopASCII * 3) + 15);
-        cout << "Élet: " << player.health;
+        std::cout << "Élet: " << player.health;
         SetConsoleTextAttribute(h, 3);    // Parancssor betűszín változtatás (aqua)
         setCursorPosition(90, (shopASCII * 3) + 17);
-        cout << "Sebzés: " << player.damage;
+        std::cout << "Sebzés: " << player.damage;
         SetConsoleTextAttribute(h, 5);    // Parancssor betűszín változtatás (lila)
         setCursorPosition(90, (shopASCII * 3) + 19);
-        cout << "Páncél: " << player.armor;
+        std::cout << "Páncél: " << player.armor;
         SetConsoleTextAttribute(h, 9);    // Parancssor betűszín változtatás (világoskék)
         setCursorPosition(90, (shopASCII * 3) + 21);
-        cout << "Kitérés: " << dodgePercent << '%';
+        std::cout << "Kitérés: " << dodgePercent << '%';
         SetConsoleTextAttribute(h, 2);    // Parancssor betűszín változtatás (zöld)
         setCursorPosition(150, (shopASCII * 3) + 13);
-        cout << bossName << " élete: " << allBosses[i].health;
+        std::cout << bossName << " élete: " << allBosses[i].health;
         SetConsoleTextAttribute(h, 3);    // Parancssor betűszín változtatás (aqua)
         setCursorPosition(150, (shopASCII * 3) + 15);
-        cout << bossName << " sebzése: " << allBosses[i].damage;
+        std::cout << bossName << " sebzése: " << allBosses[i].damage;
         setCursorPosition(0, (shopASCII * 3) + 23);
     }
 
-    int exitDisplay(HANDLE h, Player &player, vector<Debuffs> &debuffs, vector<Bosses> &allBosses, int &debuffsASCII, int debuffsASCIIRows, int i, float &dodgePercent){
-        const string bossName = getBossName(allBosses,i);
+    int exitDisplay(HANDLE h, Player &player, std::vector<Debuffs> &debuffs, std::vector<Bosses> &allBosses, int &debuffsASCII, int debuffsASCIIRows, int i, float &dodgePercent){
+        const std::string bossName = getBossName(allBosses,i);
         SetConsoleTextAttribute(h, 7);	// Parancssor betűszín változtatás (fehér)
-        cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
-        cout << "\t\t\t" << "┃ GYENGÍTÉSEK ┃" << endl;
-        cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
+        std::cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << std::endl;
+        std::cout << "\t\t\t" << "┃ GYENGÍTÉSEK ┃" << std::endl;
+        std::cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << std::endl;
         setCursorPosition(0,2);
         debuffsASCII = readFile("../txtFiles/debuffsASCII.txt", debuffs[0].color, "\t\t ", debuffsASCII);					// Gyengítésekhez tartozó ASCII-k beolvasása
         readFile("../txtFiles/debuffsASCII.txt", debuffs[1].color, "\t\t ");
         readFile("../txtFiles/debuffsASCII.txt", debuffs[2].color, "\t\t ");
         setCursorPosition(debuffsASCIIRows + 13, (debuffsASCII / 2) + 4);	// leghosszabb sor hossza + 4 + tabok száma (3*3 karakter), sorok száma / 2
         SetConsoleTextAttribute(h,debuffs[0].color);
-        cout << "\t\t\t\t" << debuffs[0].name << '[' << debuffs[0].attribute << ']' << endl;
+        std::cout << "\t\t\t\t" << debuffs[0].name << '[' << debuffs[0].attribute << ']' << std::endl;
         SetConsoleTextAttribute(h,debuffs[1].color);
         setCursorPosition(debuffsASCIIRows + 13, (debuffsASCII / 2) + 6 + debuffsASCII);
-        cout << "\t\t\t\t" << debuffs[1].name << '[' << debuffs[1].attribute << ']' << endl;
+        std::cout << "\t\t\t\t" << debuffs[1].name << '[' << debuffs[1].attribute << ']' << std::endl;
         SetConsoleTextAttribute(h,debuffs[2].color);
         setCursorPosition(debuffsASCIIRows + 13, (debuffsASCII / 2) + 8 + debuffsASCII*2);
-        cout << "\t\t\t\t" << debuffs[2].name << '[' << debuffs[2].attribute << ']' << endl;
+        std::cout << "\t\t\t\t" << debuffs[2].name << '[' << debuffs[2].attribute << ']' << std::endl;
         setCursorPosition(0,(debuffsASCII*3) + 9);
         SetConsoleTextAttribute(h, 7);	// Parancssor betűszín változtatás (fehér)
         setCursorPosition(0,(debuffsASCII*3) + 9);
-        cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
-        cout << "\t\t\t" << "┃ INTERAKCIÓK ┃" << endl;
-        cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << endl;
+        std::cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << std::endl;
+        std::cout << "\t\t\t" << "┃ INTERAKCIÓK ┃" << std::endl;
+        std::cout << "\t\t\t" << "━━━━━━━━━━━━━━━" << std::endl;
         setCursorPosition(0,(debuffsASCII*3) + 13);
         SetConsoleTextAttribute(h, debuffs[0].color);	// Parancssor betűszín változtatás
-        cout << "\t\t\tVásárlás: " <<  debuffs[0].name <<"(Balra nyíl)";
+        std::cout << "\t\t\tVásárlás: " <<  debuffs[0].name <<"(Balra nyíl)";
         setCursorPosition(0,(debuffsASCII*3) + 15);
         SetConsoleTextAttribute(h, debuffs[1].color);	// Parancssor betűszín változtatás
-        cout << "\t\t\tVásárlás: " << debuffs[1].name << "(Előre nyíl)";
+        std::cout << "\t\t\tVásárlás: " << debuffs[1].name << "(Előre nyíl)";
         setCursorPosition(0,(debuffsASCII*3) + 17);
         SetConsoleTextAttribute(h, debuffs[2].color);	// Parancssor betűszín változtatás
-        cout << "\t\t\tVásárlás: " << debuffs[2].name << "(Jobbra nyíl)";
+        std::cout << "\t\t\tVásárlás: " << debuffs[2].name << "(Jobbra nyíl)";
         setCursorPosition(0,(debuffsASCII*3) + 19);
         SetConsoleTextAttribute(h, 8);	// Parancssor betűszín változtatás (szürke)
-        cout << "\t\t\tKilépés [ESC]"; // Instrukciók
+        std::cout << "\t\t\tKilépés [ESC]"; // Instrukciók
         SetConsoleTextAttribute(h, 7);	// Parancssor betűszín változtatás (fehér)
         setCursorPosition(90,(debuffsASCII*3) + 9);
-        cout << "━━━━━━━━━━━━━━━━━━";
+        std::cout << "━━━━━━━━━━━━━━━━━━";
         setCursorPosition(90,(debuffsASCII*3) + 10);
-        cout << "┃ JÁTÉKOS STATOK ┃";
+        std::cout << "┃ JÁTÉKOS STATOK ┃";
         setCursorPosition(90,(debuffsASCII*3) + 11);
-        cout << "━━━━━━━━━━━━━━━━━━";
+        std::cout << "━━━━━━━━━━━━━━━━━━";
         SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
         setCursorPosition(90,(debuffsASCII*3) + 13);
-        cout << "Élet: " << player.health;
+        std::cout << "Élet: " << player.health;
         SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
         setCursorPosition(90,(debuffsASCII*3) + 15);
-        cout << "Sebzés: " << player.damage;
+        std::cout << "Sebzés: " << player.damage;
         SetConsoleTextAttribute(h, 5);	// Parancssor betűszín változtatás (lila)
         setCursorPosition(90,(debuffsASCII*3) + 17);
-        cout << "Páncél: " << player.armor;
+        std::cout << "Páncél: " << player.armor;
         SetConsoleTextAttribute(h, 9);	// Parancssor betűszín változtatás (világoskék)
         setCursorPosition(90,(debuffsASCII*3) + 19);
-        cout << "Kitérés: " << dodgePercent << '%';
+        std::cout << "Kitérés: " << dodgePercent << '%';
         SetConsoleTextAttribute(h, 7);	// Parancssor betűszín változtatás (fehér)
         setCursorPosition(150,(debuffsASCII*3) + 9);
-        cout << "━━━━━━━━━━━━━━━━━";
+        std::cout << "━━━━━━━━━━━━━━━━━";
         setCursorPosition(150,(debuffsASCII*3) + 10);
-        cout << "┃ SZÖRNY STATOK ┃";
+        std::cout << "┃ SZÖRNY STATOK ┃";
         setCursorPosition(150,(debuffsASCII*3) + 11);
-        cout << "━━━━━━━━━━━━━━━━━";
+        std::cout << "━━━━━━━━━━━━━━━━━";
         SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
         setCursorPosition(150,(debuffsASCII*3) + 13);
-        cout << bossName << " élete: " << allBosses[i].health;
+        std::cout << bossName << " élete: " << allBosses[i].health;
         SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
         setCursorPosition(150,(debuffsASCII*3) + 15);
-        cout << bossName << " sebzése: " << allBosses[i].damage;
+        std::cout << bossName << " sebzése: " << allBosses[i].damage;
         setCursorPosition(0, (debuffsASCII * 3) + 21);
         return debuffsASCII;
 }
 
-void pickDebuff(HANDLE h, Player &player, vector<Debuffs> &debuffs, vector<Bosses> &allBosses, float &dodgeChance, int i, int nthDebuff, int debuffsASCII, int debuffsASCIIRows){
-    const string bossName = getBossName(allBosses,i);
+void pickDebuff(HANDLE h, Player &player, std::vector<Debuffs> &debuffs, std::vector<Bosses> &allBosses, float &dodgeChance, int i, int nthDebuff, int debuffsASCII, int debuffsASCIIRows){
+    const std::string bossName = getBossName(allBosses,i);
     switch(debuffs[nthDebuff].type) {    // Gyengítés típusának ellenőrzése (debuffs.txt)
         case 1: player.health = (player.health * debuffs[nthDebuff].value / 100); break;               // JÁTÉKOS ÉLET CSÖKKENTÉS
         case 2: player.damage = (player.damage * debuffs[nthDebuff].value / 100); break;               // JÁTÉKOS SEBZÉS CSÖKKENTÉS
@@ -292,71 +292,71 @@ void pickDebuff(HANDLE h, Player &player, vector<Debuffs> &debuffs, vector<Bosse
         }
     setCursorPosition(debuffsASCIIRows*5 + 13, (debuffsASCII / 2) + 6 + debuffsASCII);
     SetConsoleTextAttribute(h,debuffs[nthDebuff].color);
-    cout << debuffs[nthDebuff].name;
+    std::cout << debuffs[nthDebuff].name;
     SetConsoleTextAttribute(h,7);
-    cout << " kiválasztva!";
+    std::cout << " kiválasztva!";
     setCursorPosition(90,(debuffsASCII*3) + 13);
-    cout << "                                                                                                                                    ";
+    std::cout << "                                                                                                                                    ";
     setCursorPosition(90,(debuffsASCII*3) + 15);
-    cout << "                                                                                                                                    ";
+    std::cout << "                                                                                                                                    ";
     setCursorPosition(90,(debuffsASCII*3) + 17);
-    cout << "                                                                                                                                    ";
+    std::cout << "                                                                                                                                    ";
     setCursorPosition(90,(debuffsASCII*3) + 19);
-    cout << "                                                                                                                                    ";
+    std::cout << "                                                                                                                                    ";
     SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
     setCursorPosition(90,(debuffsASCII*3) + 13);
-    cout << "Élet: " << player.health;
+    std::cout << "Élet: " << player.health;
     SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
     setCursorPosition(90,(debuffsASCII*3) + 15);
-    cout << "Sebzés: " << player.damage;
+    std::cout << "Sebzés: " << player.damage;
     SetConsoleTextAttribute(h, 5);	// Parancssor betűszín változtatás (lila)
     setCursorPosition(90,(debuffsASCII*3) + 17);
-    cout << "Páncél: " << player.armor;
+    std::cout << "Páncél: " << player.armor;
     SetConsoleTextAttribute(h, 9);	// Parancssor betűszín változtatás (világoskék)
     setCursorPosition(90,(debuffsASCII*3) + 19);
-    cout << "Kitérés: " << (dodgeChance / 5) << '%';
+    std::cout << "Kitérés: " << (dodgeChance / 5) << '%';
     SetConsoleTextAttribute(h, 2);	// Parancssor betűszín változtatás (zöld)
     setCursorPosition(150,(debuffsASCII*3) + 13);
-    cout << "" << bossName << " élete: " << allBosses[i].health;
+    std::cout << "" << bossName << " élete: " << allBosses[i].health;
     SetConsoleTextAttribute(h, 3);	// Parancssor betűszín változtatás (aqua)
     setCursorPosition(150,(debuffsASCII*3) + 15);
-    cout << "" << bossName << " sebzése: " << allBosses[i].damage;
+    std::cout << "" << bossName << " sebzése: " << allBosses[i].damage;
     setCursorPosition(0, (debuffsASCII * 3) + 21);
     debuffs.erase(debuffs.begin() + nthDebuff);
 }
 
-void bossDies(Player *player, vector<Bosses> allBosses, const int *i, int dodgePercent, int longestRow, int bossHeight){
+void bossDies(Player *player, std::vector<Bosses> allBosses, const int *i, int dodgePercent, int longestRow, int bossHeight){
     allBosses[*i].health = 0;
     displayStats(allBosses, *player, *i, dodgePercent, longestRow + 20, (bossHeight / 2) - 6);
     newLine();
     int goldWon = generateNum(500,750);
     player->gold += goldWon;									// Játékos kap 500-750 aranyat a győzelemért
-    int keyChance = generateNum(1,100);						// Szám generálás 1 és 100 között
+    int keyChance = generateNum(1,100);						    // Szám generálás 1 és 100 között
     bool giveKey;
-    keyChance % 2 == 0 ? giveKey = true : giveKey = false;	// A generált szám ellenőrzése
+    keyChance % 2 == 0 ? giveKey = true : giveKey = false;	    // A generált szám ellenőrzése
     giveKey ? player->keys += 1 : player->keys += 0;			// Ha a generált szám páros, a játékos kap kulcsot (50% esély)
     setCursorPosition(longestRow + 40, (bossHeight / 2) + 28);
-    cout << "\tGratulálok! Legyőzted a szörnyet!" << endl;
+    std::cout << "\tGratulálok! Legyőzted a szörnyet!" << std::endl;
     int healthRegen = generateNum((150 * ( 1 + allBosses[*i].level / 10)), 200 * allBosses[*i].level);
     newLine();
     if(giveKey){
         setCursorPosition(longestRow + 40, (bossHeight / 2) + 30);
-        cout << "\t" << goldWon << " aranyat és 1 kulcsot nyertél!" << endl;
+        std::cout << "\t" << goldWon << " aranyat és 1 kulcsot nyertél!" << std::endl;
         player->health += healthRegen;
         setCursorPosition(longestRow + 40, (bossHeight / 2) + 32);
-        cout << "\t" << healthRegen << " életet regeneráltál!";
+        std::cout << "\t" << healthRegen << " életet regeneráltál!";
     }
     else{
         setCursorPosition(longestRow + 40, (bossHeight / 2) + 30);
-        cout << "\t" << goldWon << " aranyat nyertél!" << endl;
+        std::cout << "\t" << goldWon << " aranyat nyertél!" << std::endl;
         player->health += healthRegen;
         setCursorPosition(longestRow + 40, (bossHeight / 2) + 32);
-        cout << "\t" << healthRegen / 2 << " életet regeneráltál!";
+        std::cout << "\t" << healthRegen / 2 << " életet regeneráltál!";
     }
 }
 
-size_t combatInteractions(Player *player, vector<Bosses> allBosses, const int *i, int combatOption, int longestRow, int bossHeight, float &dodgePercent, float &dodgeChance, const string& playerName){
-    const string bossName = getBossName(allBosses,*i);
+size_t combatInteractions(Player *player, std::vector<Bosses> allBosses, const int *i, int combatOption, int longestRow, int bossHeight, float &dodgePercent, float &dodgeChance, const std::string& playerName){
+    const std::string bossName = getBossName(allBosses,*i);
     do
     {
         BlockInput(false);							// User input engedélyezése, hogy ismét lehessen választani
@@ -366,7 +366,7 @@ size_t combatInteractions(Player *player, vector<Bosses> allBosses, const int *i
         if (combatOption == 0 || combatOption == 0xE0) combatOption = _getch();
         if (combatOption == RIGHT && *i < allBosses.size()){ 		// Jobb nyíl lenyomása (támadás)
             setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);
-            cout << "\tTámadás!!!" << endl;
+            std::cout << "\tTámadás!!!" << std::endl;
             Sleep(1000);
             if((allBosses[*i].health - player->damage) > 0){
                 allBosses[*i].health -= player->damage;				// Támadás után a szörny életet veszít
@@ -378,11 +378,11 @@ size_t combatInteractions(Player *player, vector<Bosses> allBosses, const int *i
             }
             displayStats(allBosses, *player, *i, dodgePercent, longestRow + 20, (bossHeight / 2) - 6);
             setCursorPosition(longestRow + 40, (bossHeight / 2) + 26);
-            cout << "\t" << player->damage << " sebzést okoztál!" << endl;
+            std::cout << "\t" << player->damage << " sebzést okoztál!" << std::endl;
             Sleep(1000);
             if (allBosses[*i].health > 0) {											// Ha a szörnynek maradt élete, támadjon vissza, ha nincs, akkor a játékos győzőtt
                 setCursorPosition(longestRow + 40, (bossHeight / 2) + 28);
-                cout << "\t" << bossName << " támad!" << endl;
+                std::cout << "\t" << bossName << " támad!" << std::endl;
                 Sleep(1000);
                 if(player->health - (allBosses[*i].damage - player->armor) > 0) {
                     player->health -= (allBosses[*i].damage - player->armor); 			// Játékos életet veszít (szörny sebzése - játékos páncélja)
@@ -397,16 +397,16 @@ size_t combatInteractions(Player *player, vector<Bosses> allBosses, const int *i
                 }
                 displayStats(allBosses, *player, *i, dodgePercent, longestRow + 20, (bossHeight / 2) - 6);
                 setCursorPosition(longestRow + 40, (bossHeight / 2) + 30);
-                cout << "\t" << allBosses[*i].damage - player->armor << " sebzést szenvedtél!" << endl;	// Elveszített élet pontok kiírása
+                std::cout << "\t" << allBosses[*i].damage - player->armor << " sebzést szenvedtél!" << std::endl;	// Elveszített élet pontok kiírása
                 Sleep(1000);
                 setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);
-                cout << "                                                                  ";
+                std::cout << "                                                                  ";
                 setCursorPosition(longestRow + 40, (bossHeight / 2) + 26);
-                cout << "                                                                  ";
+                std::cout << "                                                                  ";
                 setCursorPosition(longestRow + 40, (bossHeight / 2) + 28);
-                cout << "                                                                  ";
+                std::cout << "                                                                  ";
                 setCursorPosition(longestRow + 40, (bossHeight / 2) + 30);
-                cout << "                                                                  ";
+                std::cout << "                                                                  ";
             }
         }													// Ha a szörny élete <= 0, a játékos győzött
 
@@ -416,18 +416,18 @@ size_t combatInteractions(Player *player, vector<Bosses> allBosses, const int *i
             chance % 5 == 0 ? runAway = true : runAway = false;		// Ha a generált szám osztható 5-tel, a játékos kitéra szörny elől (kezdetben 20% esély, később változhat)
             if(runAway){											// Ha sikeres a kitérés, kilépés a harcból, főciklus elejére ugrás
                 setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);
-                cout << "\tSikeres kitérés!" << endl;
+                std::cout << "\tSikeres kitérés!" << std::endl;
                 Sleep(2000);
                 break;
             }
             else{													// Ha nem sikerült a kitérés, a szörny támad
                 setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);
-                cout << "\tSikertelen kitérés!" << endl;
+                std::cout << "\tSikertelen kitérés!" << std::endl;
                 Sleep(1000);
                 setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);
-                cout << "                                                                  ";
+                std::cout << "                                                                  ";
                 setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);
-                cout << "\t" << bossName << " támad!" << endl;
+                std::cout << "\t" << bossName << " támad!" << std::endl;
                 Sleep(1000);
                 if(player->health - (allBosses[*i].damage - player->armor) > 0) {
                     player->health -= (allBosses[*i].damage - player->armor);
@@ -443,37 +443,37 @@ size_t combatInteractions(Player *player, vector<Bosses> allBosses, const int *i
                 }
                 displayStats(allBosses, *player, *i, dodgePercent, longestRow + 20, (bossHeight / 2) - 6);
                 setCursorPosition(longestRow + 40, (bossHeight / 2) + 26);
-                cout << "\t" << allBosses[*i].damage - player->armor << " sebzést szenvedtél!" << endl;
+                std::cout << "\t" << allBosses[*i].damage - player->armor << " sebzést szenvedtél!" << std::endl;
                 Sleep(1000);
                 setCursorPosition(longestRow + 40, (bossHeight / 2) + 24);
-                cout << "                                                                  ";
+                std::cout << "                                                                  ";
                 setCursorPosition(longestRow + 40, (bossHeight / 2) + 26);
-                cout << "                                                                  ";
+                std::cout << "                                                                  ";
             }
         }
         else if(combatOption == ESC) {								// ESC-re kilép a program (harc közben is)
             system("cls");
-            cout << "Kilépés!";
+            std::cout << "Kilépés!";
             Sleep(2000);
             exit(0);
         }
         else {														// Ha a felsorolt gombok közül egyiket sem nyomta le a felhasználó, hibaüzenetet kap
             setCursorPosition(longestRow + 40, (bossHeight / 2) + 32);
             SetConsoleOutputCP(1250);
-            cout << "\t" << playerName;
+            std::cout << "\t" << playerName;
             SetConsoleOutputCP(65001);
-            cout << ", a folytatáshoz nyomd le a fent látható gombok egyikét!" << endl;
+            std::cout << ", a folytatáshoz nyomd le a fent látható gombok egyikét!" << std::endl;
             Sleep(2000);
             setCursorPosition(longestRow + 40, (bossHeight / 2) + 32);
-            cout << "                                                                  ";
+            std::cout << "                                                                  ";
         }
     } while ((player->health >= 0) && (allBosses[*i].health >= 0));	// Ha mind két félnek maradt élete, folytatódhat a harc
 }
 
-size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopItems> shopGoods, vector<Debuffs> debuffs,
-                int i, float *dodgeChance, const string& playerName, int shopRefresh, bool *gameOver, bool *itemPicked, int *bossHeight, int *doorHeight,
+size_t gameLoop(HANDLE h, Player *player, std::vector<Bosses> allBosses, std::vector<ShopItems> shopGoods, std::vector<Debuffs> debuffs,
+                int i, float *dodgeChance, const std::string& playerName, int shopRefresh, bool *gameOver, bool *itemPicked, int *bossHeight, int *doorHeight,
                 int *doorLeftHeight, int *shopASCII, int *debuffsASCII, int *combatOption){
-    string bossName;
+    std::string bossName;
     do
     {
         bossName = getBossName(allBosses,i);
@@ -493,12 +493,12 @@ size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopI
         newLine();
         newLine();
         SetConsoleOutputCP(1250);	// UTF-8 változóból kiíratáshoz
-        cout << "\t\t\t\t" << playerName;
+        std::cout << "\t\t\t\t" << playerName;
         SetConsoleOutputCP(65001);	// UTF-8 általános kiíratáshoz
-        cout << ", " << "válassz egy ajtót jobb vagy bal nyíl használatával!" << endl;
+        std::cout << ", " << "válassz egy ajtót jobb vagy bal nyíl használatával!" << std::endl;
         newLine();
-        cout << "\t\t\t\t" << "Arany: " << player->gold << endl;
-        cout << "\t\t\t\t" << "Kulcsok: " << player->keys << endl;
+        std::cout << "\t\t\t\t" << "Arany: " << player->gold << std::endl;
+        std::cout << "\t\t\t\t" << "Kulcsok: " << player->keys << std::endl;
         int pressedChar = _getch();		// User inputra várakozás, majd a kapott karakter eltárolása
         if (pressedChar == 0 || pressedChar == 0xE0) pressedChar = _getch();	// Virtuális karakterek (nyilak) nem 1 értéket adnak vissza, ezért plusz ellenőrzés szükséges
         if(pressedChar == LEFT && i < allBosses.size()){			// ----Bal ajtó választása----
@@ -519,7 +519,7 @@ size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopI
                 readFile("../txtFiles/doors.txt", 7, "\t\t\t\t");
                 newLine();
                 newLine();
-                cout << "\t\t\t\t\t\t\t\t\tBolt" << "\t\t\t\t\t\t\t\t\t" << "Kijárat" << endl;
+                std::cout << "\t\t\t\t\t\t\t\t\tBolt" << "\t\t\t\t\t\t\t\t\t" << "Kijárat" << std::endl;
                 int pickDoor = _getch();
                 if (pickDoor == 0 || pickDoor == 0xE0) pickDoor = _getch();
                 // ---- Bolt ----
@@ -592,41 +592,41 @@ size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopI
                                     }
                                     else {    // Ha nincs elegendő arany a frissítéshez, a játékos hibaüzenetet kap
                                         setCursorPosition(shopASCIIRows*6 + 13, (*shopASCII / 2) + 6 + *shopASCII);
-                                        cout << "                                                                                                                                    ";
+                                        std::cout << "                                                                                                                                    ";
                                         SetConsoleTextAttribute(h, 4);
                                         setCursorPosition(shopASCIIRows*6 + 13, (*shopASCII / 2) + 6 + *shopASCII);
-                                        cout << "\t\t\t\t" << "További ";
+                                        std::cout << "\t\t\t\t" << "További ";
                                         SetConsoleTextAttribute(h, 6);
-                                        cout << shopRefresh - player->gold;
+                                        std::cout << shopRefresh - player->gold;
                                         SetConsoleTextAttribute(h, 4);
-                                        cout << " arany szükséges az áruk frissítéséhez!" << endl;
+                                        std::cout << " arany szükséges az áruk frissítéséhez!" << std::endl;
                                         SetConsoleTextAttribute(h, 7);
                                     }
                                 } break;
                                 case ESC: {	// Kilépés a boltból, ha semmire sem elegendő a játékos aranya
                                     setCursorPosition(75,*shopASCII + 15);
-                                    cout << "                                                                                                                                    ";
+                                    std::cout << "                                                                                                                                    ";
                                     SetConsoleTextAttribute(h, 4);
                                     setCursorPosition(75,*shopASCII + 15);
-                                    cout << "\t\t\t\t" << "Kilépés!";
+                                    std::cout << "\t\t\t\t" << "Kilépés!";
                                     *itemPicked=true;
                                 } break;
                                 default: {	// Ha a felsorolt gombok közül egyiket sem nyomta meg a játékos, hibaüzenetet kap, ami 1.5s múlva el is tűnik
                                     setCursorPosition(shopASCIIRows*6 + 13, (*shopASCII / 2) + 6 + *shopASCII);
-                                    cout << "Helytelen input!" << endl;
+                                    std::cout << "Helytelen input!" << std::endl;
                                     Sleep(1500);
                                     setCursorPosition(shopASCIIRows*6 + 13, (*shopASCII / 2) + 6 + *shopASCII);
-                                    cout << "                                                                                                                                    ";
+                                    std::cout << "                                                                                                                                    ";
                                 } break;
                             }
                         } while (!*itemPicked);	// do-while ciklus vége (BOLT)
                     }
                     else {	// Ha a játékosnak nincs 1 kulcsa sem, nem léphet be a boltba
                         setCursorPosition(0,*doorHeight+6);
-                        cout << "\t\t\t\tNincs elegendő kulcs a belépéshez!" << endl;
+                        std::cout << "\t\t\t\tNincs elegendő kulcs a belépéshez!" << std::endl;
                         Sleep(1500);
                         setCursorPosition(0,*doorHeight+6);
-                        cout << "                                                                                                                                    ";
+                        std::cout << "                                                                                                                                    ";
                     }
                     shuffleArray(shopGoods);	// Árukat tároló vektor elemeinek összekeverése, hogy a következő megnyitásnál más áruk legyenek
                 }
@@ -673,18 +673,18 @@ size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopI
                             } break;
                             case ESC: {                 // ESC-re leáll a program
                                 system("cls");
-                                cout << "Kilépés!";
+                                std::cout << "Kilépés!";
                                 Sleep(2000);
                                 exit(0);
                             }
                             default: {					// Ha a felsorolt gombok közül egyiket sem nyomja meg a felhasználó, hibaüzenetet kap
                                 setCursorPosition(debuffsASCIIRows*5 + 13, (*debuffsASCII / 2) + 6 + *debuffsASCII);
-                                cout << "                                                                         ";
+                                std::cout << "                                                                         ";
                                 setCursorPosition(debuffsASCIIRows*5 + 13, (*debuffsASCII / 2) + 6 + *debuffsASCII);
-                                cout << "Helytelen input!" << endl;
+                                std::cout << "Helytelen input!" << std::endl;
                                 Sleep(1500);
                                 setCursorPosition(debuffsASCIIRows*5 + 13, (*debuffsASCII / 2) + 6 + *debuffsASCII);
-                                cout << "                                                                         ";
+                                std::cout << "                                                                         ";
                             } break;
                         }
                     } while (!*itemPicked);
@@ -694,15 +694,15 @@ size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopI
                 }
                 else if (pickDoor == ESC) { // ESC-re leáll a program
                     system("cls");
-                    cout << "Kilépés!";
+                    std::cout << "Kilépés!";
                     Sleep(2000);
                     exit(0);
                 }
                 else {						// Ha nem sikerült helyes gombot lenyomni
                     SetConsoleOutputCP(1250);
-                    cout << "\t" << playerName;
+                    std::cout << "\t" << playerName;
                     SetConsoleOutputCP(65001);
-                    cout << ", válassz ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";
+                    std::cout << ", válassz ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";
                     Sleep(2000);
                 }
             } while (!*itemPicked);	// do-while ciklus vége (kijárat)
@@ -718,7 +718,9 @@ size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopI
             int longestRow = countRows("../Enemies/" + allBosses[i].fileName);						//Szörny függőleges közepének meghatározása
             setCursorPosition(middleX, *bossHeight + 6);
             SetConsoleTextAttribute(h, allBosses[i].color);
-            cout << "\n\t\t\t\t\t\t   " << allBosses[i].name << "\n" << endl;
+            std::cout << "\n\t\t\t\t\t\t   " << allBosses[i].name << "\n" << std::endl;
+            setCursorPosition(middleX, *bossHeight + 8);
+            std::cout << "\n\t\t\t\t\t\t   " << allBosses[i].text << "\n" << std::endl;
             SetConsoleTextAttribute(h, 7);
             displayStats(allBosses, *player,i, dodgePercent, longestRow + 20, (*bossHeight / 2) - 6);					// Játékos és szörny tulajdonságok megjelenítése
             combatInteractions(player, allBosses, &i, *combatOption, longestRow, *bossHeight, dodgePercent, *dodgeChance, playerName);
@@ -727,9 +729,9 @@ size_t gameLoop(HANDLE h, Player *player, vector<Bosses> allBosses, vector<ShopI
         else if(pressedChar == ESC) {system("cls"); break;}					    // ESC-re kilép a program
         else {																	// Ha nem sikerült helyes gombot lenyomni
             SetConsoleOutputCP(1250);
-            cout << playerName;
+            std::cout << playerName;
             SetConsoleOutputCP(65001);
-            cout << "válassz ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";
+            std::cout << "válassz ajtót jobb, illetve bal nyilak valamelyikének lenyomásával!";
             Sleep(2000);
         }
     } while (!*gameOver);

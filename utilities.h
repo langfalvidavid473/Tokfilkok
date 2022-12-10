@@ -15,7 +15,7 @@ void setCursorPosition(int y, int x)
 
 // Segédfüggvény ellenfelek generálásához (megszámolja a fájlokat az adott mappában)
 
-int countEnemies(const string& filename)
+int countEnemies(const std::string& filename)
 {
 	int count = 0;
 	std::filesystem::path p1{filename};
@@ -28,17 +28,17 @@ int countEnemies(const string& filename)
 
 // ---- Függvény általános fájlból olvasáshoz + kiíráshoz ----
 
-auto readFile(const string& fileName, int color, const string& tab = "", int rows = 0)
+auto readFile(const std::string& fileName, int color, const std::string& tab = "", int rows = 0)
 {
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása
-	string myText;								// Fájl egy sora
-	ifstream MyReadFile(fileName);				// Fájl megnyitása
+	std::string myText;								// Fájl egy sora
+	std::ifstream MyReadFile(fileName);				// Fájl megnyitása
 	SetConsoleTextAttribute(h, color);			// Parancssor betűszín változtatás
-	cout << "\n\n";
+	std::cout << "\n\n";
 
 	while (getline(MyReadFile, myText))
 	{ // Fájl soronkénti kiírása
-		cout << tab << myText << endl;
+		std::cout << tab << myText << std::endl;
 		rows++;
 	}
 	MyReadFile.close(); // Fájl bezárása
@@ -46,10 +46,10 @@ auto readFile(const string& fileName, int color, const string& tab = "", int row
 	return rows;
 }
 
-auto countRows(const string& fileName){
+auto countRows(const std::string& fileName){
 	int longestRow = 0;
-	string myText;								// Fájl egy sora
-	ifstream MyReadFile(fileName);				// Fájl megnyitása
+	std::string myText;								// Fájl egy sora
+	std::ifstream MyReadFile(fileName);				// Fájl megnyitása
 	while (getline(MyReadFile, myText))
 	{ 
 		if(myText.length() > longestRow){
@@ -67,12 +67,12 @@ ezt sztringgé konvertálja, a mappa elérési útját levágja a .substr() met�
 majd eltárolja egy sztring típusú vektorban
 */
 
-vector<string> getFileNames(const string& path)
+std::vector<std::string> getFileNames(const std::string& path)
 {
-	vector<string> fileNames;
+	std::vector<std::string> fileNames;
 	for (const auto &entry : std::filesystem::directory_iterator(path))
 	{
-		string act = entry.path().string();
+		std::string act = entry.path().string();
 		fileNames.push_back(act.substr(10, act.length()));
 	}
 	return fileNames;
@@ -83,8 +83,8 @@ vector<string> getFileNames(const string& path)
 int generateNum(int from, int to)
 {
 
-	mt19937 rng(random_device{}());
-	uniform_int_distribution<> dist(from, to);
+	std::mt19937 rng(std::random_device{}());
+	std::uniform_int_distribution<> dist(from, to);
 	auto random_number = dist(rng);
 	return random_number;
 }
@@ -100,40 +100,41 @@ int sqr(int a)
 
 void newLine()
 {
-	cout << endl;
+	std::cout << std::endl;
 }
 
 // Vektor keverő függvény
 
 template <typename T>
 
-void shuffleArray(vector<T> &v)
+void shuffleArray(std::vector<T> &v)
 {
-	random_device rd;				  // Random biteket generál, melyeket a default_random_engine felhasznál
-	default_random_engine rng(rd());  // Random számokat generál a kapott bitek alapján
+	std::random_device rd;				  // Random biteket generál, melyeket a default_random_engine felhasznál
+	std::default_random_engine rng(rd());  // Random számokat generál a kapott bitek alapján
 	shuffle(v.begin(), v.end(), rng); // Szörnyek sorrendjének keverése
 }
 
 // ---- Ellenfelek generálása (random értékek) ----
 
-vector<Bosses> generateBoss(const string& filename)
+std::vector<Bosses> generateBoss(const std::string& filename)
 {
-	vector<string> v = getFileNames(filename); // A mappában lévő összes txt fájl nevének eltárolása
+	std::vector<std::string> v = getFileNames(filename); // A mappában lévő összes txt fájl nevének eltárolása
 
 	shuffleArray(v);
 
-	vector<Bosses> allBosses; // Ez a vektor lesz feltöltve a generált objektumokkal
+	std::vector<Bosses> allBosses; // Ez a vektor lesz feltöltve a generált objektumokkal
 
 	for (int i = 0; i < v.size(); i++)
 	{ // Amennyi szörny van az adott mappában, annyi objektum jön létre (könnyen bővíthető!!!)
 
 		int randomHealth = 1000 + generateNum((sqr(i + 1) * 60) - i * 100, (sqr(i + 1) * 70) - i * 100); // Random értékek generálása (1)
 		int randomDamage = 150 + generateNum(sqr(i + 1) * 10, sqr(i + 1) * 20);							 // (2)
-		string myText;
-		string name;
-		string color;
+		std::string myText;
+		std::string name;
+		std::string color;
+        std::string text;
 		int correctColor;
-		ifstream MyReadFile("../Enemies/" + v[i]);
+		std::ifstream MyReadFile("../Enemies/" + v[i]);
 		while (getline(MyReadFile, myText))
 		{
 			if (myText.find("name") != std::string::npos)
@@ -163,107 +164,112 @@ vector<Bosses> generateBoss(const string& filename)
 				else
 					correctColor = 7;
 			}
+            if (myText.find("text") != std::string::npos)
+            {
+                text = (myText.substr(myText.find("text:") + 5, myText.length()));
+            }
 		}
 		MyReadFile.close();
-		Bosses *newBoss = new Bosses(randomHealth, i + 1, randomDamage, v[i], name, correctColor); // Új objektum létrehozása, értékek hozzárendelése konstruktorral
-		allBosses.push_back(*newBoss);															   // vektor feltöltése a generált objektummal
-	}
+		Bosses *newBoss = new Bosses(randomHealth, i + 1, randomDamage, v[i], name, correctColor, text); // Új objektum létrehozása, értékek hozzárendelése konstruktorral
+        allBosses.push_back(*newBoss);															   // vektor feltöltése a generált objektummal
+	    delete newBoss;
+    }
 
 	return allBosses;
 }
 
-string getBossName(vector<Bosses> boss, int i){
-    string bossNameEnglishChars = boss[i].fileName.substr(1, boss[i].fileName.length()-5);
-    string bossName = boss[i].name.substr(boss[i].name.find(' ', bossNameEnglishChars.length()-1)+1 ,boss[i].name.length());
+std::string getBossName(std::vector<Bosses> boss, int i){
+    std::string bossNameEnglishChars = boss[i].fileName.substr(1, boss[i].fileName.length()-5);
+    std::string bossName = boss[i].name.substr(boss[i].name.find(' ', bossNameEnglishChars.length()-1)+1 ,boss[i].name.length());
     bossName[0] = toupper(bossName[0]);
     return bossName;
 }
 
-void displayStats(vector<Bosses> boss, Player player, int i, float dodge, int x, int y)
+void displayStats(std::vector<Bosses> boss, Player player, int i, float dodge, int x, int y)
 {
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása
-    string bossName = getBossName(boss,i);
+    std::string bossName = getBossName(boss,i);
 	SetConsoleTextAttribute(h, 7); // Parancssor betűszín változtatás (fehér)
 	setCursorPosition(x + 20, y - 2);
-	cout << "\t" << "━━━━━━━━━━━━━━━";
+	std::cout << "\t" << "━━━━━━━━━━━━━━━";
 	setCursorPosition(x + 20, y - 1);
-	cout << "\t" << "┃ INTERAKCIÓK ┃";
+	std::cout << "\t" << "┃ INTERAKCIÓK ┃";
 	setCursorPosition(x + 20, y);
-	cout << "\t" << "━━━━━━━━━━━━━━━";
+	std::cout << "\t" << "━━━━━━━━━━━━━━━";
 	setCursorPosition(x + 20, y + 4);
-	cout << "                                                                  ";
+	std::cout << "                                                                  ";
 	setCursorPosition(x + 20, y + 6);
-	cout << "                                                                  ";
+	std::cout << "                                                                  ";
 	setCursorPosition(x + 20, y + 8);
-	cout << "                                                                  ";
+	std::cout << "                                                                  ";
 	setCursorPosition(x + 20, y + 14);
-	cout << "                                                                  ";
+	std::cout << "                                                                  ";
 	setCursorPosition(x + 20, y + 16);
-	cout << "                                                                  ";
+	std::cout << "                                                                  ";
 	setCursorPosition(x + 20, y + 2);
 		SetConsoleTextAttribute(h, 4);	// Parancssor betűszín változtatás (piros)
-	cout << "\tTámadás [->]";
+	std::cout << "\tTámadás [->]";
 	setCursorPosition(x + 20, y + 4);
 		SetConsoleTextAttribute(h, 6);	// Parancssor betűszín változtatás (sárga)
-	cout << "\tKitérés (" << dodge << "%) [<-]";
+	std::cout << "\tKitérés (" << dodge << "%) [<-]";
 	setCursorPosition(x + 20, y + 6);
 		SetConsoleTextAttribute(h, 8);	// Parancssor betűszín változtatás (szürke)
-	cout << "\tKilépés [ESC]";
+	std::cout << "\tKilépés [ESC]";
 		SetConsoleTextAttribute(h, 7); // Parancssor betűszín változtatás (fehér)
 	setCursorPosition(x + 20, y + 10);
-	cout << "\t" << "━━━━━━━━━━━━━━━━━━";
+	std::cout << "\t" << "━━━━━━━━━━━━━━━━━━";
 	setCursorPosition(x + 20, y + 11);
-	cout << "\t" << "┃ JÁTÉKOS STATOK ┃";
+	std::cout << "\t" << "┃ JÁTÉKOS STATOK ┃";
 	setCursorPosition(x + 20, y + 12);
-	cout << "\t" << "━━━━━━━━━━━━━━━━━━";
+	std::cout << "\t" << "━━━━━━━━━━━━━━━━━━";
 		SetConsoleTextAttribute(h, 2); // Parancssor betűszín változtatás (zöld)
 	setCursorPosition(x + 20, y + 14);
-	cout << "                                                                  ";
+	std::cout << "                                                                  ";
 	setCursorPosition(x + 20, y + 14);
-	cout << "\tÉlet: " << player.health;
+	std::cout << "\tÉlet: " << player.health;
 		SetConsoleTextAttribute(h, 3); // Parancssor betűszín változtatás (aqua)
 	setCursorPosition(x + 20, y + 16);
-	cout << "                                                                  ";
+	std::cout << "                                                                  ";
 	setCursorPosition(x + 20, y + 16);
-	cout << "\tSebzés: " << player.damage;
+	std::cout << "\tSebzés: " << player.damage;
 		SetConsoleTextAttribute(h, 5); // Parancssor betűszín változtatás (lila)
 	setCursorPosition(x + 20, y + 18);
-	cout << "                                                                  ";
+	std::cout << "                                                                  ";
 	setCursorPosition(x + 20, y + 18);
-	cout << "\tPáncél: " << player.armor;
+	std::cout << "\tPáncél: " << player.armor;
 		SetConsoleTextAttribute(h, 7); // Parancssor betűszín változtatás (fehér)
 	setCursorPosition(x + 20, y + 22);
-	cout << "\t" << "━━━━━━━━━━━━━━━━━━";
+	std::cout << "\t" << "━━━━━━━━━━━━━━━━━━";
 	setCursorPosition(x + 20, y + 23);
-	cout << "\t" << "┃ SZÖRNY STATOK  ┃";
+	std::cout << "\t" << "┃ SZÖRNY STATOK  ┃";
 	setCursorPosition(x + 20, y + 24);
-	cout << "\t" << "━━━━━━━━━━━━━━━━━━";
+	std::cout << "\t" << "━━━━━━━━━━━━━━━━━━";
 	SetConsoleTextAttribute(h, 2); // Parancssor betűszín változtatás (zöld)
 	setCursorPosition(x + 20, y + 26);
-	cout << "                                                                  ";
+	std::cout << "                                                                  ";
 	setCursorPosition(x + 20, y + 26);
-	cout << "\t" << bossName << " élete: " << boss[i].health;
+	std::cout << "\t" << bossName << " élete: " << boss[i].health;
 	SetConsoleTextAttribute(h, 3); // Parancssor betűszín változtatás (aqua)
 	setCursorPosition(x + 20, y + 28);
-	cout << "                                                                  ";
+	std::cout << "                                                                  ";
 	setCursorPosition(x + 20, y + 28);
-	cout << "\t" << bossName << " sebzése: " << boss[i].damage;
+	std::cout << "\t" << bossName << " sebzése: " << boss[i].damage;
 	SetConsoleTextAttribute(h, 7); // Parancssor betűszín változtatás
 
 }
 
-vector<ShopItems> shopSystem(const string& path, float *dodgeChance)
+std::vector<ShopItems> shopSystem(const std::string& path, float *dodgeChance)
 {
-	vector<ShopItems> shopVector;
-	string myText;			   // Fájl egy sora
-	ifstream MyReadFile(path); // Fájl megnyitása
+	std::vector<ShopItems> shopVector;
+	std::string myText;			   // Fájl egy sora
+	std::ifstream MyReadFile(path); // Fájl megnyitása
 	while (getline(MyReadFile, myText))
 	{ // Fájl soronkénti olvasása
-		string name = myText.substr(myText.find("name:") + 5, myText.find("type:", myText.find("name:") + 5) - 5);
-		stringstream type(myText.substr(myText.find("type:") + 5, myText.find("price:") - (myText.find("type:") + 5)));
-		stringstream price(myText.substr(myText.find("price:") + 6, myText.find("value:") - (myText.find("price:") + 6)));
-		stringstream value(myText.substr(myText.find("value:") + 6, myText.find("buff:") - (myText.find("value:") + 6)));
-		stringstream buff(myText.substr(myText.find("buff:") + 5, myText.length()));
+		std::string name = myText.substr(myText.find("name:") + 5, myText.find("type:", myText.find("name:") + 5) - 5);
+		std::stringstream type(myText.substr(myText.find("type:") + 5, myText.find("price:") - (myText.find("type:") + 5)));
+		std::stringstream price(myText.substr(myText.find("price:") + 6, myText.find("value:") - (myText.find("price:") + 6)));
+		std::stringstream value(myText.substr(myText.find("value:") + 6, myText.find("buff:") - (myText.find("value:") + 6)));
+		std::stringstream buff(myText.substr(myText.find("buff:") + 5, myText.length()));
 		unsigned int p, v, t;
 		bool b;
         float valueCalc = v;
@@ -282,7 +288,7 @@ vector<ShopItems> shopSystem(const string& path, float *dodgeChance)
             valueCalc = generateNum(valueCalc, valueCalc * 1.1);
         }
 		p = generateNum(p, p * 1.1 );
-		stringstream attr;
+		std::stringstream attr;
 		int color;
 		switch(t){
 			case 1: attr << "ÉLET + " << v; color = 2; break;
@@ -301,31 +307,32 @@ vector<ShopItems> shopSystem(const string& path, float *dodgeChance)
 			case 9: attr << "SZÖRNY SEBZÉS - " << 100 - v << '%'; color = 4;  break;
 			default: attr << ""; break;
 		}
-		string attribute = attr.str();
+		std::string attribute = attr.str();
 		ShopItems *s = new ShopItems(name, t, p, v, b, attribute, color);
 		shopVector.push_back(*s);
-	}
+        delete s;
+    }
 	MyReadFile.close(); // Fájl bezárása
 	return shopVector;
 }
 
-vector<Debuffs> debuffSystem(const string& path, float *dodgeChance)
+std::vector<Debuffs> debuffSystem(const std::string& path, float *dodgeChance)
 {
-	vector<Debuffs> debuffs;
-	string myText;			   // Fájl egy sora
-	ifstream MyReadFile(path); // Fájl megnyitása
+	std::vector<Debuffs> debuffs;
+	std::string myText;			   // Fájl egy sora
+	std::ifstream MyReadFile(path); // Fájl megnyitása
 	while (getline(MyReadFile, myText))
 	{ // Fájl soronkénti olvasása
-		string name = myText.substr(myText.find("name:") + 5, myText.find("value:", myText.find("name:") + 5) - 5);
-		stringstream value(myText.substr(myText.find("value:") + 6, myText.find("type:") - (myText.find("value:") + 6)));
-		stringstream type(myText.substr(myText.find("type:") + 5, myText.length()));
+		std::string name = myText.substr(myText.find("name:") + 5, myText.find("value:", myText.find("name:") + 5) - 5);
+		std::stringstream value(myText.substr(myText.find("value:") + 6, myText.find("type:") - (myText.find("value:") + 6)));
+		std::stringstream type(myText.substr(myText.find("type:") + 5, myText.length()));
 		int v, t;
 		value >> v;
         float valueCalc = v;
 		type >> t;
         t > 4 ? v = generateNum(v, v * 1.1) : v = generateNum(v * 0.9, v);
         t == 3 ? valueCalc = generateNum(valueCalc, valueCalc * 1.1) : valueCalc = generateNum(valueCalc * 0.9, valueCalc);
-		stringstream attr;
+		std::stringstream attr;
         int color;
 		switch(t){
 			case 1: attr << "ÉLET - " << 100 - v << '%'; color=2; break;
@@ -341,10 +348,11 @@ vector<Debuffs> debuffSystem(const string& path, float *dodgeChance)
 			case 6: attr << "SZÖRNY SEBZÉS + " << v - 100 << '%'; color=4; break;
 			default: attr << ""; break;
 		}
-		string attribute = attr.str();
+		std::string attribute = attr.str();
 		Debuffs *d = new Debuffs(name, v, t, attribute, color);
 		debuffs.push_back(*d);
-	}
+	    delete d;
+    }
 	MyReadFile.close(); // Fájl bezárása
 	return debuffs;
 }
