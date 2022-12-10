@@ -714,13 +714,12 @@ size_t gameLoop(HANDLE h, Player *player, std::vector<Bosses> allBosses, std::ve
             Sleep(2000);
             system("cls");
             *bossHeight = allBosses[i].getBoss(allBosses[i].fileName, allBosses[i].color, *bossHeight);	// Megfelelő szörny megjelenítése, ASCII art sorainak számának eltárolása
-            int middleX = allBosses[i].middlePoint();												// Szörny vízszintes közepének meghatározása
-            int longestRow = countRows("../Enemies/" + allBosses[i].fileName);						//Szörny függőleges közepének meghatározása
-            setCursorPosition(middleX, *bossHeight + 6);
+            int longestRow = countRows("../Enemies/" + allBosses[i].fileName);					    	//Szörny függőleges közepének meghatározása
+            setCursorPosition((longestRow + 43), (*bossHeight / 2) - 12);
             SetConsoleTextAttribute(h, allBosses[i].color);
-            std::cout << "\n\t\t\t\t\t\t   " << allBosses[i].name << "\n" << std::endl;
-            setCursorPosition(middleX, *bossHeight + 8);
-            std::cout << "\n\t\t\t\t\t\t   " << allBosses[i].text << "\n" << std::endl;
+            std::cout << allBosses[i].name;
+            setCursorPosition((longestRow + 43), (*bossHeight / 2) - 10);
+            std::cout << allBosses[i].text;
             SetConsoleTextAttribute(h, 7);
             displayStats(allBosses, *player,i, dodgePercent, longestRow + 20, (*bossHeight / 2) - 6);					// Játékos és szörny tulajdonságok megjelenítése
             combatInteractions(player, allBosses, &i, *combatOption, longestRow, *bossHeight, dodgePercent, *dodgeChance, playerName);

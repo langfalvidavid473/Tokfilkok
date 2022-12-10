@@ -35,7 +35,7 @@
                               :%%####%%+          =%%####%%-
                                #%%###%%.          .%%####%%
                                -%%##%%+            +%%##%%=.
-                                =%%%%*:             +%%%%+      
+                                =%%%%*:             +%%%%+
 name:A Pancser Paradicsom
 color:red
 text:Végső elkeseredésében legalább az ingedet megöli!
