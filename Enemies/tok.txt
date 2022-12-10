@@ -45,4 +45,4 @@
 name:A Tiszteletlen Tök
 color:yellow
 text:Vigyázz, mert bosszút forral a Halloweeni megpróbáltatásai miatt!
-                                                                                        
+
