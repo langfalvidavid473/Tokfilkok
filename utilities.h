@@ -189,7 +189,12 @@ void displayStats(std::vector<Bosses> boss, Player player, int i, float dodge, i
 {
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Parancssor hívása
     std::string bossName = getBossName(boss,i);
-	SetConsoleTextAttribute(h, 7); // Parancssor betűszín változtatás (fehér)
+    SetConsoleTextAttribute(h, boss[i].color); // Parancssor betűszín változtatás (amilyen a szörny)
+    setCursorPosition(x + 20, y - 6);
+    std::cout << "\t" << boss[i].name;
+    setCursorPosition(x + 20, y - 4);
+    std::cout << "\t" << boss[i].text;
+    SetConsoleTextAttribute(h, 7); // Parancssor betűszín változtatás (fehér)
 	setCursorPosition(x + 20, y - 2);
 	std::cout << "\t" << "━━━━━━━━━━━━━━━";
 	setCursorPosition(x + 20, y - 1);
