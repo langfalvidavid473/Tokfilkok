@@ -719,8 +719,8 @@ size_t gameLoop(HANDLE h, Player *player, std::vector<Bosses> allBosses, std::ve
             setCursorPosition(middleX, *bossHeight + 6);
             SetConsoleTextAttribute(h, allBosses[i].color);
             std::cout << "\n\t\t\t\t\t\t   " << allBosses[i].name << "\n" << std::endl;
-            setCursorPosition(middleX, *bossHeight + 8);
-            std::cout << "\n\t\t\t\t\t\t   " << allBosses[i].text << "\n" << std::endl;
+            setCursorPosition((middleX/2) - 5, *bossHeight + 9);
+            std::cout <<  allBosses[i].text << "\n" << std::endl;
             SetConsoleTextAttribute(h, 7);
             displayStats(allBosses, *player,i, dodgePercent, longestRow + 20, (*bossHeight / 2) - 6);					// Játékos és szörny tulajdonságok megjelenítése
             combatInteractions(player, allBosses, &i, *combatOption, longestRow, *bossHeight, dodgePercent, *dodgeChance, playerName);
