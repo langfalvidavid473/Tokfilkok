@@ -31,4 +31,4 @@
                                .=++++++++++++++++::++++++++++++++++=.
 name:A Dühös Dinnye
 color:red
-text:A magok az előző csatákban szerzett sebeit mutatják!                                   
+text:A magok az előző csatákban szerzett sebeit mutatják!

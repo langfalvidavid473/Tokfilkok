@@ -45,4 +45,4 @@
       -#%##**++++++++++++++**##%#-
 name:A Spártai Spárga
 color:green
-text:Végtagok híján rossz ízével gyengíti az ellenség morálját!      
+text:Végtagok híján rossz ízével gyengíti az ellenség morálját!

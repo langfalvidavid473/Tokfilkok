@@ -41,4 +41,4 @@
                                         :=+*#####**+-.      
 name:Az Erjedt Eper
 color:red
-text:Elsőre, de még másodjára is finomnak tűnő íze csak a megtévesztésedre szolgál!                                     
+text:Elsőre, de még másodjára is finomnak tűnő íze csak a megtévesztésedre szolgál!

@@ -64,4 +64,4 @@
                                                        .--++**#####**+=-.
 name:A Cseles Cseresznye
 color:red
-text:Bekeríti ellenfeleit, majd két oldalról támad!                                           
+text:Bekeríti ellenfeleit, majd két oldalról támad!

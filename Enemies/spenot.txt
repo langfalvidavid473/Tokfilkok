@@ -47,4 +47,4 @@
                                   .:.               .::-.:.
 name:A Sportszerűtlen Spenót
 color:green
-text:Sokkal vérszomjasabb, mint a testvére, a Sóska!                                    
+text:Sokkal vérszomjasabb, mint a testvére, a Sóska!

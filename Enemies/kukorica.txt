@@ -37,4 +37,4 @@
                            -=+=-----==+=---------=+=---------+-            
 name:A Kedvtelen Kukorica
 color:yellow
-text:Hajléktalan, de pont ez teszi veszélyessé!     
+text:Hajléktalan, de pont ez teszi veszélyessé!

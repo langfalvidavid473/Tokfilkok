@@ -43,6 +43,4 @@
                                   %%*%*            +@*#%-        
 name:A Rosszindulatú Répa
 color:white
-text:Ha nem vigyázol elrágja a fogaidat!                                     
-                                                        
-                                                     
+text:Ha nem vigyázol elrágja a fogaidat!

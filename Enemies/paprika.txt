@@ -44,4 +44,4 @@
                                             :==.              
 name:A Pimasz Paprika
 color:red
-text:Nehéz megmondani, hogy ő vagy a megjegyzései csípősebbek!                                      
+text:Nehéz megmondani, hogy ő vagy a megjegyzései csípősebbek!

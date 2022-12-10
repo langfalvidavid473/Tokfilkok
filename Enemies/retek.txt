@@ -40,5 +40,4 @@
                                                     .+@%-              
 name:A Rettenetes Retek
 color:gray
-text:Puszta érintése is soha nem látott járványokat indíthat el!                                                        
-       
+text:Puszta érintése is soha nem látott járványokat indíthat el!

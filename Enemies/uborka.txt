@@ -43,4 +43,4 @@
   :::::::::=**-:::::::::.                                        
 name:Az Útonálló Uborka
 color:green
-text:Savanyúsága belülről fakad!                                                                                       
+text:Savanyúsága belülről fakad!
