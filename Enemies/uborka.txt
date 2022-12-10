@@ -41,4 +41,6 @@
                                     *####%:                                               
                              .......####+:......                                          
                            :::::::::=**-:::::::::.                                        
-                                                                                          
+name:Az Útonálló Uborka
+color:green
+text:Savanyúsága belülről fakad!                                                                                       

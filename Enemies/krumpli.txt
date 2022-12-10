@@ -41,4 +41,4 @@
                   *%%#####%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#####%%+.                     
 name:A Királyi Krumpli
 color:yellow
-szöveg:Nem csak hosszútávon és nagy mennyiségben okoz halált!
+text:Nem csak hosszútávon és nagy mennyiségben okoz halált!

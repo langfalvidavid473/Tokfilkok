@@ -38,5 +38,5 @@
                                    ..::::::::::---::-.            
 name:A Borzasztó Brokkoli
 color:green
-szöveg:A legenda szerint minden harapás után a duplája nő vissza!                                            
+text:A legenda szerint minden harapás után a duplája nő vissza!                                            
                                         
