@@ -22,6 +22,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6f7c62f4-7eb9-47fe-9bda-16186f3ad5ed" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Enemies/cseresznye.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Enemies/eper.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Enemies/eper.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Tokfilkok.dir/main.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Tokfilkok.dir/main.cpp.obj" afterDir="false" />
@@ -95,7 +97,9 @@
       <workItem from="1670577366167" duration="1196000" />
       <workItem from="1670578583992" duration="5766000" />
       <workItem from="1670584412701" duration="1000" />
-      <workItem from="1670688692483" duration="1000" />
+      <workItem from="1670688692483" duration="1949000" />
+      <workItem from="1670690668459" duration="45000" />
+      <workItem from="1670690722861" duration="531000" />
     </task>
     <servers />
   </component>
