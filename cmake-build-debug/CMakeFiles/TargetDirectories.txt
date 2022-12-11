@@ -1,3 +1,0 @@
-C:/Users/langf/OneDrive/Dokumentumok/GitHub/Tokfilkok/cmake-build-debug/CMakeFiles/Tokfilkok.dir
-C:/Users/langf/OneDrive/Dokumentumok/GitHub/Tokfilkok/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/langf/OneDrive/Dokumentumok/GitHub/Tokfilkok/cmake-build-debug/CMakeFiles/rebuild_cache.dir
