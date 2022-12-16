@@ -44,5 +44,5 @@
                                 .::-==+++++#%%%%%%#*++++=--:.             
 name:A Tiszteletlen Tök
 color:yellow
-szöveg:Vigyázz, mert bosszút forral a Halloweeni megpróbáltatásai miatt!                 
-                                                                                        
+text:Vigyázz, mert bosszút forral a Halloweeni megpróbáltatásai miatt!
+
