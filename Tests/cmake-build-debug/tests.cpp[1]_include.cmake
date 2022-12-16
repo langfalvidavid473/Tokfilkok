@@ -1,5 +1,0 @@
-if(EXISTS "C:/Users/langf/OneDrive/Dokumentumok/GitHub/Tokfilkok/Tests/cmake-build-debug/tests.cpp[1]_tests.cmake")
-  include("C:/Users/langf/OneDrive/Dokumentumok/GitHub/Tokfilkok/Tests/cmake-build-debug/tests.cpp[1]_tests.cmake")
-else()
-  add_test(tests.cpp_NOT_BUILT tests.cpp_NOT_BUILT)
-endif()
